@@ -5,3 +5,4 @@
 #
 
 ReadPackage( "BacktrackKit", "gap/BacktrackKit.gd");
+ReadPackage( "BacktrackKit", "gap/constraint.gd");

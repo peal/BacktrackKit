@@ -14,6 +14,15 @@
 #! This section will describe the example
 #! methods of BacktrackKit
 
+
+DeclareGlobalFunction( "BTKit_BuildRBase" );
+
+DeclareGlobalFunction( "BTKit_Backtrack" );
+
+DeclareGlobalFunction( "BTKit_Search" );
+
+
 #! @Description
-#!   Insert documentation for your function here
-DeclareGlobalFunction( "BacktrackKit_Example" );
+#!  Information about backtrack search
+DeclareInfoClass( "InfoBTKit" );
+SetInfoLevel(InfoBTKit, 2);
