@@ -19,10 +19,10 @@ DeclareGlobalFunction( "BTKit_BuildRBase" );
 
 DeclareGlobalFunction( "BTKit_Backtrack" );
 
-DeclareGlobalFunction( "BTKit_Search" );
+DeclareGlobalFunction( "BTKit_SimpleSearch" );
 
 
 #! @Description
 #!  Information about backtrack search
 DeclareInfoClass( "InfoBTKit" );
-SetInfoLevel(InfoBTKit, 2);
+SetInfoLevel(InfoBTKit, 0);

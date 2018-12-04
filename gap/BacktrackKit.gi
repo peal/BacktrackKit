@@ -96,12 +96,11 @@ InstallGlobalFunction( BTKit_BuildRBase,
     end);
 
 BTKit_GetCandidateSolution := function(ps, rbase)
-    local perm, list1, list2, n, c;
+    local perm, list1, list2, n, c, i;
     n := PS_Points(ps);
     list1 := List([1..n], {x} -> PS_CellSlice(rbase.ps, x)[1]);
     # At this point the partition stack should be fixed
     list2 := List([1..n], {x} -> PS_CellSlice(ps, x)[1]);
-    Print(list1, "\n", list2,"\n");
     perm := [];
     for i in [1..n] do
         perm[list1[i]] := list2[i];
@@ -153,7 +152,7 @@ InstallGlobalFunction( BTKit_Backtrack,
     fi;    
 end);
 
-InstallGlobalFunction( BTKit_Search,
+InstallGlobalFunction( BTKit_SimpleSearch,
     function(ps, conlist)
         local rbase, perms;
         if not InitaliseConstraints(ps, conlist) then
