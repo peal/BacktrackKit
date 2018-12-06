@@ -1,4 +1,7 @@
-Con_TupleStab := function(n, fixpoints)
+BTKit_Con := rec();
+
+
+BTKit_Con.TupleStab := function(n, fixpoints)
     local fixlist, i, filters, r;
     fixlist := [1..n]*0;
     for i in [1..Length(fixpoints)] do
@@ -17,7 +20,7 @@ Con_TupleStab := function(n, fixpoints)
     return r;
 end;
 
-Con_SetStab := function(n, fixedset)
+BTKit_Con.SetStab := function(n, fixedset)
     local fixlist, i, filters, r;
     fixlist := BlistList([1..n], fixedset);
     filters := [{i} -> fixlist[i]];
@@ -33,7 +36,7 @@ Con_SetStab := function(n, fixedset)
     return r;
 end;
 
-Con_InGroup := function(n, group)
+BTKit_Con.InGroup := function(n, group)
     local orbList,fillOrbits, orbMap, pointMap, r;
     fillOrbits := function(pointlist)
         local orbs, array, i, j;
