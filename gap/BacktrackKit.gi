@@ -54,6 +54,10 @@ BTKit_RefineConstraints := function(ps, tracer, rbase, conlist)
     return true;
 end;
 
+#! @Description
+#! Return the smallest cell of <a>ps</a> which is not of size 1,
+#! (or fail if all cells are size 1). Break ties by returning smaller
+#! cells. 
 BranchSelector_MinSizeCell := function(ps)
     local cellsize, cellpos, i;
     cellsize := infinity;

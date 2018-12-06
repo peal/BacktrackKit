@@ -55,6 +55,11 @@ DeclareOperation("PS_FixedCells", [IsPartitionStack]);
 DeclareOperation("PS_FixedPoints", [IsPartitionStack]);
 
 #! @Description
+#! Return the cell which contains value i
+#! @Arguments PS, i
+DeclareOperation("PS_CellOfPoint", [IsPartitionStack, IsPosInt]);
+
+#! @Description
 #! Revert the state of the partition stack to when there were i cells.
 #! This requires that i is less than PS_Cells(PS)
 #! @Arguments PS, i

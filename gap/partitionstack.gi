@@ -108,6 +108,16 @@ InstallMethod(PS_FixedCells, [IsPartitionStackRep],
 InstallMethod(PS_FixedPoints, [IsPartitionStackRep],
     {ps} -> List(ps!.fixed, {x} -> ps!.vals[ps!.cellstart[x]]));
 
+InstallMethod(PS_CellOfPoint, [IsPartitionStackRep, IsPosInt],
+    function(ps, i)
+        local pos;
+        pos := ps!.invvals[i];
+        while ps!.marks[pos] = 0 do
+            pos := pos - 1;
+        od;
+        return ps!.marks[pos];
+    end);
+
 
 InstallMethod(PS_UNSAFE_CellSlice, [IsPartitionStackRep, IsPosInt],
     {ps, cell} -> Slice(ps!.vals, ps!.cellstart[cell], ps!.cellsize[cell]));
