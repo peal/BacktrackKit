@@ -7,7 +7,7 @@ BTKit_Con.TupleStab := function(n, fixpoints)
     for i in [1..Length(fixpoints)] do
         fixlist[fixpoints[i]] := i;
     od;
-    filters := [{i} -> fixlist[i]];
+    filters := [rec(partition := {i} -> fixlist[i])];
 
     r := rec(
         name := "TupleStab",
@@ -23,7 +23,7 @@ end;
 BTKit_Con.SetStab := function(n, fixedset)
     local fixlist, i, filters, r;
     fixlist := BlistList([1..n], fixedset);
-    filters := [{i} -> fixlist[i]];
+    filters := [rec(partition := {i} -> fixlist[i])];
 
     r := rec(
         name := "SetStab",
@@ -68,7 +68,7 @@ BTKit_Con.InGroup := function(n, group)
                 fixedpoints := PS_FixedPoints(ps);
                 fillOrbits(fixedpoints);
                 points := pointMap[fixedpoints];
-                return [{x} -> points[x]];
+                return [rec(partition := {x} -> points[x])];
             end,
 
             changed := function(ps, rbase)
@@ -77,7 +77,7 @@ BTKit_Con.InGroup := function(n, group)
                     fixedpoints := PS_FixedPoints(ps);
                     fillOrbits(fixedpoints);
                     points := pointMap[fixedpoints];
-                    return [{x} -> points[x]];
+                    return [rec(partition := {x} -> points[x])];
                 else
                     fixedps := PS_FixedPoints(ps);
                     fixedrbase := PS_FixedPoints(rbase);
@@ -88,7 +88,7 @@ BTKit_Con.InGroup := function(n, group)
                         return fail;
                     fi;
                     points := pointMap[fixedrbase];
-                    return [{x} -> points[x^p]];
+                    return [rec(partition := {x} -> points[x^p])];
                 fi;
             end)
         );

@@ -11,8 +11,8 @@ BTKit_ApplyFilters := function(ps, tracer, filters)
         return false;
     fi;
     for f in filters do
-        if IsFunction(f) then
-            if not PS_SplitCellsByFunction(ps, tracer, f) then
+        if IsFunction(f.partition) then
+            if not PS_SplitCellsByFunction(ps, tracer, f.partition) then
                 Info(InfoBTKit, 1, "Trace violation");
                 return false;
             fi;
