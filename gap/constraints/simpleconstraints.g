@@ -1,37 +1,41 @@
 Con_TupleStab := function(n, fixpoints)
-    local fixlist, i, filters;
+    local fixlist, i, filters, r;
     fixlist := [1..n]*0;
     for i in [1..Length(fixpoints)] do
         fixlist[fixpoints[i]] := i;
     od;
     filters := [{i} -> fixlist[i]];
-    return rec(
+
+    r := rec(
         name := "TupleStab",
         check := {p} -> OnTuples(fixpoints, p) = fixpoints,
         refine := rec(
-            initalise := function(con, ps)
+            initalise := function(ps)
                 return filters;
             end)
         );
+    return r;
 end;
 
 Con_SetStab := function(n, fixedset)
-    local fixlist, i, filters;
+    local fixlist, i, filters, r;
     fixlist := BlistList([1..n], fixedset);
     filters := [{i} -> fixlist[i]];
-    return rec(
+
+    r := rec(
         name := "SetStab",
         check := {p} -> OnSets(fixedset, p) = fixedset,
         refine := rec(
-            initalise := function(con, ps)
+            initalise := function(ps)
                 return filters;
             end)
         );
+    return r;
 end;
 
 Con_InGroup := function(n, group)
-    local orbList,fillOrbits, orbMap, pointMap;
-    fillOrbits := function(con, pointlist)
+    local orbList,fillOrbits, orbMap, pointMap, r;
+    fillOrbits := function(pointlist)
         local orbs, array, i, j;
         if IsBound(pointMap[pointlist]) then
             return pointMap[pointlist];
@@ -52,23 +56,23 @@ Con_InGroup := function(n, group)
     orbMap := HashMap();
     pointMap := HashMap();
 
-    return rec(
+    r := rec(
         name := "InGroup",
         check := {p} -> p in group,
         refine := rec(
-            initalise := function(con, ps)
+            initalise := function(ps)
                 local fixedpoints, mapval, points;
                 fixedpoints := PS_FixedPoints(ps);
-                fillOrbits(con, fixedpoints);
+                fillOrbits(fixedpoints);
                 points := pointMap[fixedpoints];
                 return [{x} -> points[x]];
             end,
 
-            changed := function(con, ps, rbase)
+            changed := function(ps, rbase)
                 local fixedpoints, points, fixedps, fixedrbase, p;
                 if rbase = fail then
                     fixedpoints := PS_FixedPoints(ps);
-                    fillOrbits(con, fixedpoints);
+                    fillOrbits(fixedpoints);
                     points := pointMap[fixedpoints];
                     return [{x} -> points[x]];
                 else
@@ -85,4 +89,5 @@ Con_InGroup := function(n, group)
                 fi;
             end)
         );
+        return r;
     end;

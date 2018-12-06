@@ -28,7 +28,7 @@ InitaliseConstraints := function(ps, conlist)
     tracer := RecordingTracer();
     for c in conlist do
         if IsBound(c.refine.initalise) then
-            filters := c.refine.initalise(c, ps);
+            filters := c.refine.initalise(ps);
             if not BTKit_ApplyFilters(ps, tracer, filters) then
                 return false;
             fi;
@@ -44,7 +44,7 @@ BTKit_RefineConstraints := function(ps, tracer, rbase, conlist)
         cellCount := PS_Cells(ps);
         for c in conlist do
             if IsBound(c.refine.changed) then
-                filters := c.refine.changed(c, ps, rbase);
+                filters := c.refine.changed(ps, rbase);
                 if not BTKit_ApplyFilters(ps, tracer, filters) then
                     return false;
                 fi;
