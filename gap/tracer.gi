@@ -17,6 +17,12 @@ InstallMethod(AddEvent, [IsRecordingTracerRep and IsMutable, IsObject],
 InstallMethod(TraceLength, [IsRecordingTracerRep], x -> Length(x!.trace));
 InstallMethod(TraceEvent, [IsRecordingTracerRep, IsPosInt], {x,i} -> x!.trace[i]);
 
+InstallMethod(ViewObj, [IsRecordingTracerRep],
+function(t)
+  Print("<recording tracer of length ", TraceLength(t), ">");
+end);
+
+
 InstallGlobalFunction(FollowingTracer,
 function(trace)
     return Objectify(FollowingTracerTypeMutable, 
@@ -40,6 +46,12 @@ InstallMethod(AddEvent, [IsFollowingTracerRep and IsMutable, IsObject],
 
 InstallMethod(TraceLength, [IsFollowingTracerRep], {x} -> TraceLength(x!.existingTrace));
 InstallMethod(TraceEvent, [IsFollowingTracerRep, IsPosInt], {x,i} -> TraceEvent(x!.existingTrace, i));
+
+InstallMethod(ViewObj, [IsFollowingTracerRep],
+function(t)
+    Print("<following tracer of length ", TraceLength(t), ">");
+end);
+
 
 InstallGlobalFunction(CanonicalisingTracer,
 function()
