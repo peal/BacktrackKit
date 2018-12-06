@@ -66,8 +66,7 @@ BTKit_Con.InGroup := function(n, group)
             initalise := function(ps)
                 local fixedpoints, mapval, points;
                 fixedpoints := PS_FixedPoints(ps);
-                fillOrbits(fixedpoints);
-                points := pointMap[fixedpoints];
+                points := fillOrbits(fixedpoints);
                 return [rec(partition := {x} -> points[x])];
             end,
 
@@ -75,8 +74,7 @@ BTKit_Con.InGroup := function(n, group)
                 local fixedpoints, points, fixedps, fixedrbase, p;
                 if rbase = fail then
                     fixedpoints := PS_FixedPoints(ps);
-                    fillOrbits(fixedpoints);
-                    points := pointMap[fixedpoints];
+                    points := fillOrbits(fixedpoints);
                     return [rec(partition := {x} -> points[x])];
                 else
                     fixedps := PS_FixedPoints(ps);
