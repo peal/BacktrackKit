@@ -141,7 +141,7 @@ InstallGlobalFunction( BTKit_Backtrack,
         vals := Set(PS_CellSlice(ps, branchInfo.cell));
         Info(InfoBTKit, 1, "Branching: ", depth, ":", branchInfo);
         Print("\>");
-        # A node is special if its parent is spec ial and it is
+        # A node is special if its parent is special and it is
         # the first one amongst its siblings
         # If we find a group element down a subtree
         # we return to the deepest special node above
@@ -157,15 +157,12 @@ InstallGlobalFunction( BTKit_Backtrack,
                BTKit_RefineConstraints(ps, tracer, rbase.ps, conlist) then
                 p := BTKit_Backtrack(ps, rbase, depth+1, conlist, special);
 
-                # We found a permutation below
+                # We found a permutation below so we return to the deepest
+                # special node node above
                 if p <> fail then
-                    # We found an element so we return to the special
-                    # node above
                     if (not parent_special) then
-                        PS_RevertToCellCount(ps, saveDepth);
-                        BTKit_RestoreConstraintState(conlist, saveState);
-                        Print("\<");
-                        return p;
+                        perms := p;
+                        break;
                     else
                         Append(perms, p);
                     fi;
