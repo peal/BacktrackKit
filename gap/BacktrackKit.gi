@@ -123,8 +123,8 @@ BTKit_CheckSolution := function(perm, conlist)
 end;
 
 InstallGlobalFunction( BTKit_Backtrack,
-    function(ps, rbase, depth, conlist, parent_special)
-    local p, isSol, saveState, saveDepth, vals, branchInfo, v, tracer, special, perms;
+    function(ps, rbase, depth, conlist, subgroup, parent_special)
+    local found, isSol, saveState, saveDepth, vals, branchInfo, v, tracer, special, perms;
     Info(InfoBTKit, 2, "Partition: ", PS_AsPartition(ps));
 
     if depth > Length(rbase.branches) then
@@ -132,9 +132,10 @@ InstallGlobalFunction( BTKit_Backtrack,
         isSol := BTKit_CheckSolution(p, conlist);
         Info(InfoBTKit, 2, "Maybe solution?",p,":",isSol);
         if isSol then
-            return [ p ];
+            subgroup[1] := ClosureGroup(subgroup[1], p);
+            return true;
         else
-            return fail;
+            return false;
         fi;
     else
         branchInfo := rbase.branches[depth];
@@ -146,36 +147,29 @@ InstallGlobalFunction( BTKit_Backtrack,
         # If we find a group element down a subtree
         # we return to the deepest special node above
         special := parent_special;
-        perms := [];
         for v in vals do
             Info(InfoBTKit, 2, "Searching: ", v, " special: ", special);
             saveDepth := PS_Cells(ps);
             saveState := BTKit_SaveConstraintState(conlist);
 
             tracer := FollowingTracer(rbase.branches[depth].tracer);
+            found := false;
             if PS_SplitCellByFunction(ps, tracer, branchInfo.cell, {x} -> x = v) and
                BTKit_RefineConstraints(ps, tracer, rbase.ps, conlist) then
-                p := BTKit_Backtrack(ps, rbase, depth+1, conlist, special);
-
-                # We found a permutation below so we return to the deepest
-                # special node node above
-                if p <> fail then
-                    if (not parent_special) then
-                        perms := p;
-                        break;
-                    else
-                        Append(perms, p);
-                    fi;
-                fi;
+                found := BTKit_Backtrack(ps, rbase, depth+1, conlist, subgroup, special);
             fi;
 
             PS_RevertToCellCount(ps, saveDepth);
             BTKit_RestoreConstraintState(conlist, saveState);
+
+            # We found a permutation below so we return to the deepest
+            # special node node above
+            if found and (not special) and parent_special then break; fi;
             special := false;
         od;
         Print("\<");
-        return perms;
     fi;
+    return false;
 end);
 
 InstallGlobalFunction( BTKit_SimpleSearch,
@@ -185,6 +179,7 @@ InstallGlobalFunction( BTKit_SimpleSearch,
             return fail;
         fi;
         rbase := BTKit_BuildRBase(ps, conlist, BranchSelector_MinSizeCell);
-        perms := BTKit_Backtrack(ps, rbase, 1, conlist, true);
-        return perms;
+        perms := [ Group(()) ];
+        BTKit_Backtrack(ps, rbase, 1, conlist, perms, true);
+        return perms[1];
 end);
