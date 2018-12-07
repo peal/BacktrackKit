@@ -123,37 +123,62 @@ BTKit_CheckSolution := function(perm, conlist)
 end;
 
 InstallGlobalFunction( BTKit_Backtrack,
-    function(ps, rbase, depth, conlist, perms)
-    local p, isSol, saveState, saveDepth, vals, branchInfo, v, tracer;
+    function(ps, rbase, depth, conlist, parent_special)
+    local p, isSol, saveState, saveDepth, vals, branchInfo, v, tracer, special, perms;
     Info(InfoBTKit, 2, "Partition: ", PS_AsPartition(ps));
+
     if depth > Length(rbase.branches) then
         p := BTKit_GetCandidateSolution(ps, rbase);
         isSol := BTKit_CheckSolution(p, conlist);
         Info(InfoBTKit, 2, "Maybe solution?",p,":",isSol);
         if isSol then
-            Add(perms, p);
+            return [ p ];
+        else
+            return fail;
         fi;
     else
         branchInfo := rbase.branches[depth];
         vals := Set(PS_CellSlice(ps, branchInfo.cell));
         Info(InfoBTKit, 1, "Branching: ", depth, ":", branchInfo);
         Print("\>");
+        # A node is special if its parent is spec ial and it is
+        # the first one amongst its siblings
+        # If we find a group element down a subtree
+        # we return to the deepest special node above
+        special := parent_special;
+        perms := [];
         for v in vals do
-            Info(InfoBTKit, 2, "Searching: ", v);
+            Info(InfoBTKit, 2, "Searching: ", v, " special: ", special);
             saveDepth := PS_Cells(ps);
             saveState := BTKit_SaveConstraintState(conlist);
 
             tracer := FollowingTracer(rbase.branches[depth].tracer);
             if PS_SplitCellByFunction(ps, tracer, branchInfo.cell, {x} -> x = v) and
                BTKit_RefineConstraints(ps, tracer, rbase.ps, conlist) then
-                    BTKit_Backtrack(ps, rbase, depth+1, conlist, perms);
+                p := BTKit_Backtrack(ps, rbase, depth+1, conlist, special);
+
+                # We found a permutation below
+                if p <> fail then
+                    # We found an element so we return to the special
+                    # node above
+                    if (not parent_special) then
+                        PS_RevertToCellCount(ps, saveDepth);
+                        BTKit_RestoreConstraintState(conlist, saveState);
+                        Print("\<");
+                        return p;
+                    else
+                        Append(perms, p);
+                    fi;
+                fi;
             fi;
 
             PS_RevertToCellCount(ps, saveDepth);
             BTKit_RestoreConstraintState(conlist, saveState);
+            special := false;
         od;
         Print("\<");
-    fi;    
+        return perms;
+    fi;
 end);
 
 InstallGlobalFunction( BTKit_SimpleSearch,
@@ -162,8 +187,7 @@ InstallGlobalFunction( BTKit_SimpleSearch,
         if not InitaliseConstraints(ps, conlist) then
             return fail;
         fi;
-        perms := [];
         rbase := BTKit_BuildRBase(ps, conlist, BranchSelector_MinSizeCell);
-        BTKit_Backtrack(ps, rbase, 1, conlist, perms);
+        perms := BTKit_Backtrack(ps, rbase, 1, conlist, true);
         return perms;
 end);
