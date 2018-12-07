@@ -57,7 +57,7 @@ end;
 #! @Description
 #! Return the smallest cell of <a>ps</a> which is not of size 1,
 #! (or fail if all cells are size 1). Break ties by returning smaller
-#! cells. 
+#! cells.
 BranchSelector_MinSizeCell := function(ps)
     local cellsize, cellpos, i;
     cellsize := infinity;
@@ -92,7 +92,7 @@ InstallGlobalFunction( BTKit_BuildRBase,
             BTKit_RefineConstraints(ps, tracer, fail, conlist);
             Info(InfoBTKit, 2, "RBase level:", PS_AsPartition(ps));
         od;
-        
+
         rbase.ps := MakeImmutable(ps);
         rbase.depth := Length(rbase.branches);
         BTKit_RestoreConstraintState(conlist, savedState);
