@@ -124,7 +124,7 @@ end;
 
 InstallGlobalFunction( BTKit_Backtrack,
     function(ps, rbase, depth, conlist, subgroup, parent_special)
-    local found, isSol, saveState, saveDepth, vals, branchInfo, v, tracer, special, perms;
+    local p, found, isSol, saveState, saveDepth, vals, branchInfo, v, tracer, special, perms;
     Info(InfoBTKit, 2, "Partition: ", PS_AsPartition(ps));
 
     if depth > Length(rbase.branches) then
@@ -164,7 +164,7 @@ InstallGlobalFunction( BTKit_Backtrack,
 
             # We found a permutation below so we return to the deepest
             # special node node above
-            if found and (not special) and parent_special then break; fi;
+            if found and (not special) and parent_special then return true; fi;
             special := false;
         od;
         Print("\<");
