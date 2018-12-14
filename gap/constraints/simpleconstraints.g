@@ -40,6 +40,7 @@ BTKit_Con.InGroup := function(n, group)
     local orbList,fillOrbits, orbMap, pointMap, r;
     fillOrbits := function(pointlist)
         local orbs, array, i, j;
+        # caching
         if IsBound(pointMap[pointlist]) then
             return pointMap[pointlist];
         fi;
@@ -56,6 +57,7 @@ BTKit_Con.InGroup := function(n, group)
         return array;
     end;
 
+    # OrbMap is unused?
     orbMap := HashMap();
     pointMap := HashMap();
 
@@ -81,10 +83,15 @@ BTKit_Con.InGroup := function(n, group)
                     fixedrbase := PS_FixedPoints(rbase);
                     fixedrbase := fixedrbase{[1..Length(fixedps)]};
                     p := RepresentativeAction(group, fixedps, fixedrbase, OnTuples);
-                    Info(InfoBTKit, 1,"Find mapping",fixedps,fixedrbase,p);
+                    Info(InfoBTKit, 1, "Find mapping (InGroup):\n"
+                         , "    fixed points:   ", fixedps, "\n"
+                         , "    fixed by rbase: ", fixedrbase, "\n"
+                         , "    map:            ", p);
+
                     if p = fail then
                         return fail;
                     fi;
+                    # this could as well call fillOrbits
                     points := pointMap[fixedrbase];
                     return [rec(partition := {x} -> points[x^p])];
                 fi;
@@ -92,3 +99,80 @@ BTKit_Con.InGroup := function(n, group)
         );
         return r;
     end;
+
+BTKit_Con.EltCentralizer := function(n, fixedelt)
+    local cycles, cyclepart,
+          i, c, s, r,
+          fixByFixed, pointMap;
+
+    cyclepart := [];
+    cycles := Cycles(fixedelt, [1..n]);
+    for c in cycles do
+        s := Length(c);
+        for i in c do
+            cyclepart[i] := s;
+        od;
+    od;
+
+    fixByFixed := function(pointlist)
+        local part, s, p;
+#        if IsBound(pointMap[pointlist]) then
+#            return pointMap[pointlist];
+#        fi;
+        if pointlist = [] then return cyclepart; fi;
+
+        part := [1..n] * 0;
+        s := 1;
+        for p in pointlist do
+            if part[p] = 0 then
+                repeat
+                    part[p] := s;
+                    p := p ^ fixedelt;
+                    s := s + 1;
+                until part[p] <> 0;
+            fi;
+        od;
+        return part;
+    end;
+
+    pointMap := HashMap();
+    pointMap[[]] := cyclepart;
+
+    r := rec( name := "EltCentralizer",
+              check := {p} -> fixedelt ^ p = fixedelt,
+              refine := rec( initalise := function(ps)
+                               local fixedpoints, mapval, points;
+                               fixedpoints := PS_FixedPoints(ps);
+                               points := fixByFixed(fixedpoints);
+                               return [rec(partition := {x} -> points[x])];
+                             end,
+                             changed := function(ps, rbase)
+                                 local fixedpoints, points, fixedps, fixedrbase, p;
+                                 fixedpoints := PS_FixedPoints(ps);
+                                 Print("FIXXED: ", fixedpoints, "\n");
+                                 if rbase = fail then # We are computing an rbase
+                                     fixedpoints := PS_FixedPoints(ps);
+                                     Print("rbasefix, ", fixedpoints, "\n");
+                                     # if any fixed point in a cycle is fixed the whole cycle is fixed
+                                     points := fixByFixed(fixedpoints);
+                                     return [rec(partition := {x} -> points[x])];
+                                 else
+                                     fixedps := PS_FixedPoints(ps);
+                                     fixedrbase := PS_FixedPoints(rbase);
+                                     fixedrbase := fixedrbase{[1..Length(fixedps)]};
+                                     # This can't be right.
+                                     p := RepresentativeAction(SymmetricGroup(n), fixedps, fixedrbase, OnTuples);
+                                     Info(InfoBTKit, 1, "Find mapping (EltCentralizer):\n"
+                                          , "    fixed points:   ", fixedps, "\n"
+                                          , "    fixed by rbase: ", fixedrbase, "\n"
+                                          , "    map:            ", p);
+                                     if p = fail then
+                                         return fail;
+                                     fi;
+                                     points := fixByFixed(fixedrbase);
+                                     return [rec(partition := {x} -> points[x^p])];
+                                 fi;
+                             end ) );
+    return r;
+end;
+
