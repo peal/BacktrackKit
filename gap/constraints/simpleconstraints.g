@@ -116,11 +116,6 @@ BTKit_Con.EltCentralizer := function(n, fixedelt)
 
     fixByFixed := function(pointlist)
         local part, s, p;
-#        if IsBound(pointMap[pointlist]) then
-#            return pointMap[pointlist];
-#        fi;
-        if pointlist = [] then return cyclepart; fi;
-
         part := [1..n] * 0;
         s := 1;
         for p in pointlist do
@@ -135,44 +130,20 @@ BTKit_Con.EltCentralizer := function(n, fixedelt)
         return part;
     end;
 
-    pointMap := HashMap();
-    pointMap[[]] := cyclepart;
 
     r := rec( name := "EltCentralizer",
               check := {p} -> fixedelt ^ p = fixedelt,
               refine := rec( initalise := function(ps)
-                               local fixedpoints, mapval, points;
-                               fixedpoints := PS_FixedPoints(ps);
-                               points := fixByFixed(fixedpoints);
-                               return [rec(partition := {x} -> points[x])];
+                               local points;
+                               points := fixByFixed(PS_FixedPoints(ps));
+                               # Pass cyclepart just on the first call, for efficency
+                               return [rec(partition := {x} -> points[x]), rec(partition := {x} -> cyclepart[x])];
                              end,
                              changed := function(ps, rbase)
-                                 local fixedpoints, points, fixedps, fixedrbase, p;
-                                 fixedpoints := PS_FixedPoints(ps);
-                                 Print("FIXXED: ", fixedpoints, "\n");
-                                 if rbase = fail then # We are computing an rbase
-                                     fixedpoints := PS_FixedPoints(ps);
-                                     Print("rbasefix, ", fixedpoints, "\n");
-                                     # if any fixed point in a cycle is fixed the whole cycle is fixed
-                                     points := fixByFixed(fixedpoints);
-                                     return [rec(partition := {x} -> points[x])];
-                                 else
-                                     fixedps := PS_FixedPoints(ps);
-                                     fixedrbase := PS_FixedPoints(rbase);
-                                     fixedrbase := fixedrbase{[1..Length(fixedps)]};
-                                     # This can't be right.
-                                     p := RepresentativeAction(SymmetricGroup(n), fixedps, fixedrbase, OnTuples);
-                                     Info(InfoBTKit, 1, "Find mapping (EltCentralizer):\n"
-                                          , "    fixed points:   ", fixedps, "\n"
-                                          , "    fixed by rbase: ", fixedrbase, "\n"
-                                          , "    map:            ", p);
-                                     if p = fail then
-                                         return fail;
-                                     fi;
-                                     points := fixByFixed(fixedrbase);
-                                     return [rec(partition := {x} -> points[x^p])];
-                                 fi;
-                             end ) );
+                               local points;
+                               points := fixByFixed(PS_FixedPoints(ps));
+                               return [rec(partition := {x} -> points[x])];
+                             end) );
     return r;
 end;
 
