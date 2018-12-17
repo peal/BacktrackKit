@@ -147,8 +147,9 @@ InstallGlobalFunction( BTKit_Backtrack,
         # If we find a group element down a subtree
         # we return to the deepest special node above
         special := parent_special;
+        Info(InfoBTKit, 2, "Searching: ", vals, " parent_special: ", parent_special, " special: ", special);
         for v in vals do
-            Info(InfoBTKit, 2, "Searching: ", v, " special: ", special);
+            Info(InfoBTKit, 2, " Branch: ", v);
             saveDepth := PS_Cells(ps);
             saveState := BTKit_SaveConstraintState(conlist);
 
@@ -164,7 +165,10 @@ InstallGlobalFunction( BTKit_Backtrack,
 
             # We found a permutation below so we return to the deepest
             # special node node above
-            if found and (not special) and parent_special then return true; fi;
+            if found and (not special) and (not parent_special) then
+                Print("\<");
+                return true;
+            fi;
             special := false;
         od;
         Print("\<");
