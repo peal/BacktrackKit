@@ -31,7 +31,7 @@ RandomTransitiveGroup := function(rdsrc, degrees)
     return TransitiveGroup(degrees[i-1], nr + l[i-1]);
 end;
 
-CentralizerTests := function(k)
+PermCentralizerTests := function(k)
     local g, e, t, i, d, ps, gap, btkit;
 
     Info(InfoBTKitTest, 5, "Creating \"random\" group");
@@ -55,7 +55,7 @@ CentralizerTests := function(k)
 
         g := Group(GeneratorsOfGroup(g));
         t := NanosecondsSinceEpoch();
-        btkit := BTKit_SimpleSearch(ps, [ BTKit_Con.InGroup(d, g), BTKit_Con.EltCentralizer(d, e) ] );
+        btkit := BTKit_SimpleSearch(ps, [ BTKit_Con.InGroup(d, g), BTKit_Con.PermCentralizer(d, e) ] );
         t := NanosecondsSinceEpoch() - t;
         Info(InfoBTKitTest, 5, "BTKit:  ", t / 1000000000., " size: ", Size(btkit));
 
@@ -63,6 +63,50 @@ CentralizerTests := function(k)
             Error("GAP and BTKit disagree!\n");
         fi;
     od;
+    return true;
+end;
+
+CentralizerTest := function()
+    local g, h, e, l, t, i, d, p, ps, gap, btkit;
+
+    Info(InfoBTKitTest, 5, "Creating \"random\" group");
+    repeat
+    g := DirectProduct(List([1..2], x -> RandomPrimitiveGroup(GlobalMersenneTwister, [20..50])));
+    h := DirectProduct(List([1..2], x -> RandomPrimitiveGroup(GlobalMersenneTwister, [20..50])));
+    h := Intersection(g,h);
+    until not IsTrivial(h);
+
+    d := LargestMovedPoint(g);
+    p := Random(GlobalMersenneTwister, SymmetricGroup(d));
+    g := g ^ p;
+    h := h ^ p;
+
+    Info(InfoBTKitTest, 5, " done, on ", d, " points");
+    Info(InfoBTKitTest, 5, " testing ", k, " random element centralizers");
+    ps := PartitionStack(d);
+
+    g := Group(GeneratorsOfGroup(g));
+    h := Group(GeneratorsOfGroup(h));
+
+    t := NanosecondsSinceEpoch();
+    gap := Centralizer(g, h);
+    t := NanosecondsSinceEpoch() - t;
+    Info(InfoBTKitTest, 5, "GAP:    ", t / 1000000000., " size: ", Size(gap));
+
+    g := Group(GeneratorsOfGroup(g));
+
+    l := List(GeneratorsOfGroup(h), x -> BTKit_Con.PermCentralizer(d, x));
+    Add(l, BTKit_Con.InGroup(d, g));
+
+    t := NanosecondsSinceEpoch();
+    btkit := BTKit_SimpleSearch(ps, l);
+    t := NanosecondsSinceEpoch() - t;
+    Info(InfoBTKitTest, 5, "BTKit:  ", t / 1000000000., " size: ", Size(btkit));
+
+    if gap <> btkit then
+        Error("GAP and BTKit disagree!\n");
+    fi;
+
     return true;
 end;
 
