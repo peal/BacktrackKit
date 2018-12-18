@@ -1,52 +1,30 @@
 BTKit_Con := rec();
 
 
-BTKit_Con.TupleStab := function(n, fixpoints)
-    local fixlist, i, filters, r;
-    fixlist := [1..n]*0;
-    for i in [1..Length(fixpoints)] do
-        fixlist[fixpoints[i]] := i;
-    od;
+# Make a refiner which accepts permutations p
+# such that fixlist[i^p] = fixlist[i]
+BTKit_MakeFixlistStabilizer := function(name, fixlist)
+    local filters;
     filters := [rec(partition := {i} -> fixlist[i])];
-
-    r := rec(
-        name := "TupleStab",
-        check := {p} -> OnTuples(fixpoints, p) = fixpoints,
+    return rec(
+        name := name,
+        check := {p} -> ForAll([1..Length(fixlist)], {i} -> fixlist[i^p] = fixlist[i]),
         refine := rec(
             initalise := function(ps, rbase)
                 return filters;
             end)
-        );
-    return r;
+    );
 end;
 
-BTKit_Con.SetStab := function(n, fixedset)
-    local fixlist, i, filters, r;
-    fixlist := BlistList([1..n], fixedset);
-    filters := [rec(partition := {i} -> fixlist[i])];
-
-    r := rec(
-        name := "SetStab",
-        check := {p} -> OnSets(fixedset, p) = fixedset,
-        refine := rec(
-            initalise := function(ps, rbase)
-                return filters;
-            end)
-        );
-    return r;
-end;
-
-BTKit_Con.SetTransporter := function(n, fixedsetL, fixedsetR)
-    local fixlistL, fixlistR, i, filtersL, filtersR, r;
-    fixlistL := BlistList([1..n], fixedsetL);
+# Make a refiner which accepts permutations p
+# such that fixlistL[i^p] = fixlistR[i]
+BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR)
+    local filtersL, filtersR;
     filtersL := [rec(partition := {i} -> fixlistL[i])];
-
-    fixlistR := BlistList([1..n], fixedsetR);
     filtersR := [rec(partition := {i} -> fixlistR[i])];
-
-    r := rec(
-        name := "SetTransport",
-        check := {p} -> OnSets(fixedsetL, p) = fixedsetR,
+    return rec(
+        name := name,
+        check := {p} -> ForAll([1..Length(fixlistL)], {i} -> fixlistL[i^p] = fixlistR[i]),
         refine := rec(
             initalise := function(ps, rbase)
                 if rbase = fail then
@@ -55,8 +33,79 @@ BTKit_Con.SetTransporter := function(n, fixedsetL, fixedsetR)
                     return filtersR;
                 fi;
             end)
-        );
-    return r;
+    );
+end;
+
+BTKit_Con.TupleStab := function(n, fixpoints)
+    local fixlist, i;
+    fixlist := [1..n]*0;
+    for i in [1..Length(fixpoints)] do
+        fixlist[fixpoints[i]] := i;
+    od;
+    return BTKit_MakeFixlistStabilizer("TupleStab", fixlist);
+end;
+
+BTKit_Con.TupleTransporter := function(n, fixpointsL, fixpointsR)
+    local fixlistL, fixlistR, i;
+    fixlistL := [1..n]*0;
+    for i in [1..Length(fixpointsL)] do
+        fixlistL[fixpointsL[i]] := i;
+    od;
+    fixlistR := [1..n]*0;
+    for i in [1..Length(fixpointsR)] do
+        fixlistR[fixpointsR[i]] := i;
+    od;
+    return BTKit_MakeFixlistTransporter("TupleTransport", fixlistL, fixlistR);
+end;
+
+BTKit_Con.SetStab := function(n, fixset)
+    local fixlist, i;
+    fixlist := [1..n]*0;
+    for i in [1..Length(fixset)] do
+        fixlist[fixset[i]] := 1;
+    od;
+    return BTKit_MakeFixlistStabilizer("SetStab", fixlist);
+end;
+
+BTKit_Con.SetTransporter := function(n, fixsetL, fixsetR)
+    local fixlistL, fixlistR, i;
+    fixlistL := [1..n]*0;
+    for i in [1..Length(fixsetL)] do
+        fixlistL[fixsetL[i]] := 1;
+    od;
+    fixlistR := [1..n]*0;
+    for i in [1..Length(fixsetR)] do
+        fixlistR[fixsetR[i]] := 1;
+    od;
+    return BTKit_MakeFixlistTransporter("SetTransport", fixlistL, fixlistR);
+end;
+
+BTKit_Con.OrderedPartitionStab := function(n, fixpart)
+    local fixlist, i, j;
+    fixlist := [1..n]*0;
+    for i in [1..Length(fixpart)] do
+        for j in fixpart[i] do
+            fixlist[j] := i;
+        od;
+    od;
+    return BTKit_MakeFixlistStabilizer("OrderedPartitionStab", fixlist);
+end;
+
+BTKit_Con.OrderedPartitionTransporter := function(n, fixpartL, fixpartR)
+    local fixlistL, fixlistR, i, j;
+    fixlistL := [1..n]*0;
+    for i in [1..Length(fixpartL)] do
+        for j in fixpartL[i] do
+            fixlistL[j] := i;
+        od;
+    od;
+    fixlistR := [1..n]*0;
+    for i in [1..Length(fixpartR)] do
+        for j in fixpartR[i] do
+            fixlistR[j] := i;
+        od;
+    od;
+    return BTKit_MakeFixlistTransporter("OrdredPartitionTransport", fixlistL, fixlistR);
 end;
 
 BTKit_Con.InGroup := function(n, group)

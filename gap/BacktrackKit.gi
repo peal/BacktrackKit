@@ -220,5 +220,9 @@ InstallGlobalFunction( BTKit_SimpleSinglePermSearch,
 
         InitaliseConstraints(state, rbase);
         BTKit_Backtrack(state, rbase, 1, perms, true, true);
-        return perms[2][1];
+        if Length(perms[2]) > 0 then
+            return perms[2][1];
+        else
+            return fail;
+        fi;
 end);
