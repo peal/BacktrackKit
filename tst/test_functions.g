@@ -1,5 +1,13 @@
 DeclareInfoClass("InfoBTKitTest");
 
+if not IsBound(BTKit_CentralizerTestSizes) then
+    BTKit_CentralizerTestSizes := [20..50];
+fi;
+
+if not IsBound(BTKit_IntersectionTestSizes) then
+    BTKit_IntersectionTestSizes := [50..100];
+fi;
+
 # Select a primitive group uniformly at random amongst all
 # primitive groups with degrees <degrees> using random source
 # <rdsrc>
@@ -35,7 +43,7 @@ PermCentralizerTests := function(k)
     local g, e, t, i, d, ps, gap, btkit;
 
     Info(InfoBTKitTest, 5, "Creating \"random\" group");
-    g := DirectProduct(List([1..2], x -> RandomPrimitiveGroup(GlobalMersenneTwister, [20..50])));
+    g := DirectProduct(List([1..2], x -> RandomPrimitiveGroup(GlobalMersenneTwister, BTKit_CentralizerTestSizes)));
     Info(InfoBTKitTest, 5, " making stabilizer chain");
     d := LargestMovedPoint(g);
     g := g ^ Random(GlobalMersenneTwister, SymmetricGroup(d));
@@ -71,8 +79,8 @@ CentralizerTest := function()
 
     Info(InfoBTKitTest, 5, "Creating \"random\" group");
     repeat
-    g := DirectProduct(List([1..2], x -> RandomPrimitiveGroup(GlobalMersenneTwister, [20..50])));
-    h := DirectProduct(List([1..2], x -> RandomPrimitiveGroup(GlobalMersenneTwister, [20..50])));
+    g := DirectProduct(List([1..2], x -> RandomPrimitiveGroup(GlobalMersenneTwister, BTKit_CentralizerTestSizes)));
+    h := DirectProduct(List([1..2], x -> RandomPrimitiveGroup(GlobalMersenneTwister, BTKit_CentralizerTestSizes)));
     h := Intersection(g,h);
     until not IsTrivial(h);
 
@@ -82,7 +90,6 @@ CentralizerTest := function()
     h := h ^ p;
 
     Info(InfoBTKitTest, 5, " done, on ", d, " points");
-    Info(InfoBTKitTest, 5, " testing ", k, " random element centralizers");
     ps := PartitionStack(d);
 
     g := Group(GeneratorsOfGroup(g));
@@ -115,8 +122,8 @@ IntersectionTests := function(k)
 
     for i in [1..k] do
         Info(InfoBTKitTest, 5, "Creating \"random\" groups");
-        g := DirectProduct(List([1..2], x -> RandomPrimitiveGroup(GlobalMersenneTwister, [50..100])));
-        h := DirectProduct(List([1..2], x -> RandomPrimitiveGroup(GlobalMersenneTwister, [50..100])));
+        g := DirectProduct(List([1..2], x -> RandomPrimitiveGroup(GlobalMersenneTwister, BTKit_IntersectionTestSizes)));
+        h := DirectProduct(List([1..2], x -> RandomPrimitiveGroup(GlobalMersenneTwister, BTKit_IntersectionTestSizes)));
 
         d := Maximum(LargestMovedPoint(g), LargestMovedPoint(h));
         g := g ^ Random(GlobalMersenneTwister, SymmetricGroup(d));
