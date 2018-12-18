@@ -95,10 +95,13 @@ InstallGlobalFunction( BTKit_BuildRBase,
     function(state, branchselector)
         local ps_depth, rbase, tracelist, tracer, branchinfo, saved, branchCell, branchPos;
         Info(InfoBTKit, 1, "Building RBase");
+        
+        saved := BTKit_SaveState(state);
+
+        InitaliseConstraints(state);
+
         rbase := rec(branches := []);
         ps_depth := PS_Cells(state.ps);
-
-        saved := BTKit_SaveState(state);
 
         while PS_Cells(state.ps) <> PS_Points(state.ps) do
             branchCell := branchselector(state.ps);
@@ -198,11 +201,10 @@ InstallGlobalFunction( BTKit_SimpleSearch,
     function(ps, conlist)
         local rbase, perms, state;
         state := rec(ps := ps, conlist := conlist);
-        if not InitaliseConstraints(state) then
-            return fail;
-        fi;
         rbase := BTKit_BuildRBase(state, BranchSelector_MinSizeCell);
         perms := [ Group(()) ];
+
+        InitaliseConstraints(state);
         BTKit_Backtrack(state, rbase, 1, perms, true);
         return perms[1];
 end);
