@@ -4,6 +4,19 @@
 # Implementations
 #
 
+
+
+BTKit_SaveState := function(state)
+    return rec(depth := PS_Cells(state.ps),
+               conState := BTKit_SaveConstraintState(state.conlist),
+               );
+end;
+
+BTKit_RestoreState := function(state, saved)
+    PS_RevertToCellCount(state.ps, saved.depth);
+    BTKit_RestoreConstraintState(state.conlist, saved.conState);
+end;
+
 BTKit_ApplyFilters := function(ps, tracer, filters)
     local f, ret;
     if filters = fail then
@@ -73,13 +86,12 @@ end;
 
 InstallGlobalFunction( BTKit_BuildRBase,
     function(state, branchselector)
-        local ps_depth, rbase, tracelist, tracer, branchinfo, savedState, saveDepth, branchCell, branchPos;
+        local ps_depth, rbase, tracelist, tracer, branchinfo, saved, branchCell, branchPos;
         Info(InfoBTKit, 1, "Building RBase");
         rbase := rec(branches := []);
         ps_depth := PS_Cells(state.ps);
 
-        saveDepth := PS_Cells(state.ps);
-        savedState := BTKit_SaveConstraintState(state.conlist);
+        saved := BTKit_SaveState(state);
 
         while PS_Cells(state.ps) <> PS_Points(state.ps) do
             branchCell := branchselector(state.ps);
@@ -95,8 +107,7 @@ InstallGlobalFunction( BTKit_BuildRBase,
         rbase.ps := Immutable(state.ps);
         rbase.depth := Length(rbase.branches);
 
-        PS_RevertToCellCount(state.ps, saveDepth);
-        BTKit_RestoreConstraintState(state.conlist, savedState);
+        BTKit_RestoreState(state, saved);
         
         return rbase;
     end);
@@ -126,7 +137,7 @@ end;
 
 InstallGlobalFunction( BTKit_Backtrack,
     function(state, rbase, depth, subgroup, parent_special)
-    local p, found, isSol, saveState, saveDepth, vals, branchInfo, v, tracer, special, perms;
+    local p, found, isSol, saved, vals, branchInfo, v, tracer, special, perms;
     Info(InfoBTKit, 2, "Partition: ", PS_AsPartition(state.ps));
 
     if depth > Length(rbase.branches) then
@@ -152,9 +163,8 @@ InstallGlobalFunction( BTKit_Backtrack,
         Info(InfoBTKit, 2, "Searching: ", vals, " parent_special: ", parent_special, " special: ", special);
         for v in vals do
             Info(InfoBTKit, 2, " Branch: ", v);
-            saveDepth := PS_Cells(state.ps);
-            saveState := BTKit_SaveConstraintState(state.conlist);
-
+            saved := BTKit_SaveState(state);
+            
             tracer := FollowingTracer(rbase.branches[depth].tracer);
             found := false;
             if PS_SplitCellByFunction(state.ps, tracer, branchInfo.cell, {x} -> x = v) and
@@ -162,8 +172,7 @@ InstallGlobalFunction( BTKit_Backtrack,
                 found := BTKit_Backtrack(state, rbase, depth+1, subgroup, special);
             fi;
 
-            PS_RevertToCellCount(state.ps, saveDepth);
-            BTKit_RestoreConstraintState(state.conlist, saveState);
+            BTKit_RestoreState(state, saved);
 
             # We found a permutation below so we return to the deepest
             # special node node above
