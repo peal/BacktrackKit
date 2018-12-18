@@ -213,13 +213,18 @@ end);
 
 InstallGlobalFunction( BTKit_SimpleSinglePermSearch,
     function(ps, conlist)
-        local rbase, perms, state;
+        local rbase, perms, state, saved;
         state := rec(ps := ps, conlist := conlist);
+        saved := BTKit_SaveState(state);
         rbase := BTKit_BuildRBase(state, BranchSelector_MinSizeCell);
         perms := [ Group(()), [] ];
 
         InitaliseConstraints(state, rbase);
+
         BTKit_Backtrack(state, rbase, 1, perms, true, true);
+
+        BTKit_RestoreState(state, saved);
+
         if Length(perms[2]) > 0 then
             return perms[2][1];
         else

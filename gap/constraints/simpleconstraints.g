@@ -24,7 +24,7 @@ BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR)
     filtersR := [rec(partition := {i} -> fixlistR[i])];
     return rec(
         name := name,
-        check := {p} -> ForAll([1..Length(fixlistL)], {i} -> fixlistL[i^p] = fixlistR[i]),
+        check := {p} -> ForAll([1..Length(fixlistL)], {i} -> fixlistL[i] = fixlistR[i^p]),
         refine := rec(
             initalise := function(ps, rbase)
                 if rbase = fail then
