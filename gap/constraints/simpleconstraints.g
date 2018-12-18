@@ -131,7 +131,7 @@ BTKit_Con.PermCentralizer := function(n, fixedelt)
     end;
 
 
-    r := rec( name := "EltCentralizer",
+    r := rec( name := "PermCentralizer",
               check := {p} -> fixedelt ^ p = fixedelt,
               refine := rec( initalise := function(ps)
                                local points;
