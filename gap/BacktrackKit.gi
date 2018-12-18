@@ -43,12 +43,12 @@ end;
 #! @Description
 #! Set up a list of constraints. This should be called once, at
 #! the start of search after all constraints have been created.
-InitaliseConstraints := function(state)
+InitaliseConstraints := function(state, rbase)
     local c, filters, tracer;
     tracer := RecordingTracer();
     for c in state.conlist do
         if IsBound(c.refine.initalise) then
-            filters := c.refine.initalise(state.ps);
+            filters := c.refine.initalise(state.ps, rbase);
             if not BTKit_ApplyFilters(state.ps, tracer, filters) then
                 return false;
             fi;
@@ -98,7 +98,7 @@ InstallGlobalFunction( BTKit_BuildRBase,
         
         saved := BTKit_SaveState(state);
 
-        InitaliseConstraints(state);
+        InitaliseConstraints(state, fail);
 
         rbase := rec(branches := []);
         ps_depth := PS_Cells(state.ps);
@@ -146,7 +146,7 @@ BTKit_CheckSolution := function(perm, conlist)
 end;
 
 InstallGlobalFunction( BTKit_Backtrack,
-    function(state, rbase, depth, subgroup, parent_special)
+    function(state, rbase, depth, subgroup, parent_special, find_single_perm)
     local p, found, isSol, saved, vals, branchInfo, v, tracer, special, perms;
     Info(InfoBTKit, 2, "Partition: ", PS_AsPartition(state.ps));
 
@@ -156,6 +156,7 @@ InstallGlobalFunction( BTKit_Backtrack,
         Info(InfoBTKit, 2, "Maybe solution?",p,":",isSol);
         if isSol then
             subgroup[1] := ClosureGroup(subgroup[1], p);
+            Add(subgroup[2], p);
             return true;
         else
             return false;
@@ -179,14 +180,14 @@ InstallGlobalFunction( BTKit_Backtrack,
             found := false;
             if PS_SplitCellByFunction(state.ps, tracer, branchInfo.cell, {x} -> x = v) and
                BTKit_RefineConstraints(state, tracer, rbase.ps) then
-                found := BTKit_Backtrack(state, rbase, depth+1, subgroup, special);
+                found := BTKit_Backtrack(state, rbase, depth+1, subgroup, special, find_single_perm);
             fi;
 
             BTKit_RestoreState(state, saved);
 
             # We found a permutation below so we return to the deepest
             # special node node above
-            if found and (not special) and (not parent_special) then
+            if found and (find_single_perm or ((not special) and (not parent_special))) then
                 Print("\<");
                 return true;
             fi;
@@ -202,9 +203,22 @@ InstallGlobalFunction( BTKit_SimpleSearch,
         local rbase, perms, state;
         state := rec(ps := ps, conlist := conlist);
         rbase := BTKit_BuildRBase(state, BranchSelector_MinSizeCell);
-        perms := [ Group(()) ];
+        perms := [ Group(()), [] ];
 
-        InitaliseConstraints(state);
-        BTKit_Backtrack(state, rbase, 1, perms, true);
+        InitaliseConstraints(state, rbase);
+        BTKit_Backtrack(state, rbase, 1, perms, true, false);
         return perms[1];
+end);
+
+
+InstallGlobalFunction( BTKit_SimpleSinglePermSearch,
+    function(ps, conlist)
+        local rbase, perms, state;
+        state := rec(ps := ps, conlist := conlist);
+        rbase := BTKit_BuildRBase(state, BranchSelector_MinSizeCell);
+        perms := [ Group(()), [] ];
+
+        InitaliseConstraints(state, rbase);
+        BTKit_Backtrack(state, rbase, 1, perms, true, true);
+        return perms[2][1];
 end);

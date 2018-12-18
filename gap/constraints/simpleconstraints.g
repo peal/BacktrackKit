@@ -13,7 +13,7 @@ BTKit_Con.TupleStab := function(n, fixpoints)
         name := "TupleStab",
         check := {p} -> OnTuples(fixpoints, p) = fixpoints,
         refine := rec(
-            initalise := function(ps)
+            initalise := function(ps, rbase)
                 return filters;
             end)
         );
@@ -29,8 +29,31 @@ BTKit_Con.SetStab := function(n, fixedset)
         name := "SetStab",
         check := {p} -> OnSets(fixedset, p) = fixedset,
         refine := rec(
-            initalise := function(ps)
+            initalise := function(ps, rbase)
                 return filters;
+            end)
+        );
+    return r;
+end;
+
+BTKit_Con.SetTransporter := function(n, fixedsetL, fixedsetR)
+    local fixlistL, fixlistR, i, filtersL, filtersR, r;
+    fixlistL := BlistList([1..n], fixedsetL);
+    filtersL := [rec(partition := {i} -> fixlistL[i])];
+
+    fixlistR := BlistList([1..n], fixedsetR);
+    filtersR := [rec(partition := {i} -> fixlistR[i])];
+
+    r := rec(
+        name := "SetTransport",
+        check := {p} -> OnSets(fixedsetL, p) = fixedsetR,
+        refine := rec(
+            initalise := function(ps, rbase)
+                if rbase = fail then
+                    return filtersL;
+                else
+                    return filtersR;
+                fi;
             end)
         );
     return r;
@@ -65,7 +88,7 @@ BTKit_Con.InGroup := function(n, group)
         name := "InGroup",
         check := {p} -> p in group,
         refine := rec(
-            initalise := function(ps)
+            initalise := function(ps, rbase)
                 local fixedpoints, mapval, points;
                 fixedpoints := PS_FixedPoints(ps);
                 points := fillOrbits(fixedpoints);
@@ -133,7 +156,7 @@ BTKit_Con.PermCentralizer := function(n, fixedelt)
 
     r := rec( name := "PermCentralizer",
               check := {p} -> fixedelt ^ p = fixedelt,
-              refine := rec( initalise := function(ps)
+              refine := rec( initalise := function(ps, rbase)
                                local points;
                                points := fixByFixed(PS_FixedPoints(ps));
                                # Pass cyclepart just on the first call, for efficency
