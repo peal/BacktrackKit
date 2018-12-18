@@ -5,13 +5,17 @@
 #
 
 
-
+#! @Description
+#! Return a small object which can be later used to return to this
+#! state from later in the search.
 BTKit_SaveState := function(state)
     return rec(depth := PS_Cells(state.ps),
                conState := BTKit_SaveConstraintState(state.conlist),
                );
 end;
 
+#! @Description
+#! Return to a saved state from later in the search.
 BTKit_RestoreState := function(state, saved)
     PS_RevertToCellCount(state.ps, saved.depth);
     BTKit_RestoreConstraintState(state.conlist, saved.conState);
@@ -36,6 +40,9 @@ BTKit_ApplyFilters := function(ps, tracer, filters)
     return true;
 end;
 
+#! @Description
+#! Set up a list of constraints. This should be called once, at
+#! the start of search after all constraints have been created.
 InitaliseConstraints := function(state)
     local c, filters, tracer;
     tracer := RecordingTracer();
