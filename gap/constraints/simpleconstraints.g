@@ -100,7 +100,7 @@ BTKit_Con.InGroup := function(n, group)
         return r;
     end;
 
-BTKit_Con.EltCentralizer := function(n, fixedelt)
+BTKit_Con.PermCentralizer := function(n, fixedelt)
     local cycles, cyclepart,
           i, c, s, r,
           fixByFixed, pointMap;
