@@ -17,8 +17,8 @@ matrix:
     - env: CFLAGS="-O2"
 
 branches:
-  only:
-    - master
+        #  only:
+        #    - master
 
 before_script:
   - export GAPROOT="$HOME/gap"
