@@ -1,14 +1,28 @@
 BTKit_Con := rec();
 
+# Any refiner which can be expressed as "stabilize an ordered partition"
+# can be implemented easily and efficently, as we only need to handle
+# the root node of search (as we never gain more information as search
+# progresses).
+# Therefore we have two general functions which implement:
+#
+# MakeFixlistStabilizer: Returns the refiner which implements
+#                        fixlist[i] = fixlist[i^p]
+#
+# MakeFixListTransporter: Returns the refiner which implements
+#                         fixlistL[i] = fixlistR[i^p]
+#
+# These are used to then implement refiners for sets, tuples
+# and ordered partitions.
 
 # Make a refiner which accepts permutations p
-# such that fixlist[i^p] = fixlist[i]
+# such that fixlist[i] = fixlist[i^p]
 BTKit_MakeFixlistStabilizer := function(name, fixlist)
     local filters;
     filters := [rec(partition := {i} -> fixlist[i])];
     return rec(
         name := name,
-        check := {p} -> ForAll([1..Length(fixlist)], {i} -> fixlist[i^p] = fixlist[i]),
+        check := {p} -> ForAll([1..Length(fixlist)], {i} -> fixlist[i] = fixlist[i^p]),
         refine := rec(
             initalise := function(ps, rbase)
                 return filters;
@@ -17,7 +31,7 @@ BTKit_MakeFixlistStabilizer := function(name, fixlist)
 end;
 
 # Make a refiner which accepts permutations p
-# such that fixlistL[i^p] = fixlistR[i]
+# such that fixlistL[i] = fixlistR[i^p]
 BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR)
     local filtersL, filtersR;
     filtersL := [rec(partition := {i} -> fixlistL[i])];
@@ -108,6 +122,15 @@ BTKit_Con.OrderedPartitionTransporter := function(n, fixpartL, fixpartR)
     return BTKit_MakeFixlistTransporter("OrdredPartitionTransport", fixlistL, fixlistR);
 end;
 
+
+# The following refiner is probably the most complex. It implements
+# 'permutation is in group given by list of generators'.
+#
+# Exactly why this refiner works, and why we use 'RepresentativeAction',
+# requires more explanation than fits in this comment. However, every
+# other refiner we have ever seen does not need to worry about the values
+# in the rBase, so don't use this as a model for another refiner, unless
+# that one is also based around a group given as a list of generators.
 BTKit_Con.InGroup := function(n, group)
     local orbList,fillOrbits, orbMap, pointMap, r;
     fillOrbits := function(pointlist)
@@ -172,6 +195,7 @@ BTKit_Con.InGroup := function(n, group)
         return r;
     end;
 
+# Find the centralizer of a permutation
 BTKit_Con.PermCentralizer := function(n, fixedelt)
     local cycles, cyclepart,
           i, c, s, r,
