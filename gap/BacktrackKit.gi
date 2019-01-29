@@ -40,23 +40,6 @@ BTKit_ApplyFilters := function(ps, tracer, filters)
     return true;
 end;
 
-#! @Description
-#! Set up a list of constraints. This should be called once, at
-#! the start of search after all constraints have been created.
-InitaliseConstraints := function(state, rbase)
-    local c, filters, tracer;
-    tracer := RecordingTracer();
-    for c in state.conlist do
-        if IsBound(c.refine.initalise) then
-            filters := c.refine.initalise(state.ps, rbase);
-            if not BTKit_ApplyFilters(state.ps, tracer, filters) then
-                return false;
-            fi;
-        fi;
-    od;
-    return true;
-end;
-
 BTKit_RefineConstraints := function(state, tracer, rbase)
     local c, filters, cellCount;
     cellCount := -1;
@@ -73,6 +56,29 @@ BTKit_RefineConstraints := function(state, tracer, rbase)
     od;
     return true;
 end;
+
+
+#! @Description
+#! Set up a list of constraints. This should be called once, at
+#! the start of search after all constraints have been created.
+BTKit_InitaliseConstraints := function(state, tracer, rbase)
+    local c, filters;
+    for c in state.conlist do
+        if IsBound(c.refine.initalise) then
+            filters := c.refine.initalise(state.ps, rbase);
+            if not BTKit_ApplyFilters(state.ps, tracer, filters) then
+                return false;
+            fi;
+        fi;
+    od;
+    return true;
+end;
+
+BTKit_FirstFixedPoint := function(state, tracer, rbase)
+    return BTKit_InitaliseConstraints(state, tracer, rbase) and
+           BTKit_RefineConstraints(state, tracer, rbase);
+end;
+
 
 #! @Description
 #! Return the smallest cell of <a>ps</a> which is not of size 1,
@@ -93,15 +99,17 @@ end;
 
 InstallGlobalFunction( BTKit_BuildRBase,
     function(state, branchselector)
-        local ps_depth, rbase, tracelist, tracer, branchinfo, saved, branchCell, branchPos;
+        local rbase, tracelist, tracer, branchinfo, saved, branchCell, branchPos;
         Info(InfoBTKit, 1, "Building RBase");
         
         saved := BTKit_SaveState(state);
 
-        InitaliseConstraints(state, fail);
-
         rbase := rec(branches := []);
-        ps_depth := PS_Cells(state.ps);
+
+        tracer := RecordingTracer();
+        rbase.root := rec(tracer := tracer);
+
+        BTKit_FirstFixedPoint(state, tracer, fail);
 
         while PS_Cells(state.ps) <> PS_Points(state.ps) do
             branchCell := branchselector(state.ps);
@@ -200,14 +208,16 @@ end);
 
 InstallGlobalFunction( BTKit_SimpleSearch,
     function(ps, conlist)
-        local rbase, perms, state, saved;
+        local rbase, perms, state, saved, tracer;
         state := rec(ps := ps, conlist := conlist);
         saved := BTKit_SaveState(state);
         rbase := BTKit_BuildRBase(state, BranchSelector_MinSizeCell);
         perms := [ Group(()), [] ];
 
-        InitaliseConstraints(state, rbase);
-        BTKit_Backtrack(state, rbase, 1, perms, true, false);
+        tracer := FollowingTracer(rbase.root.tracer);
+        if BTKit_FirstFixedPoint(state, tracer, rbase.ps) then
+            BTKit_Backtrack(state, rbase, 1, perms, true, false);
+        fi;
         BTKit_RestoreState(state, saved);
         return perms[1];
 end);
@@ -215,15 +225,16 @@ end);
 
 InstallGlobalFunction( BTKit_SimpleSinglePermSearch,
     function(ps, conlist)
-        local rbase, perms, state, saved;
+        local rbase, perms, state, saved, tracer;
         state := rec(ps := ps, conlist := conlist);
         saved := BTKit_SaveState(state);
         rbase := BTKit_BuildRBase(state, BranchSelector_MinSizeCell);
         perms := [ Group(()), [] ];
 
-        InitaliseConstraints(state, rbase);
-
-        BTKit_Backtrack(state, rbase, 1, perms, true, true);
+        tracer := FollowingTracer(rbase.root.tracer);
+        if BTKit_FirstFixedPoint(state, tracer, rbase.ps) then
+            BTKit_Backtrack(state, rbase, 1, perms, true, true);
+        fi;
 
         BTKit_RestoreState(state, saved);
 
