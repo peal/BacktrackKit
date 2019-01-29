@@ -46,7 +46,7 @@ BTKit_Con.GraphTrans := function(graphL, graphR)
                 else
                     filt := BTKit_FilterGraph(ps, graphR);
                 fi;
-                return [rec(partition := {x} -> filt[x])];
+                return {x} -> filt[x];
             end;
     return rec(
         name := "GraphTrans",

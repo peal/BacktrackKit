@@ -19,7 +19,7 @@ BTKit_Con := rec();
 # such that fixlist[i] = fixlist[i^p]
 BTKit_MakeFixlistStabilizer := function(name, fixlist)
     local filters;
-    filters := [rec(partition := {i} -> fixlist[i])];
+    filters :=  {i} -> fixlist[i];
     return rec(
         name := name,
         check := {p} -> ForAll([1..Length(fixlist)], {i} -> fixlist[i] = fixlist[i^p]),
@@ -34,8 +34,8 @@ end;
 # such that fixlistL[i] = fixlistR[i^p]
 BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR)
     local filtersL, filtersR;
-    filtersL := [rec(partition := {i} -> fixlistL[i])];
-    filtersR := [rec(partition := {i} -> fixlistR[i])];
+    filtersL :=  {i} -> fixlistL[i];
+    filtersR :=  {i} -> fixlistR[i];
     return rec(
         name := name,
         check := {p} -> ForAll([1..Length(fixlistL)], {i} -> fixlistL[i] = fixlistR[i^p]),
@@ -164,7 +164,7 @@ BTKit_Con.InGroup := function(n, group)
                 local fixedpoints, mapval, points;
                 fixedpoints := PS_FixedPoints(ps);
                 points := fillOrbits(fixedpoints);
-                return [rec(partition := {x} -> points[x])];
+                return {x} -> points[x];
             end,
 
             changed := function(ps, rbase)
@@ -172,7 +172,7 @@ BTKit_Con.InGroup := function(n, group)
                 if rbase = fail then
                     fixedpoints := PS_FixedPoints(ps);
                     points := fillOrbits(fixedpoints);
-                    return [rec(partition := {x} -> points[x])];
+                    return {x} -> points[x];
                 else
                     fixedps := PS_FixedPoints(ps);
                     fixedrbase := PS_FixedPoints(rbase);
@@ -188,7 +188,7 @@ BTKit_Con.InGroup := function(n, group)
                     fi;
                     # this could as well call fillOrbits
                     points := pointMap[fixedrbase];
-                    return [rec(partition := {x} -> points[x^p])];
+                    return {x} -> points[x^p];
                 fi;
             end)
         );
@@ -233,12 +233,12 @@ BTKit_Con.PermCentralizer := function(n, fixedelt)
                                local points;
                                points := fixByFixed(PS_FixedPoints(ps));
                                # Pass cyclepart just on the first call, for efficency
-                               return [rec(partition := {x} -> points[x]), rec(partition := {x} -> cyclepart[x])];
+                               return {x} -> [points[x], cyclepart[x]];
                              end,
                              changed := function(ps, rbase)
                                local points;
                                points := fixByFixed(PS_FixedPoints(ps));
-                               return [rec(partition := {x} -> points[x])];
+                               return {x} -> points[x];
                              end) );
     return r;
 end;

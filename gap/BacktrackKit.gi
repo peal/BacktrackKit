@@ -21,22 +21,20 @@ BTKit_RestoreState := function(state, saved)
     BTKit_RestoreConstraintState(state.conlist, saved.conState);
 end;
 
-BTKit_ApplyFilters := function(ps, tracer, filters)
+BTKit_ApplyFilters := function(ps, tracer, filter)
     local f, ret;
-    if filters = fail then
+    if filter = fail then
         Info(InfoBTKit, 1, "Failed filter");
         return false;
     fi;
-    for f in filters do
-        if IsFunction(f.partition) then
-            if not PS_SplitCellsByFunction(ps, tracer, f.partition) then
-                Info(InfoBTKit, 1, "Trace violation");
-                return false;
-            fi;
-        else
-            ErrorNoReturn("Invalid filter?");
+    if IsFunction(filter) then
+        if not PS_SplitCellsByFunction(ps, tracer, filter) then
+            Info(InfoBTKit, 1, "Trace violation");
+            return false;
         fi;
-    od;
+    else
+        ErrorNoReturn("Invalid filter?");
+    fi;
     return true;
 end;
 
