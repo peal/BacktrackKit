@@ -8,7 +8,7 @@
 # For directed graphs, make the 'colour' of the edge in both directions different
 # (for example 1 in the forward direction, -1 in the backward direction)
 BTKit_FilterGraph := function(ps, graph)
-    local list, points, i;
+    local list, points, i, j;
     points := PS_Points(ps);
     list := [];
     for i in [1..points] do
@@ -19,41 +19,41 @@ BTKit_FilterGraph := function(ps, graph)
         Sort(list[i]);
     od;
     return list;
-od;
-
-# Check if graph1^p = graph2
-BTKit_GraphEqualPerm := function(p, graph1, graph2)
-    local i, edgemap;
-    for i in 
-
-BTKit_Con.GraphStab := function(name, graphL, graphR)
-    local filters;
-    return rec(
-        name := name,
-        check := {p} -> ForAll([1..Length(fixlist)], {i} -> fixlist[i] = fixlist[i^p]),
-        refine := rec(
-            initalise := function(ps, rbase)
-                return filters;
-            end)
-    );
 end;
+
+BTKit_OnGraph := function(p, graph)
+    local graphimg, neighbours,i,j;
+    graphimg := [];
+    for i in [1..Length(graph)] do
+        neighbours := [];
+        for j in graph[i] do
+            Add(neighbours, [j[1], j[2]^p]);
+        od;
+        graphimg[i^p] := neighbours;
+    od;
+    return graphimg;
+end;
+
 
 # Make a refiner which accepts permutations p
 # such that fixlistL[i] = fixlistR[i^p]
-BTKit_Con.GraphStab := function(name, fixlistL, fixlistR)
-    local filtersL, filtersR;
-    filtersL := [rec(partition := {i} -> fixlistL[i])];
-    filtersR := [rec(partition := {i} -> fixlistR[i])];
-    return rec(
-        name := name,
-        check := {p} -> ForAll([1..Length(fixlistL)], {i} -> fixlistL[i] = fixlistR[i^p]),
-        refine := rec(
-            initalise := function(ps, rbase)
+BTKit_Con.GraphTrans := function(graphL, graphR)
+    local filtersL, filtersR, check;
+    check := function(ps, rbase)
+                local filt;
                 if rbase = fail then
-                    return filtersL;
+                    filt := BTKit_FilterGraph(ps, graphL);
                 else
-                    return filtersR;
+                    filt := BTKit_FilterGraph(ps, graphR);
                 fi;
-            end)
+                return [rec(partition := {x} -> filt[x])];
+            end;
+    return rec(
+        name := "GraphTrans",
+        check := {p} -> BTKit_OnGraph(p, graphL) = graphR,
+        refine := rec(
+            initalise := check, 
+            changed := check
+        )
     );
 end;

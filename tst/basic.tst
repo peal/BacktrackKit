@@ -11,3 +11,6 @@ Group(())
 gap> G := BTKit_SimpleSearch(ps6, [BTKit_Con.InGroup(6, AlternatingGroup(6)), BTKit_Con.SetStab(6,[2,4,6]), BTKit_Con.TupleStab(6,[1,2]) ]);;
 gap> G = Intersection(AlternatingGroup(6), Stabilizer(AlternatingGroup(6), [2,4,6], OnSets), Stabilizer(AlternatingGroup(6), [1,2], OnTuples));
 true
+gap> graph := [ [ [1,2] ], [ [1,3] ], [ [1,1] ] ];;
+gap> BTKit_SimpleSearch(ps3, [BTKit_Con.GraphTrans( graph, graph)]) = Group( (1,2,3) );
+true
