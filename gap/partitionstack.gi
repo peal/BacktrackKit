@@ -191,7 +191,7 @@ InstallMethod(PS_SplitCellByFunction, [IsPartitionStackRep, IsTracer, IsPosInt, 
             fi;
             lastval := curval;
         od;
-        return true;
+        return AddEvent(t, rec(endsplit := true, reason := f(slice[1])));
     end);
 
 InstallMethod(PS_SplitCellByUnorderedFunction, [IsPartitionStack, IsTracer, IsPosInt, IsFunction],

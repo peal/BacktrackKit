@@ -29,7 +29,7 @@ BTKit_OnGraph := function(p, graph)
         for j in graph[i] do
             Add(neighbours, [j[1], j[2]^p]);
         od;
-        graphimg[i^p] := neighbours;
+        graphimg[i^p] := SortedList(neighbours);
     od;
     return graphimg;
 end;
@@ -39,6 +39,9 @@ end;
 # such that fixlistL[i] = fixlistR[i^p]
 BTKit_Con.GraphTrans := function(graphL, graphR)
     local filtersL, filtersR, check;
+    # Give an initial sort
+    graphL := List(graphL, SortedList);
+    graphR := List(graphR, SortedList);
     check := function(ps, rbase)
                 local filt;
                 if rbase = fail then
