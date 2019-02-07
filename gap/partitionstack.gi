@@ -157,7 +157,7 @@ BindGlobal("_PSR_SplitCell",
         fi;
 
         Add(ps!.splits, cell);
-        return AddEvent(t, rec(oldcell := cell, newcell := newcellid,
+        return MaybeAddEvent(t, rec(oldcell := cell, newcell := newcellid,
                                oldsize := index - 1, newsize := splitcellsize - (index - 1),
                                reason := reason));
     end);
@@ -191,7 +191,7 @@ InstallMethod(PS_SplitCellByFunction, [IsPartitionStackRep, IsTracer, IsPosInt, 
             fi;
             lastval := curval;
         od;
-        return AddEvent(t, rec(endsplit := true, reason := f(slice[1])));
+        return MaybeAddEvent(t, rec(endsplit := true, reason := f(slice[1])));
     end);
 
 InstallMethod(PS_SplitCellByUnorderedFunction, [IsPartitionStack, IsTracer, IsPosInt, IsFunction],

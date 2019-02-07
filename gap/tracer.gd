@@ -60,3 +60,6 @@ DeclareOperation("TraceEvent", [IsTracer, IsPosInt]);
 
 DeclareInfoClass("InfoTrace");
 SetInfoLevel(InfoTrace, 1);
+
+# This adds a horribly hack "customisation point", for me to play with.
+MaybeAddEvent := function(t, o) return AddEvent(t, o); end;
