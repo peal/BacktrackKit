@@ -30,6 +30,8 @@ DeclareOperation("PS_Points", [IsPartitionStack]);
 #! The number of cells in the partition
 DeclareOperation("PS_Cells", [IsPartitionStack]);
 
+#! Returns if all cells are of size 1
+DeclareOperation("PS_Fixed", [IsPartitionStack]);
 
 #! Return the current partition state as a list of sets
 DeclareOperation("PS_AsPartition", [IsPartitionStack]);
