@@ -211,7 +211,7 @@ InstallGlobalFunction( BTKit_Backtrack,
             BTKit_RestoreState(state, saved);
 
             # We found a permutation below so we return to the deepest
-            # special node node above
+            # special node above
             if found and (find_single_perm or ((not special) and (not parent_special))) then
                 Print("\<");
                 return true;
