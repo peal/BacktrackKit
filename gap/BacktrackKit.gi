@@ -4,6 +4,15 @@
 # Implementations
 #
 
+BTKit_Stats := rec( nodes := 0 );
+
+BTKit_Stats_AddNode := function()
+    BTKit_Stats.nodes := BTKit_Stats.nodes + 1;
+end;
+
+BTKit_ResetStats := function()
+    BTKit_Stats := rec( nodes := 0 );
+end;
 
 #! @Description
 #! Return a small object which can be later used to return to this
@@ -155,6 +164,8 @@ InstallGlobalFunction( BTKit_Backtrack,
     function(state, rbase, depth, subgroup, parent_special, find_single_perm)
     local p, found, isSol, saved, vals, branchInfo, v, tracer, special, perms;
     Info(InfoBTKit, 2, "Partition: ", PS_AsPartition(state.ps));
+
+    BTKit_Stats_AddNode();
 
     if depth > Length(rbase.branches) then
         # If we haven't reached fixed everything, this isn't a solution.
