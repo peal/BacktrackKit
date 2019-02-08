@@ -18,6 +18,9 @@
 /doc/*.tex
 /doc/*.toc
 /doc/manual.pdf
+/doc/_*.xml
+/doc/BacktrackKit.xml
+/doc/title.xml
 
 /bin/
 /Makefile
