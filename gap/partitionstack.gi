@@ -71,16 +71,17 @@ InstallMethod(IsInternallyConsistent, [IsPartitionStack],
 
         fixedcells := Filtered([1..Length(ps!.cellsize)], x -> ps!.cellsize[x] = 1);
         if Set(ps!.fixed) <> Set(fixedcells) or
-           Length(Set(ps!.fixed)) = Length(ps!.fixed) then
+           Length(Set(ps!.fixed)) <> Length(ps!.fixed) then
             return false;
         fi;
 
         if Set(ps!.vals) <> [1..n] or Set(ps!.invvals) <> [1..n] then
             return false;
         fi;
-        if ForAny([1..n], ps!.vals[ps!.invvals[i]] <> i) then
+        if ForAny([1..n], i -> ps!.vals[ps!.invvals[i]] <> i) then
             return false;
         fi;
+        return true;
     end);
 
 InstallMethod(PS_AsPartition, [IsPartitionStack],
