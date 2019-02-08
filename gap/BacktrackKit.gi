@@ -157,6 +157,10 @@ InstallGlobalFunction( BTKit_Backtrack,
     Info(InfoBTKit, 2, "Partition: ", PS_AsPartition(state.ps));
 
     if depth > Length(rbase.branches) then
+        # If we haven't reached fixed everything, this isn't a solution.
+        if not PS_Fixed(state.ps) then
+            return false;
+        fi;
         p := BTKit_GetCandidateSolution(state.ps, rbase);
         isSol := BTKit_CheckSolution(p, state.conlist);
         Info(InfoBTKit, 2, "Maybe solution?",p,":",isSol);
@@ -169,6 +173,10 @@ InstallGlobalFunction( BTKit_Backtrack,
         fi;
     else
         branchInfo := rbase.branches[depth];
+        # If this number is smaller than the number of cells, we aren't branching on it
+        if PS_Cells(state.ps) < branchInfo.cell then
+            return false;
+        fi;
         vals := Set(PS_CellSlice(state.ps, branchInfo.cell));
         Info(InfoBTKit, 1, "Branching: ", depth, ":", branchInfo);
         Print("\>");
