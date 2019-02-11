@@ -28,8 +28,8 @@
 InstallGlobalFunction(PartitionStack,
 function(n)
     local marks;
-    # Make array full of 0s
-    marks := [1..n+1] * 0;
+    # Make array full of n+1 0s
+    marks := ListWithIdenticalEntries(n + 1, 0);
     marks[1] := 1;
     marks[n+1] := n+1;
     return Objectify(PartitionStackTypeMutable, 
