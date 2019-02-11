@@ -1,33 +1,33 @@
 #! @Chapter Ordered tracer
 #!
-#! An Ordered tracer is an Ordered Partition which supports
+#! An <E>ordered tracer</E> is an ordered partition which supports
 #! splitting a cell, and then later undoing a change, reverting the
-#! partition back to an earlier start.
+#! partition back to an earlier state.
 
 
 #! @Section API
 #!
 #! @Description
-#! Constructor for tracers
+#! Constructor for tracers.
 #! @Arguments
-#! @Returns a tracer which records the state
+#! @Returns a tracer which records the state.
 DeclareGlobalFunction("RecordingTracer");
 
 #! @Description
-#! Constructor for tracers
+#! Constructor for tracers.
 #! @Arguments
-#! @Returns a tracer which follows a previous tracer
+#! @Returns a tracer which follows a previous tracer.
 DeclareGlobalFunction("FollowingTracer");
 
 #! @Description
-#! Constructor for tracers
+#! Constructor for tracers.
 #! @Arguments
-#! @Returns a tracer which produces a canonical image
+#! @Returns a tracer which produces a canonical image.
 DeclareGlobalFunction("CanonicalisingTracer");
 
 
 #! @Description
-#! Category of tracers
+#! Category of tracers.
 DeclareCategory("IsTracer", IsObject);
 BindGlobal( "TracerFamily", NewFamily("TracerFamily") );
 
@@ -47,19 +47,23 @@ BindGlobal( "CanonicalisingTracerType", NewType(TracerFamily, IsCanonicalisingTr
 BindGlobal( "CanonicalisingTracerTypeMutable", NewType(TracerFamily,
                                         IsCanonicalisingTracerRep and IsMutable));
 
-#! Add an event to the trace
+#! @Description
+#! Add an event to the trace.
 #!
-#! @Returns a boolean, which represents if the event is accepted by the trace
+#! @Returns a boolean, which indicates whether the event is accepted by the
+#! trace.
 DeclareOperation("AddEvent", [IsTracer, IsObject]);
 
-#! Get length of a trace
+#! @Description
+#! Get the length of a trace.
 DeclareOperation("TraceLength", [IsTracer]);
 
-#! Get the list of events in the trace
+#! @Description
+#! Get the list of events in the trace.
 DeclareOperation("TraceEvent", [IsTracer, IsPosInt]);
 
 DeclareInfoClass("InfoTrace");
 SetInfoLevel(InfoTrace, 0);
 
-# This adds a horribly hack "customisation point", for me to play with.
+# This adds a horribly hacky "customisation point", for me to play with.
 MaybeAddEvent := function(t, o) return AddEvent(t, o); end;
