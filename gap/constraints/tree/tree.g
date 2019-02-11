@@ -10,9 +10,9 @@
 #         name := name,
 #         check := {p} -> ForAll(conlist, {c} -> c.check(p)),
 #         refine := rec(
-#             initalise := function(ps, rbase)
+#             initialise := function(ps, rbase)
 #                 local refines, gather;
-#                 refines := List(conlist, {c} -> c.initalise(ps, rbase));
+#                 refines := List(conlist, {c} -> c.initialise(ps, rbase));
 #                 gather := List([1..PS_Points(ps)], {i} -> List([1..Length(refines)], {x} -> refines[i](x)));
 #                 return {i} -> gather[i];
 #             end,
@@ -35,9 +35,9 @@
 #         name := name,
 #         check := {p} -> ForAll(conlist, {c} -> c.check(p)),
 #         refine := rec(
-#             initalise := function(ps, rbase)
+#             initialise := function(ps, rbase)
 #                 local refines, gather;
-#                 refines := List(conlist, {c} -> c.initalise(ps, rbase));
+#                 refines := List(conlist, {c} -> c.initialise(ps, rbase));
 #                 gather := List([1..PS_Points(ps)], {i} -> List([1..Length(refines)], {x} -> refines[i](x)));
 #                 return {i} -> gather[i];
 #             end,

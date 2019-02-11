@@ -24,7 +24,7 @@ BTKit_MakeFixlistStabilizer := function(name, fixlist)
         name := name,
         check := {p} -> ForAll([1..Length(fixlist)], {i} -> fixlist[i] = fixlist[i^p]),
         refine := rec(
-            initalise := function(ps, rbase)
+            initialise := function(ps, rbase)
                 return filters;
             end)
     );
@@ -40,7 +40,7 @@ BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR)
         name := name,
         check := {p} -> ForAll([1..Length(fixlistL)], {i} -> fixlistL[i] = fixlistR[i^p]),
         refine := rec(
-            initalise := function(ps, rbase)
+            initialise := function(ps, rbase)
                 if rbase = fail then
                     return filtersL;
                 else
@@ -160,7 +160,7 @@ BTKit_Con.InGroup := function(n, group)
         name := "InGroup",
         check := {p} -> p in group,
         refine := rec(
-            initalise := function(ps, rbase)
+            initialise := function(ps, rbase)
                 local fixedpoints, mapval, points;
                 fixedpoints := PS_FixedPoints(ps);
                 points := fillOrbits(fixedpoints);
@@ -229,7 +229,7 @@ BTKit_Con.PermCentralizer := function(n, fixedelt)
 
     r := rec( name := "PermCentralizer",
               check := {p} -> fixedelt ^ p = fixedelt,
-              refine := rec( initalise := function(ps, rbase)
+              refine := rec( initialise := function(ps, rbase)
                                local points;
                                points := fixByFixed(PS_FixedPoints(ps));
                                # Pass cyclepart just on the first call, for efficency

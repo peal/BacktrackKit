@@ -55,7 +55,7 @@ BTKit_Con.GraphTrans := function(graphL, graphR)
         name := "GraphTrans",
         check := {p} -> BTKit_OnGraph(p, graphL) = graphR,
         refine := rec(
-            initalise := check, 
+            initialise := check, 
             changed := check
         )
     );
