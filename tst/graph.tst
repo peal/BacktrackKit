@@ -16,8 +16,8 @@ gap> testGraph := function(graph,verts)
 > local g1, g2, btgraph, ps;
 > ps := PartitionStack(verts);
 > btgraph := ToBTKit_Graph(graph, verts);
-> g1 := BTKit_SimpleSearch(ps, [BTKit_Con.GraphTrans( btgraph, btgraph)]);
-> g2 := DigraphGroup(graph);
+> g1 := BTKit_SimpleSearch(ps, [BTKit_Con.GraphTrans(btgraph, btgraph)]);
+> g2 := AutomorphismGroup(graph);
 > if g1 <> g2 then PrintFormatted("failure: {} {} {}", graph, g1, g2); fi;
 > end;;
 gap> graphs := ReadDigraphs(Filename(dir, "graph6.g6"));;
