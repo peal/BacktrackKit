@@ -19,7 +19,7 @@
 #! arguments are listed below.
 #!
 #!
-#! * initalise (required) - Called when search begins (note, the partition
+#! * initialise (required) - Called when search begins (note, the partition
 #!   may already be split, by another constraint)
 #!
 #! * changed - One or splits occurred

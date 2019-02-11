@@ -68,11 +68,11 @@ end;
 #! @Description
 #! Set up a list of constraints. This should be called once, at
 #! the start of search after all constraints have been created.
-BTKit_InitaliseConstraints := function(state, tracer, rbase)
+BTKit_InitialiseConstraints := function(state, tracer, rbase)
     local c, filters;
     for c in state.conlist do
-        if IsBound(c.refine.initalise) then
-            filters := c.refine.initalise(state.ps, rbase);
+        if IsBound(c.refine.initialise) then
+            filters := c.refine.initialise(state.ps, rbase);
             if not BTKit_ApplyFilters(state.ps, tracer, filters) then
                 return false;
             fi;
@@ -82,7 +82,7 @@ BTKit_InitaliseConstraints := function(state, tracer, rbase)
 end;
 
 BTKit_FirstFixedPoint := function(state, tracer, rbase)
-    return BTKit_InitaliseConstraints(state, tracer, rbase) and
+    return BTKit_InitialiseConstraints(state, tracer, rbase) and
            BTKit_RefineConstraints(state, tracer, rbase);
 end;
 
