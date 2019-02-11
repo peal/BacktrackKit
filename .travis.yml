@@ -4,7 +4,7 @@ env:
     - GAPROOT=gaproot
     - COVDIR=coverage
     # list of package to compile; io and profiling are always needed for coverage reports
-    - GAP_PKGS_TO_BUILD="io profiling datastructures json"
+    - GAP_PKGS_TO_BUILD="io profiling datastructures json digraphs orb grape"
 
 addons:
   apt_packages:
