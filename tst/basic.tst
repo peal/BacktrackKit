@@ -18,3 +18,18 @@ true
 gap> graph := [ [ [1,2] ], [ [1,3] ], [ [1,1] ] ];;
 gap> BTKit_SimpleSearch(ps3, [BTKit_Con.GraphTrans(graph, graph)]) = Group( (1,2,3) );
 true
+
+# Trivial intersection of two 'disjoint' C4 x C4 x C4 groups with equal orbits
+gap> g1 := Group([(1,2,3,4), (5,6,7,8), (9,10,11,12)]);;
+gap> g2 := Group([(1,2,4,3), (5,6,8,7), (9,10,12,11)]);;
+gap> Set(BTKit_SimpleSearch(PartitionStack(12),
+>                           [BTKit_Con.InGroup(12, g1),
+>                            BTKit_Con.InGroup(12, g2)]));
+[ () ]
+
+# Trivial intersection of two primitive groups in S_10
+gap> LoadPackage("primgrp", false);;
+gap> Set(BTKit_SimpleSearch(PartitionStack(10),
+>                           [BTKit_Con.InGroup(10, PrimitiveGroup(10, 1)),
+>                            BTKit_Con.InGroup(10, PrimitiveGroup(10, 3))]));
+[ () ]
