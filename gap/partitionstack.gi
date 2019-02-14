@@ -2,27 +2,42 @@
 ##  This file defines partition stacks.
 ##
 
-## The data structure used here is best demonstrated by example:
-## The ordered partition [ [3,5], [1,2], [4] ] can be represented:
+## An ordered partition of length n is a list of disjoint sublists of [1..n]
+## whose union is [1..n]. A partition stack is a list of ordered partitions,
+## each of which is a refinement of the last.
 
-## The only required data structures are:
+## The data structure used here to encode partition stacks is best demonstrated
+## by example. The partition stack:
 
-## vals:  [5,3,4,1,2]    - A permutation of [1..n]
-## marks: [1,0,3,2,0,6]  - marks[i] = j means cell 'j' starts at index 'i'.
-##                         The n+1th element of the array is fixed to n+1.
+## [ [ [1,2,3,4,5] ],
+##   [ [3,5], [1,2,4] ],
+##   [ [3,5], [1,2], [4] ] ]
+
+## can be represented by the following pieces of information:
+
+## vals:   [5,3,4,1,2]    - A permutation of [1..n].
+## marks:  [1,0,3,2,0,6]  - marks[i] = j means cell 'j' starts at index 'i' of
+##                          vals. The n+1th element of the array is always n+1.
+## splits: [-1,1,2]       - splits[i] is the cell which was split to create
+##                          cell i (or -1 for splits[1])
 ## Note that:
-##   * The cells do not have to be in any particular order
-##   * The values in a cell do not have to sorted.
-## The main allowed operation is splitting a cell. This is done by adding
-## a new integer to 'marks', which splits a current cell.
-##
+##   * The values within a cell do not have to sorted.
+##   * The list of cells do not have to be sorted in any particular order.
+
+
+## The main allowed operation for a partition stack is splitting a cell to form
+## a new, finer partition to add onto the end of the partition stack. This is
+## done by adding a new integer to 'marks', which splits a current cell.
+
 ## There are some other data structures provided for efficient lookup:
-## invvals: The inverse of vals, to find where a value exists in 'vals'.
-## cellstart: marks[cellstart[i]] = i
-## cellsize: The length of cell i
-## fixed: A list of cells of size 1
-## splits: splits[i] is the cell which was split to create cell i
-##         (or -1 for splits[1])
+
+## invvals:   [4,5,2,3,1]  - The inverse of vals, to find where a value exists
+##                           in vals.
+## cellstart: [1,4,3]      - marks[cellstart[i]] = i.
+## cellsize:  [2,2,1]      - The length of cell i.
+## fixed:     [3]          - A list of cells of size 1, in the order that they
+##                           become fixed. When a cell of size 2 is split into
+##                           two cells of size 1, the original cell comes first.
 
 
 InstallGlobalFunction(PartitionStack,
