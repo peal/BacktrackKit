@@ -1,3 +1,6 @@
+#
+# BacktrackKit: An extensible, easy to understand backtracking framework
+#
 #! @Chapter Ordered partition stack
 #!
 #! An <E>ordered partition stack</E> is an ordered partition which supports
@@ -53,7 +56,7 @@ DeclareOperation("PS_Fixed", [IsPartitionStack]);
 
 #! @Description
 #! Return the current partition state of the partition stack <A>PS</A> as a
-#! list of sets.
+#! list of sets, in the correct order.
 #!
 #! @Arguments PS
 #! @Returns a list of lists of positive integers.
