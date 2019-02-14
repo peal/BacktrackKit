@@ -1,33 +1,39 @@
+#
+# BacktrackKit: An extensible, easy to understand backtracking framework
+#
 #! @Chapter Ordered tracer
 #!
-#! An <E>ordered tracer</E> is an ordered partition which supports
-#! splitting a cell, and then later undoing a change, reverting the
-#! partition back to an earlier state.
+#! An <E>ordered tracer</E> is...
+# TODO complete the description of an ordered tracer.
 
 
 #! @Section API
 #!
 #! @Description
-#! Constructor for tracers.
+#! Constructor for recording tracers.
 #! @Arguments
-#! @Returns a tracer which records the state.
+#! @Returns a recording tracer.
 DeclareGlobalFunction("RecordingTracer");
 
 #! @Description
-#! Constructor for tracers.
-#! @Arguments
-#! @Returns a tracer which follows a previous tracer.
+#! If the argument <A>t</A> is a tracer, then this constructs a tracer that
+#! follows <A>t</A>.
+#! @Arguments t
+#! @Returns a following tracer.
 DeclareGlobalFunction("FollowingTracer");
 
 #! @Description
-#! Constructor for tracers.
+#! Constructor for canonicalising tracers.
 #! @Arguments
-#! @Returns a tracer which produces a canonical image.
+#! @Returns a canonicalising tracer.
 DeclareGlobalFunction("CanonicalisingTracer");
 
 
 #! @Description
-#! Category of tracers.
+#! The category of tracers.
+#!
+#! @Arguments t
+#! @Returns <K>true</K> or <K>false</K>.
 DeclareCategory("IsTracer", IsObject);
 BindGlobal( "TracerFamily", NewFamily("TracerFamily") );
 
@@ -52,18 +58,28 @@ BindGlobal( "CanonicalisingTracerTypeMutable",
             NewType(TracerFamily, IsCanonicalisingTracerRep and IsMutable));
 
 #! @Description
-#! Add an event to the trace.
+#! Add the arbitrary GAP object <A>o</A> as an event to the tracer <A>t</A>.
+#! This returns <K>true</K> if the event is accepted by the tracer, and
+#! <K>false</K> if not. Events are always accepted by recording tracers.
 #!
-#! @Returns a boolean, which indicates whether the event is accepted by the
-#! trace.
+#! @Returns <K>true</K> or <K>false</K>.
+#! @Arguments t, o
 DeclareOperation("AddEvent", [IsTracer, IsObject]);
 
 #! @Description
-#! Get the length of a trace.
+#! Get the number of events in the tracer <A>t</A>.
+#!
+#! @Returns an integer.
+#! @Arguments t
 DeclareOperation("TraceLength", [IsTracer]);
 
 #! @Description
-#! Get the list of events in the trace.
+#! Get the event at position <A>i</A> in the tracer <A>t</A>.
+#! The argument <A>i</A> must lie in the range
+#! <C>[1..TraceLength(<A>t</A>)]</C>.
+#!
+#! @Returns a GAP object.
+#! @Arguments t, i
 DeclareOperation("TraceEvent", [IsTracer, IsPosInt]);
 
 DeclareInfoClass("InfoTrace");
