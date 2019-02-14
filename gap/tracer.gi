@@ -3,10 +3,7 @@
 ##
 
 InstallGlobalFunction(RecordingTracer,
-function()
-    return Objectify(RecordingTracerTypeMutable, 
-        rec(trace := []) );
-end);
+{} -> Objectify(RecordingTracerTypeMutable, rec(trace := []) ));
 
 InstallMethod(AddEvent, [IsRecordingTracerRep and IsMutable, IsObject],
     function(tracer, o)
@@ -21,13 +18,16 @@ InstallMethod(TraceEvent, [IsRecordingTracerRep, IsPosInt],
 
 InstallMethod(ViewObj, [IsRecordingTracerRep],
 function(t)
-  Print("<recording tracer of length ", TraceLength(t), ">");
+    PrintFormatted("<recording tracer of length {}>", TraceLength(t));
 end);
 
 
 InstallGlobalFunction(FollowingTracer,
 function(trace)
-    return Objectify(FollowingTracerTypeMutable, 
+    if IsFollowingTracerRep(trace) then
+        ErrorNoReturn("a following tracer cannot follow a following tracer,");
+    fi;
+    return Objectify(FollowingTracerTypeMutable,
         rec(existingTrace := trace, pos := 1) );
 end);
 
@@ -53,12 +53,9 @@ InstallMethod(TraceEvent, [IsFollowingTracerRep, IsPosInt],
 
 InstallMethod(ViewObj, [IsFollowingTracerRep],
 function(t)
-    Print("<following tracer of length ", TraceLength(t), ">");
+    PrintFormatted("<following tracer of length {}>", TraceLength(t));
 end);
 
 
 InstallGlobalFunction(CanonicalisingTracer,
-function()
-    return Objectify(CanonicalisingTracerTypeMutable, 
-        rec(trace := [], pos := 1) );
-end);
+{} -> Objectify(CanonicalisingTracerTypeMutable, rec(trace := [], pos := 1)));
