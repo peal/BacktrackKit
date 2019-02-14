@@ -20,10 +20,12 @@ DeclareCategory("IsPartitionStack", IsObject);
 BindGlobal( "PartitionStackFamily", NewFamily("PartitionStackFamily") );
 
 
-DeclareRepresentation( "IsPartitionStackRep", IsPartitionStack and IsComponentObjectRep, []);
-BindGlobal( "PartitionStackType", NewType(PartitionStackFamily, IsPartitionStackRep));
-BindGlobal( "PartitionStackTypeMutable", NewType(PartitionStackFamily,
-                                        IsPartitionStackRep and IsMutable));
+DeclareRepresentation( "IsPartitionStackRep",
+                       IsPartitionStack and IsComponentObjectRep, []);
+BindGlobal( "PartitionStackType",
+            NewType(PartitionStackFamily, IsPartitionStackRep));
+BindGlobal( "PartitionStackTypeMutable",
+            NewType(PartitionStackFamily, IsPartitionStackRep and IsMutable));
 
 #! @Description
 #! Return the number of points on which the partition stack <A>PS</A> is
@@ -120,7 +122,8 @@ DeclareOperation("PS_RevertToCellCount", [IsPartitionStack, IsPosInt]);
 #!
 #! @Arguments PS, t, i, f
 #! @Returns <K>true</K> or <K>false</K>.
-DeclareOperation("PS_SplitCellByFunction", [IsPartitionStack, IsTracer, IsPosInt, IsFunction]);
+DeclareOperation("PS_SplitCellByFunction",
+                 [IsPartitionStack, IsTracer, IsPosInt, IsFunction]);
 
 #! @Description
 #! Apply <C>PS_SplitCellByFunction</C> to every active cell in the partition
@@ -128,7 +131,8 @@ DeclareOperation("PS_SplitCellByFunction", [IsPartitionStack, IsTracer, IsPosInt
 #!
 #! @Arguments PS, t, f
 #! @Returns <K>true</K> or <K>false</K>.
-DeclareOperation("PS_SplitCellsByFunction", [IsPartitionStack, IsTracer, IsFunction]);
+DeclareOperation("PS_SplitCellsByFunction",
+                 [IsPartitionStack, IsTracer, IsFunction]);
 
 #! @Description
 #! Split cell <A>i</A> of the current partition state of the partition stack
@@ -138,14 +142,16 @@ DeclareOperation("PS_SplitCellsByFunction", [IsPartitionStack, IsTracer, IsFunct
 #! The second argument <A>t</A> should be a tracer.
 #!
 #! @Arguments PS, t, i, f
-DeclareOperation("PS_SplitCellByUnorderedFunction", [IsPartitionStack, IsTracer, IsPosInt, IsFunction]);
+DeclareOperation("PS_SplitCellByUnorderedFunction",
+                 [IsPartitionStack, IsTracer, IsPosInt, IsFunction]);
 
 #! @Description
 #! Apply <C>PS_SplitCellByUnorderedFunction</C> to every active cell in the
 #! partition stack <A>PS</A>.
 #!
 #! @Arguments PS, t, f
-DeclareOperation("PS_SplitCellsByUnorderedFunction", [IsPartitionStack, IsTracer, IsFunction]);
+DeclareOperation("PS_SplitCellsByUnorderedFunction",
+                 [IsPartitionStack, IsTracer, IsFunction]);
 
 DeclareOperation("PS_UNSAFE_CellSlice", [IsPartitionStack, IsPosInt]);
 

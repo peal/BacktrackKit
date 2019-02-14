@@ -14,8 +14,10 @@ InstallMethod(AddEvent, [IsRecordingTracerRep and IsMutable, IsObject],
         return true;
     end);
 
-InstallMethod(TraceLength, [IsRecordingTracerRep], x -> Length(x!.trace));
-InstallMethod(TraceEvent, [IsRecordingTracerRep, IsPosInt], {x,i} -> x!.trace[i]);
+InstallMethod(TraceLength, [IsRecordingTracerRep],
+{x} -> Length(x!.trace));
+InstallMethod(TraceEvent, [IsRecordingTracerRep, IsPosInt],
+{x,i} -> x!.trace[i]);
 
 InstallMethod(ViewObj, [IsRecordingTracerRep],
 function(t)
@@ -34,9 +36,9 @@ InstallMethod(AddEvent, [IsFollowingTracerRep and IsMutable, IsObject],
         if tracer!.pos > TraceLength(tracer!.existingTrace) then
             Info(InfoTrace, 1, "Too long!");
             return false;
-        fi;
-        if TraceEvent(tracer!.existingTrace, tracer!.pos) <> o then
-            Info(InfoTrace, 1, "Trace violation", TraceEvent(tracer!.existingTrace, tracer!.pos), ":", o);
+        elif TraceEvent(tracer!.existingTrace, tracer!.pos) <> o then
+            Info(InfoTrace, 1, StringFormatted("Trace violation {}:{}",
+                               TraceEvent(tracer!.existingTrace, tracer!.pos), o));
             tracer!.pos := infinity;
             return false;
         fi;
@@ -44,8 +46,10 @@ InstallMethod(AddEvent, [IsFollowingTracerRep and IsMutable, IsObject],
         return true;
     end);
 
-InstallMethod(TraceLength, [IsFollowingTracerRep], {x} -> TraceLength(x!.existingTrace));
-InstallMethod(TraceEvent, [IsFollowingTracerRep, IsPosInt], {x,i} -> TraceEvent(x!.existingTrace, i));
+InstallMethod(TraceLength, [IsFollowingTracerRep],
+{x} -> TraceLength(x!.existingTrace));
+InstallMethod(TraceEvent, [IsFollowingTracerRep, IsPosInt],
+{x,i} -> TraceEvent(x!.existingTrace, i));
 
 InstallMethod(ViewObj, [IsFollowingTracerRep],
 function(t)
