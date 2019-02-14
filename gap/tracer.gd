@@ -32,20 +32,24 @@ DeclareCategory("IsTracer", IsObject);
 BindGlobal( "TracerFamily", NewFamily("TracerFamily") );
 
 
-DeclareRepresentation( "IsRecordingTracerRep", IsTracer and IsComponentObjectRep, []);
+DeclareRepresentation( "IsRecordingTracerRep",
+                       IsTracer and IsComponentObjectRep, []);
 BindGlobal( "RecordingTracerType", NewType(TracerFamily, IsRecordingTracerRep));
-BindGlobal( "RecordingTracerTypeMutable", NewType(TracerFamily,
-                                        IsRecordingTracerRep and IsMutable));
+BindGlobal( "RecordingTracerTypeMutable",
+            NewType(TracerFamily, IsRecordingTracerRep and IsMutable));
 
-DeclareRepresentation( "IsFollowingTracerRep", IsTracer and IsComponentObjectRep, []);
+DeclareRepresentation( "IsFollowingTracerRep",
+                       IsTracer and IsComponentObjectRep, []);
 BindGlobal( "FollowingTracerType", NewType(TracerFamily, IsFollowingTracerRep));
-BindGlobal( "FollowingTracerTypeMutable", NewType(TracerFamily,
-                                        IsFollowingTracerRep and IsMutable));
+BindGlobal( "FollowingTracerTypeMutable",
+            NewType(TracerFamily, IsFollowingTracerRep and IsMutable));
 
-DeclareRepresentation( "IsCanonicalisingTracerRep", IsTracer and IsComponentObjectRep, []);
-BindGlobal( "CanonicalisingTracerType", NewType(TracerFamily, IsCanonicalisingTracerRep));
-BindGlobal( "CanonicalisingTracerTypeMutable", NewType(TracerFamily,
-                                        IsCanonicalisingTracerRep and IsMutable));
+DeclareRepresentation( "IsCanonicalisingTracerRep",
+                       IsTracer and IsComponentObjectRep, []);
+BindGlobal( "CanonicalisingTracerType",
+            NewType(TracerFamily, IsCanonicalisingTracerRep));
+BindGlobal( "CanonicalisingTracerTypeMutable",
+            NewType(TracerFamily, IsCanonicalisingTracerRep and IsMutable));
 
 #! @Description
 #! Add an event to the trace.
