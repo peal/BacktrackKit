@@ -1,15 +1,15 @@
 BTKit_Con := rec();
 
-# Any refiner which can be expressed as "stabilize an ordered partition"
+# Any constraint which can be expressed as "stabilize an ordered partition"
 # can be implemented easily and efficently, as we only need to handle
-# the root node of search (as we never gain more information as search
-# progresses).
+# the root node of search (as we never gain more information from such a
+# constraint as search progresses).
 # Therefore we have two general functions which implement:
 #
-# MakeFixlistStabilizer: Returns the refiner which implements
+# MakeFixlistStabilizer: Returns the constraint which implements
 #                        fixlist[i] = fixlist[i^p]
 #
-# MakeFixListTransporter: Returns the refiner which implements
+# MakeFixListTransporter: Returns the constraint which implements
 #                         fixlistL[i] = fixlistR[i^p]
 #
 # These are used to then implement refiners for sets, tuples
@@ -232,7 +232,7 @@ BTKit_Con.PermCentralizer := function(n, fixedelt)
               refine := rec( initialise := function(ps, rbase)
                                local points;
                                points := fixByFixed(PS_FixedPoints(ps));
-                               # Pass cyclepart just on the first call, for efficency
+                               # Pass cyclepart just on the first call, for efficiency
                                return {x} -> [points[x], cyclepart[x]];
                              end,
                              changed := function(ps, rbase)
