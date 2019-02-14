@@ -6,7 +6,8 @@
 #! Informally, a <E>constraint</E> is a <K>true</K>/<K>false</K> mathematical
 #! property of permutations that is used to define a search problem in the
 #! symmetric group. For example, the property could be "belongs to the
-#! permutation group G", or "commutes with the permutation x".
+#! permutation group G", or "commutes with the permutation x", or "maps set
+#! A to set B", or "is an automorphism of the digraph D".
 #!
 #! In backtrackKit, a constraint is implemented as a record that must contain:
 #!
@@ -28,12 +29,12 @@
 #! The <C>refine</C> member of a constraint is a record that contains
 #! functions which, if present, will be called to inform the constraint
 #! of behaviour as search progresses, and to give the constraint the
-#! opportunity to influence the search.
-#! These functions will always be passed at least two arguments –
-#! firstly the constraint itself, and then the partition stack. Further
-#! arguments are listed below.
-#! * initalise - Called when search begins (note, the partition
-#!   may already be split, by another constraint)
+#! opportunity to influence the search. The permissible functions are given
+#! described below.
+#!
+#! These functions will always be passed at least two arguments: firstly the
+#! constraint itself, and then the partition stack. Details of any further
+#! arguments are described with the relevant function, below.
 #!
 #TODO: the return value of <C>initialise</C> seems to be important.
 #! * <C>initialise</C> <E>(required)</E>. This is called when search begins.
@@ -45,7 +46,7 @@
 #TODO: this is incomplete
 #! * <C>changed</C> - One or splits occurred.
 #!
-#TODO: this is unclear
+#TODO: this is unclear. Also unimplemented.
 #! * <C>rBaseFinished</C> - The rBase has been created (is passed the rbase).
 #!   Constraints which care about this can use this to remember the rBase
 #!   construction is finished.
