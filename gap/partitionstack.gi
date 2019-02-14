@@ -32,7 +32,7 @@ function(n)
     marks := ListWithIdenticalEntries(n + 1, 0);
     marks[1] := 1;
     marks[n+1] := n+1;
-    return Objectify(PartitionStackTypeMutable, 
+    return Objectify(PartitionStackTypeMutable,
         rec(len := n,
             vals := [1..n],
             invvals := [1..n],
@@ -45,12 +45,10 @@ end);
 
 InstallMethod(IsInternallyConsistent, [IsPartitionStack],
     function(ps)
-        local n, i, fixedcells, ret;
+        local n, i, fixedcells;
         n := ps!.len;
         if Length(ps!.marks) <> n+1 then return false; fi;
-        ret := ps!.marks[1] = 1 and
-               ps!.marks[n+1] = n+1;
-        if not ret then return false; fi;
+        if ps!.marks[1] <> 1 or ps!.marks[n+1] <> n+1 then return false; fi;
 
         if Length(ps!.cellstart) <> Length(ps!.cellsize) then return false; fi;
         if ForAny([1..n],
@@ -145,7 +143,7 @@ BindGlobal("_PSR_SplitCell",
         splitcellsize := ps!.cellsize[cell];
 
         newcellid := Length(ps!.cellstart) + 1;
-        
+
         ps!.cellstart[newcellid] := splitpos;
         ps!.cellsize[newcellid] := splitcellsize - (index - 1);
 
@@ -162,9 +160,11 @@ BindGlobal("_PSR_SplitCell",
         fi;
 
         Add(ps!.splits, cell);
-        return MaybeAddEvent(t, rec(oldcell := cell, newcell := newcellid,
-                               oldsize := index - 1, newsize := splitcellsize - (index - 1),
-                               reason := reason));
+        return MaybeAddEvent(t, rec(oldcell := cell,
+                                    newcell := newcellid,
+                                    oldsize := index - 1,
+                                    newsize := splitcellsize - (index - 1),
+                                    reason  := reason));
     end);
 
 InstallMethod(PS_SplitCellsByFunction, [IsPartitionStack, IsTracer, IsFunction],
