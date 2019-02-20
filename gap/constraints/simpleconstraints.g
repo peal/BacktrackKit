@@ -17,7 +17,7 @@
 # such that fixlist[i] = fixlist[i^p]
 BTKit_MakeFixlistStabilizer := function(name, fixlist)
     local filters;
-    filters :=  {i} -> fixlist[i];
+    filters := {i} -> fixlist[i];
     return rec(
         name := name,
         check := {p} -> ForAll([1..Length(fixlist)], {i} -> fixlist[i] = fixlist[i^p]),
@@ -32,8 +32,8 @@ end;
 # such that fixlistL[i] = fixlistR[i^p]
 BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR)
     local filtersL, filtersR;
-    filtersL :=  {i} -> fixlistL[i];
-    filtersR :=  {i} -> fixlistR[i];
+    filtersL := {i} -> fixlistL[i];
+    filtersR := {i} -> fixlistR[i];
     return rec(
         name := name,
         check := {p} -> ForAll([1..Length(fixlistL)], {i} -> fixlistL[i] = fixlistR[i^p]),
