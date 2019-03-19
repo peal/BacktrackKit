@@ -32,6 +32,8 @@
 #! These functions will always be passed at least two arguments –
 #! firstly the constraint itself, and then the partition stack. Further
 #! arguments are listed below.
+#! * initalise - Called when search begins (note, the partition
+#!   may already be split, by another constraint)
 #!
 #TODO: the return value of <C>initialise</C> seems to be important.
 #! * <C>initialise</C> <E>(required)</E>. This is called when search begins.

@@ -81,6 +81,18 @@ BTKit_InitialiseConstraints := function(state, tracer, rbase)
     return true;
 end;
 
+#! @Description
+#! Set up a list of constraints. This should be called once, at
+#! the start of search after all constraints have been created.
+BTKit_FinaliseRBaseForConstraints := function(state, rbase)
+    local c;
+    for c in state.conlist do
+        if IsBound(c.refine.rBaseFinished) then
+            c.refine.rBaseFinished(rbase.ps);
+        fi;
+    od;
+end;
+
 BTKit_FirstFixedPoint := function(state, tracer, rbase)
     return BTKit_InitialiseConstraints(state, tracer, rbase) and
            BTKit_RefineConstraints(state, tracer, rbase);
@@ -116,7 +128,7 @@ InstallGlobalFunction( BTKit_BuildRBase,
         tracer := RecordingTracer();
         rbase.root := rec(tracer := tracer);
 
-        BTKit_FirstFixedPoint(state, tracer, fail);
+        BTKit_FirstFixedPoint(state, tracer, true);
 
         while PS_Cells(state.ps) <> PS_Points(state.ps) do
             branchCell := branchselector(state.ps);
@@ -125,7 +137,7 @@ InstallGlobalFunction( BTKit_BuildRBase,
             Add(rbase.branches, rec(cell := branchCell,
                                 pos := branchPos, tracer := tracer));
             PS_SplitCellByFunction(state.ps, tracer, branchCell, {x} -> (x = branchPos));
-            BTKit_RefineConstraints(state, tracer, fail);
+            BTKit_RefineConstraints(state, tracer, true);
             Info(InfoBTKit, 2, "RBase level:", PS_AsPartition(state.ps));
         od;
 
@@ -204,7 +216,7 @@ InstallGlobalFunction( BTKit_Backtrack,
             tracer := FollowingTracer(rbase.branches[depth].tracer);
             found := false;
             if PS_SplitCellByFunction(state.ps, tracer, branchInfo.cell, {x} -> x = v) and
-               BTKit_RefineConstraints(state, tracer, rbase.ps) then
+               BTKit_RefineConstraints(state, tracer, false) then
                 found := BTKit_Backtrack(state, rbase, depth+1, subgroup, special, find_single_perm);
             fi;
 
@@ -212,7 +224,7 @@ InstallGlobalFunction( BTKit_Backtrack,
 
             # We found a permutation below so we return to the deepest
             # special node above
-            if found and (find_single_perm or ((not special) and (not parent_special))) then
+            if found and (find_single_perm or (not parent_special)) then
                 Print("\<");
                 return true;
             fi;
@@ -229,10 +241,11 @@ InstallGlobalFunction( BTKit_SimpleSearch,
         state := rec(ps := ps, conlist := conlist);
         saved := BTKit_SaveState(state);
         rbase := BTKit_BuildRBase(state, BranchSelector_MinSizeCell);
+        BTKit_FinaliseRBaseForConstraints(state, rbase);
         perms := [ Group(()), [] ];
 
         tracer := FollowingTracer(rbase.root.tracer);
-        if BTKit_FirstFixedPoint(state, tracer, rbase.ps) then
+        if BTKit_FirstFixedPoint(state, tracer, false) then
             BTKit_Backtrack(state, rbase, 1, perms, true, false);
         fi;
         BTKit_RestoreState(state, saved);
@@ -246,10 +259,11 @@ InstallGlobalFunction( BTKit_SimpleSinglePermSearch,
         state := rec(ps := ps, conlist := conlist);
         saved := BTKit_SaveState(state);
         rbase := BTKit_BuildRBase(state, BranchSelector_MinSizeCell);
+        BTKit_FinaliseRBaseForConstraints(state, rbase);
         perms := [ Group(()), [] ];
 
         tracer := FollowingTracer(rbase.root.tracer);
-        if BTKit_FirstFixedPoint(state, tracer, rbase.ps) then
+        if BTKit_FirstFixedPoint(state, tracer, false) then
             BTKit_Backtrack(state, rbase, 1, perms, true, true);
         fi;
 
