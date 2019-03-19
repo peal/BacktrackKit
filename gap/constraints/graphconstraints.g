@@ -42,9 +42,9 @@ BTKit_Con.GraphTrans := function(graphL, graphR)
     # Give an initial sort
     graphL := List(graphL, SortedList);
     graphR := List(graphR, SortedList);
-    check := function(ps, rbase)
+    check := function(ps, buildingRBase)
                 local filt;
-                if rbase = fail then
+                if buildingRBase then
                     filt := BTKit_FilterGraph(ps, graphL);
                 else
                     filt := BTKit_FilterGraph(ps, graphR);

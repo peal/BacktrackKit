@@ -1,5 +1,3 @@
-BTKit_Con := rec();
-
 # Any refiner which can be expressed as "stabilize an ordered partition"
 # can be implemented easily and efficently, as we only need to handle
 # the root node of search (as we never gain more information as search
@@ -24,7 +22,7 @@ BTKit_MakeFixlistStabilizer := function(name, fixlist)
         name := name,
         check := {p} -> ForAll([1..Length(fixlist)], {i} -> fixlist[i] = fixlist[i^p]),
         refine := rec(
-            initalise := function(ps, rbase)
+            initalise := function(ps, buildingRBase)
                 return filters;
             end)
     );
@@ -40,8 +38,8 @@ BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR)
         name := name,
         check := {p} -> ForAll([1..Length(fixlistL)], {i} -> fixlistL[i] = fixlistR[i^p]),
         refine := rec(
-            initalise := function(ps, rbase)
-                if rbase = fail then
+            initalise := function(ps, buildingRBase)
+                if buildingRBase then
                     return filtersL;
                 else
                     return filtersR;
@@ -160,22 +158,24 @@ BTKit_Con.InGroup := function(n, group)
         name := "InGroup",
         check := {p} -> p in group,
         refine := rec(
-            initalise := function(ps, rbase)
+            rBaseFinished := function(getRBase)
+                r.RBase := getRBase;
+            end,
+            initalise := function(ps, buildingRBase)
                 local fixedpoints, mapval, points;
                 fixedpoints := PS_FixedPoints(ps);
                 points := fillOrbits(fixedpoints);
                 return {x} -> points[x];
             end,
-
-            changed := function(ps, rbase)
+            changed := function(ps, buildingRBase)
                 local fixedpoints, points, fixedps, fixedrbase, p;
-                if rbase = fail then
+                if buildingRBase then
                     fixedpoints := PS_FixedPoints(ps);
                     points := fillOrbits(fixedpoints);
                     return {x} -> points[x];
                 else
                     fixedps := PS_FixedPoints(ps);
-                    fixedrbase := PS_FixedPoints(rbase);
+                    fixedrbase := PS_FixedPoints(r.RBase);
                     fixedrbase := fixedrbase{[1..Length(fixedps)]};
                     p := RepresentativeAction(group, fixedps, fixedrbase, OnTuples);
                     Info(InfoBTKit, 1, "Find mapping (InGroup):\n"
@@ -229,13 +229,13 @@ BTKit_Con.PermCentralizer := function(n, fixedelt)
 
     r := rec( name := "PermCentralizer",
               check := {p} -> fixedelt ^ p = fixedelt,
-              refine := rec( initalise := function(ps, rbase)
+              refine := rec( initalise := function(ps, buildingRBase)
                                local points;
                                points := fixByFixed(PS_FixedPoints(ps));
                                # Pass cyclepart just on the first call, for efficency
                                return {x} -> [points[x], cyclepart[x]];
                              end,
-                             changed := function(ps, rbase)
+                             changed := function(ps, buildingRBase)
                                local points;
                                points := fixByFixed(PS_FixedPoints(ps));
                                return {x} -> points[x];

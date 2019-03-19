@@ -19,12 +19,12 @@
 #! arguments are listed below.
 #!
 #!
-#! * initalise (required) - Called when search begins (note, the partition
+#! * initalise - Called when search begins (note, the partition
 #!   may already be split, by another constraint)
 #!
 #! * changed - One or splits occurred
 #!
-#! * rBaseFinished - The rBase has been created (is passed the rbase).
+#! * rBaseFinished - The rBase has been created (is passed the RBase).
 #!   Constraints which care about this can use this to remember the rBase
 #!   construction is finished.
 #!
