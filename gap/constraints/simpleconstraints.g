@@ -195,51 +195,5 @@ BTKit_Con.InGroup := function(n, group)
         return r;
     end;
 
-# Find the centralizer of a permutation
-BTKit_Con.PermCentralizer := function(n, fixedelt)
-    local cycles, cyclepart,
-          i, c, s, r,
-          fixByFixed, pointMap;
 
-    cyclepart := [];
-    cycles := Cycles(fixedelt, [1..n]);
-    for c in cycles do
-        s := Length(c);
-        for i in c do
-            cyclepart[i] := s;
-        od;
-    od;
-
-    fixByFixed := function(pointlist)
-        local part, s, p;
-        part := ListWithIdenticalEntries(n, 0);
-        s := 1;
-        for p in pointlist do
-            if part[p] = 0 then
-                repeat
-                    part[p] := s;
-                    p := p ^ fixedelt;
-                    s := s + 1;
-                until part[p] <> 0;
-            fi;
-        od;
-        return part;
-    end;
-
-
-    r := rec( name := "PermCentralizer",
-              check := {p} -> fixedelt ^ p = fixedelt,
-              refine := rec( initialise := function(ps, buildingRBase)
-                               local points;
-                               points := fixByFixed(PS_FixedPoints(ps));
-                               # Pass cyclepart just on the first call, for efficiency
-                               return {x} -> [points[x], cyclepart[x]];
-                             end,
-                             changed := function(ps, buildingRBase)
-                               local points;
-                               points := fixByFixed(PS_FixedPoints(ps));
-                               return {x} -> points[x];
-                             end) );
-    return r;
-end;
 
