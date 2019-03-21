@@ -2,9 +2,7 @@ dist: xenial
 language: c
 env:
   global:
-    - GAPROOT=gaproot
-    - COVDIR=coverage
-    # list of package to compile; io and profiling are always needed for coverage reports
+    - GAP_PKGS_TO_CLONE="datastructures"
     - GAP_PKGS_TO_BUILD="io profiling datastructures json digraphs orb grape"
 
 addons:
@@ -22,7 +20,7 @@ branches:
         #    - master
 
 before_script:
-  - export GAPROOT="$HOME/gap"
+  - git clone https://github.com/gap-system/pkg-ci-scripts.git scripts
   - scripts/build_gap.sh
 script:
   - scripts/build_pkg.sh && scripts/run_tests.sh
