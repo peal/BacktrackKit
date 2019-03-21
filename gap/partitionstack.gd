@@ -151,6 +151,7 @@ DeclareOperation("PS_SplitCellByUnorderedFunction",
 #! @Description
 #! Apply <C>PS_SplitCellByUnorderedFunction</C> to every active cell in the
 #! partition stack <A>PS</A>.
+#! The second argument <A>t</A> should be a tracer.
 #!
 #! @Arguments PS, t, f
 DeclareOperation("PS_SplitCellsByUnorderedFunction",
