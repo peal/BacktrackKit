@@ -1,0 +1,73 @@
+@Chapter Tutorial
+
+@Section Partition Stacks
+
+A Partition Stack represents an ordered partition which can be modified in two ways:
+
+* A cell in the ordered partition can be split into two pieces
+* The ordered partition can be reverted to an earlier state, when it had fewer cells.
+
+Let's look at an example! Firstly, we will create a partition stack which partitions [1..8] (Partition Stacks are always defined on a range of integers starting from 1). In the initial state, the partition has a single cell of size 1.
+
+@BeginExample
+LoadPackage("BacktrackKit", false);;
+p := PartitionStack(8);
+#! [ [ 1, 2, 3, 4, 5, 6, 7, 8 ] ]
+@EndExample
+
+In most applications of Partition Stacks, we want to record the list of changes which are made. These are stored in an object known as a Tracer. We will make one.
+
+@BeginExample
+t := RecordingTracer();;
+@EndExample
+
+The main method used for splitting partitions is PS_SplitCellsByFunction. This takes a partition stack, a tracer and a function. It splits each cell of the partition by introducing a cell for each different value the function takes.
+
+@BeginExample
+PS_SplitCellsByFunction(p, t, {x} -> x mod 3);;
+p;
+#! [ [ 3, 6 ], [ 2, 5, 8 ], [ 1, 4, 7 ] ]
+@EndExample
+
+We can further divide the partition with another function
+
+@BeginExample
+PS_SplitCellsByFunction(p, t, {x} -> x mod 2);;
+p;
+#! [ [ 6 ], [ 2, 8 ], [ 4 ], [ 3 ], [ 5 ], [ 1, 7 ] ]
+@EndExample
+
+From this example we can see that whenever an existing cell is split, the new cell is always placed at the end.
+
+There are a range of functions which can be used to find out information about a partition stack,
+
+@BeginExample
+# Number of cells
+PS_Cells(p);
+#! 6
+# Cells of size 1, in the order they were created
+PS_FixedCells(p);
+#! [ 1, 4, 5, 3 ]
+# Contents of the cells of size 1
+PS_FixedPoints(p);
+#! [ 6, 3, 5, 4 ]
+# The contents of a cell, as a slice (a type of list)
+PS_CellSlice(p, 2)
+[ 2, 8 ]
+@EndExample
+
+Note that PS_CellSlice does not make a copy of the list, but gives a "view" inside the partition stack. This means it is fast, but the value will become invalid if another split is made in the Partition Stack. Also, in general the list returned by PS_CellSlice is *NOT* sorted.
+
+We can revert to an earlier state of the partition stack. This includes states we may never have explicitly created, while a cell was being split into pieces.
+
+@BeginExample
+PS_RevertToCellCount(p, 3);
+p;
+#! [ [ 3, 6 ], [ 2, 5, 8 ], [ 1, 4, 7 ] ]
+PS_RevertToCellCount(p, 2);
+p;
+#! [ [ 1, 3, 4, 6, 7 ], [ 2, 5, 8 ] ]
+PS_CellSlice(p, 1);
+#! [ 6, 3, 4, 1, 7 ]
+@EndExample
+

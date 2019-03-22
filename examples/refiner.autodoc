@@ -1,0 +1,48 @@
+@Chapter Tutorial
+
+@Section Refiners
+
+In partition backtrack, the search takes a list of refiners, each of which represents a group or coset, and calculates their intersection.
+
+Let us begin by calculating the intersection of two groups, $G$ and $H$.
+
+@BeginExample
+LoadPackage("BacktrackKit", false);
+G := Group((1,2,3),(4,5,6),(1,4)(2,5)(3,6));;
+H := Group((1,2,3,4,5,6),(2,3)(4,5));;
+# Need to make a partition stack to search over
+ps := PartitionStack(6);;
+# We create a refiner for each group
+# We have to give this how many points we want the group to act on
+rg := BTKit_Con.InGroup(6, G);;
+rh := BTKit_Con.InGroup(6, H);;
+# Finally, intersect the groups
+BTKit_SimpleSearch(ps, [rg, rh]);
+Group([ (1,2,3)(4,6,5), (1,4)(2,5)(3,6) ])
+@EndExample
+
+The refiner BTKit_Con.InGroup represents a group represented as a Permutation Group in GAP. There are many other ways of representing groups. For example, we could calculate a set stabilizer:
+
+@BeginExample
+# This represents the group which stabilizes the set [3,4,5,6]
+ss := BTKit_Con.SetStab(6, [3,4,5,6]);;
+# We can prove this by just "searching" on this group
+BTKit_SimpleSearch(ps, [ss]);
+#! Group([ (5,6), (4,5), (3,4), (1,2) ])
+# We can intersect this with G
+BTKit_SimpleSearch(ps, [rg,ss]);
+#! Group([ (4,5,6) ])
+# We can also intersect G and H and the set stabilizer at the same time!
+gap> BTKit_SimpleSearch(ps, [rg,rh,ss]);
+Group(())
+@EndExample
+
+Writing a new refiner requires some understanding of the Partition Backtracking framework by Jeffry Leon. We will give a (very brief, and incomplete!) overview here.
+
+In general, a refiner represents either a group or coset. Here we will consider the case where we are building a coset which represents mapping some permutation $P$ to another permutation $Q$ under conjugation. This is a group when $P=Q$.
+
+To begin, we will just consider the case where $P=Q$. Then, we need to provide a GAP function $R$ which, given an ordered partition `ps` on $\{1..n\}$ returns a function $f: \{1..n\} -> O$ (where $O$ is any valid GAP object) which satisfies the following conditions:
+
+* Invariance: Given a permutation $g$ such that $P^g=g$, then $R(ps^g) = R(ps)^g$. Here, we define $ps^g$ as applying $g$ to each point in each cell of `ps`, and we define $(R(ps)^g)(x) := R(ps)(x^g)$.
+
+<TO COMPLETE>
