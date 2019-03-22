@@ -24,7 +24,7 @@ BTKit_Con.MostBasicConjugacyTransporter := function(permL, permR)
     );
 end;
 
-# Slightly cleverer refiner -- the function 'initalise' is called
+# Slightly cleverer refiner -- the function 'initialise' is called
 # once at the start of search. It should return a function
 BTKit_Con.BasicConjugacyTransporter := function(permL, permR)
     local mapToOrbitSize;
@@ -45,7 +45,7 @@ BTKit_Con.BasicConjugacyTransporter := function(permL, permR)
         name := "BasicConjugacy",
         check := {p} -> (permL^p = permR),
         refine := rec(
-            initalise := function(ps, buildingRbase)
+            initialise := function(ps, buildingRbase)
                 if buildingRbase then
                     return mapToOrbitSize(permL, PS_Points(ps));
                 else
