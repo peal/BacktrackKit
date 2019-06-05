@@ -123,8 +123,6 @@ BTKit_InitialiseConstraints := function(state, tracer, rbase)
             if not BTKit_ApplyFilters(state.ps, tracer, filters) then
                 return false;
             fi;
-        else
-            ErrorNoReturn("constraint <c> has no refine.initialise member,");
         fi;
     od;
     return true;

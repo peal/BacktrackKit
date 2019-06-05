@@ -37,7 +37,7 @@
 #! arguments are described with the relevant function, below.
 #!
 #TODO: the return value of <C>initialise</C> seems to be important.
-#! * <C>initialise</C> <E>(required)</E>. This is called when search begins.
+#! * <C>initialise</C> - This is called when search begins.
 #!   Note that, since the <C>refine.initialise</C> function is called for all
 #!   relevant constraints at the beginning of search, the partition may have
 #!   already been split by some earlier constraint by the time that
@@ -47,7 +47,7 @@
 #! * <C>changed</C> - One or splits occurred.
 #!
 #TODO: this is unclear. Also unimplemented.
-#! * <C>rBaseFinished</C> - The rBase has been created (is passed the rbase).
+#! * <C>rBaseFinished</C> - The rBase has been created (is passed the rBase).
 #!   Constraints which care about this can use this to remember the rBase
 #!   construction is finished.
 
