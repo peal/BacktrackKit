@@ -19,35 +19,26 @@ BTKit_ResetStats := function()
     BTKit_Stats := rec( nodes := 0 );
 end;
 
-#! @Description
-#! Return a small object which allows one to revert to this state from later
-#! the search.  In particular, the object records the current depth of the
-#! search, and the current value of <C>btdata</C> for each of the constraints
-#! in the search.
-#!
-#! @Arguments state
-#! @Returns a record.
-BTKit_SaveState := function(state)
-    if IsBound(state.graphs) then Error("???"); fi;
+InstallMethod(SaveState, [IsBTKitState],
+    function(state)
+        local refiners;
+        if IsBound(state!.graphs) then Error("???"); fi;
 
-    return rec(depth := PS_Cells(state.ps),
-               conState := BTKit_SaveConstraintState(state.conlist),
-              );
-end;
+        refiners := List(state!.conlist, SaveState);
+        return rec(depth := PS_Cells(state!.ps),
+                   refiners := refiners
+                  );
+end);
 
-#! @Description
-#! Revert to a saved state from later in the search. The first argument
-#! <A>state</A> must be the current state object, and the second argument
-#! <A>saved</A> must be one of the objects produced by <C>BTKit_SaveState</C>
-#! from earlier in the search.
-#!
-#! @Arguments state, saved
-#! @Returns nothing.
-BTKit_RestoreState := function(state, saved)
-    if IsBound(state.graphs) then Error("???"); fi;
-    PS_RevertToCellCount(state.ps, saved.depth);
-    BTKit_RestoreConstraintState(state.conlist, saved.conState);
-end;
+InstallMethod(RestoreState, [IsBTKitState, IsObject],
+    function(state, saved)
+        local c;
+        if IsBound(state!.graphs) then Error("???"); fi;
+        PS_RevertToCellCount(state!.ps, saved.depth);
+        for c in [1..Length(saved.refiners)] do
+            RestoreState(state!.conlist[c], saved.refiners[c]);
+        od;
+end);
 
 #! @Description
 #! Split the cells of the partition stack <A>ps</A>, if possible, according
@@ -92,12 +83,12 @@ end;
 BTKit_RefineConstraints := function(state, tracer, rbase)
     local c, filters, cellCount;
     cellCount := -1;
-    while cellCount <> PS_Cells(state.ps) do
-        cellCount := PS_Cells(state.ps);
-        for c in state.conlist do
-            if IsBound(c.refine.changed) then
-                filters := c.refine.changed(state.ps, rbase);
-                if not BTKit_ApplyFilters(state.ps, tracer, filters) then
+    while cellCount <> PS_Cells(state!.ps) do
+        cellCount := PS_Cells(state!.ps);
+        for c in state!.conlist do
+            if IsBound(c!.refine.changed) then
+                filters := c!.refine.changed(state!.ps, rbase);
+                if not BTKit_ApplyFilters(state!.ps, tracer, filters) then
                     return false;
                 fi;
             fi;
@@ -120,10 +111,10 @@ end;
 #! @Returns <K>true</K> or <K>false</K>.
 BTKit_InitialiseConstraints := function(state, tracer, rbase)
     local c, filters;
-    for c in state.conlist do
-        if IsBound(c.refine.initialise) then
-            filters := c.refine.initialise(state.ps, rbase);
-            if not BTKit_ApplyFilters(state.ps, tracer, filters) then
+    for c in state!.conlist do
+        if IsBound(c!.refine.initialise) then
+            filters := c!.refine.initialise(state!.ps, rbase);
+            if not BTKit_ApplyFilters(state!.ps, tracer, filters) then
                 return false;
             fi;
         else
@@ -138,9 +129,9 @@ end;
 #! the start of search after all constraints have been created.
 BTKit_FinaliseRBaseForConstraints := function(state, rbase)
     local c;
-    for c in state.conlist do
-        if IsBound(c.refine.rBaseFinished) then
-            c.refine.rBaseFinished(rbase.ps);
+    for c in state!.conlist do
+        if IsBound(c!.refine.rBaseFinished) then
+            c!.refine.rBaseFinished(rbase.ps);
         fi;
     od;
 end;
@@ -184,10 +175,10 @@ end;
 InstallGlobalFunction( BTKit_BuildRBase,
     function(state, branchselector)
         local rbase, tracer, saved, branchCell, branchPos;
-        saved  := BTKit_SaveState(state);
+        saved  := SaveState(state);
 
         Info(InfoBTKit, 1, "Building RBase");
-        Info(InfoBTKit, 2, "RBase level: ", PS_AsPartition(state.ps));
+        Info(InfoBTKit, 2, "RBase level: ", PS_AsPartition(state!.ps));
         tracer := RecordingTracer();
         rbase  := rec(branches := [],
                       root := rec(tracer := tracer)
@@ -200,31 +191,31 @@ InstallGlobalFunction( BTKit_BuildRBase,
         BTKit_FirstFixedPoint(state, tracer, true);
 
         # Continue building the RBase until a discrete partition is reached.
-        while PS_Cells(state.ps) <> PS_Points(state.ps) do
+        while PS_Cells(state!.ps) <> PS_Points(state!.ps) do
 
             # Split off the min value of the cell chosen by the branch selector.
             # Use the constraints to refine until the next stable point.
             # Record the trace into a new tracer.
-            branchCell := branchselector(state.ps);
-            branchPos := Minimum(PS_CellSlice(state.ps, branchCell));
+            branchCell := branchselector(state!.ps);
+            branchPos := Minimum(PS_CellSlice(state!.ps, branchCell));
             tracer := RecordingTracer();
             # Record the info from this step of construction in rbase.branches.
             Add(rbase.branches, rec(cell   := branchCell,
                                     pos    := branchPos,
                                     tracer := tracer
                                    ));
-            PS_SplitCellByFunction(state.ps, tracer, branchCell, {x} -> (x = branchPos));
+            PS_SplitCellByFunction(state!.ps, tracer, branchCell, {x} -> (x = branchPos));
             BTKit_RefineConstraints(state, tracer, true);
-            Info(InfoBTKit, 2, "RBase level: ", PS_AsPartition(state.ps));
+            Info(InfoBTKit, 2, "RBase level: ", PS_AsPartition(state!.ps));
         od;
 
         # When the RBase has been built, save a copy of the corresponding
         # partition stack, and the length of the RBase in search tree.
-        rbase.ps := Immutable(state.ps);
+        rbase.ps := Immutable(state!.ps);
         rbase.depth := Length(rbase.branches);
         Info(InfoBTKit, 1, "RBase built");
 
-        BTKit_RestoreState(state, saved);
+        RestoreState(state, saved);
         return rbase;
     end);
 
@@ -241,13 +232,13 @@ BTKit_GetCandidateSolution := function(ps, rbase)
     return PermList(image);
 end;
 
-BTKit_CheckSolution := {perm, conlist} -> ForAll(conlist, c -> c.check(perm));
+BTKit_CheckSolution := {perm, conlist} -> ForAll(conlist, c -> c!.check(perm));
 
 InstallGlobalFunction( BTKit_Backtrack,
     function(state, rbase, depth, subgroup, parent_special, find_single)
     local p, found, isSol, saved, vals, branchInfo, v, tracer, special;
 
-    Info(InfoBTKit, 2, "Partition: ", PS_AsPartition(state.ps));
+    Info(InfoBTKit, 2, "Partition: ", PS_AsPartition(state!.ps));
     BTKit_Stats_AddNode();
 
     if depth > Length(rbase.branches) then
@@ -256,11 +247,11 @@ InstallGlobalFunction( BTKit_Backtrack,
         # - If the partition state is not discrete, there are no solutions here.
         # - If the partition state is discrete, then this defines a candidate
         #   solution. Construct the candidate, and check it.
-        if not PS_Fixed(state.ps) then
+        if not PS_Fixed(state!.ps) then
             return false;
         fi;
-        p := BTKit_GetCandidateSolution(state.ps, rbase);
-        isSol := BTKit_CheckSolution(p, state.conlist);
+        p := BTKit_GetCandidateSolution(state!.ps, rbase);
+        isSol := BTKit_CheckSolution(p, state!.conlist);
         Info(InfoBTKit, 2, "Maybe solution? ", p, " : ", isSol);
         if isSol then
             subgroup[1] := ClosureGroup(subgroup[1], p);
@@ -273,7 +264,7 @@ InstallGlobalFunction( BTKit_Backtrack,
     # attempt to branch. We consult the RBase to guide this process.
 
     branchInfo := rbase.branches[depth];
-    if PS_Cells(state.ps) < branchInfo.cell then
+    if PS_Cells(state!.ps) < branchInfo.cell then
         # The current state is inconsistent with the RBase: the RBase branched
         # here on the cell with index <branchInfo.cell>, but the current state
         # has no such cell.
@@ -283,7 +274,7 @@ InstallGlobalFunction( BTKit_Backtrack,
     # <vals> is the cell of the current state with index <branchInfo.cell>. We
     # branch by splitting the search space up into those permutations that map
     # <branchInfo.branchPos> to <v>, for each <v> in <vals>.
-    vals := Set(PS_CellSlice(state.ps, branchInfo.cell));
+    vals := Set(PS_CellSlice(state!.ps, branchInfo.cell));
     Info(InfoBTKit, 1,
          StringFormatted("Branching at depth {}: {}", depth, branchInfo));
     Print("\>");
@@ -300,14 +291,14 @@ InstallGlobalFunction( BTKit_Backtrack,
         found := false;
 
         # Split off point <v>, and then continue the backtrack search.
-        saved := BTKit_SaveState(state);
-        if PS_SplitCellByFunction(state.ps, tracer, branchInfo.cell, {x} -> x = v)
+        saved := SaveState(state);
+        if PS_SplitCellByFunction(state!.ps, tracer, branchInfo.cell, {x} -> x = v)
            and BTKit_RefineConstraints(state, tracer, false)
            and BTKit_Backtrack(state, rbase, depth + 1, subgroup, special, find_single)
            then
             found := true;
         fi;
-        BTKit_RestoreState(state, saved);
+        RestoreState(state, saved);
 
         # If this gave a solution, we return to the deepest special node above.
         # here. If the current node is special, then we are already here, and we
@@ -325,8 +316,8 @@ end);
 InstallGlobalFunction( BTKit_SimpleSearch,
     function(ps, conlist)
         local rbase, perms, state, saved, tracer;
-        state := rec(ps := ps, conlist := conlist);
-        saved := BTKit_SaveState(state);
+        state := Objectify(BTKitStateType, rec(ps := ps, conlist := conlist));
+        saved := SaveState(state);
         rbase := BTKit_BuildRBase(state, BranchSelector_MinSizeCell);
         BTKit_FinaliseRBaseForConstraints(state, rbase);
         perms := [ Group(()), [] ];
@@ -335,7 +326,7 @@ InstallGlobalFunction( BTKit_SimpleSearch,
         if BTKit_FirstFixedPoint(state, tracer, false) then
             BTKit_Backtrack(state, rbase, 1, perms, true, false);
         fi;
-        BTKit_RestoreState(state, saved);
+        RestoreState(state, saved);
         return perms[1];
 end);
 
@@ -343,8 +334,8 @@ end);
 InstallGlobalFunction( BTKit_SimpleSinglePermSearch,
     function(ps, conlist)
         local rbase, perms, state, saved, tracer;
-        state := rec(ps := ps, conlist := conlist);
-        saved := BTKit_SaveState(state);
+        state := Objectify(BTKitStateType, rec(ps := ps, conlist := conlist));
+        saved := SaveState(state);
         rbase := BTKit_BuildRBase(state, BranchSelector_MinSizeCell);
         BTKit_FinaliseRBaseForConstraints(state, rbase);
         perms := [ Group(()), [] ];
@@ -354,7 +345,7 @@ InstallGlobalFunction( BTKit_SimpleSinglePermSearch,
             BTKit_Backtrack(state, rbase, 1, perms, true, true);
         fi;
 
-        BTKit_RestoreState(state, saved);
+        RestoreState(state, saved);
 
         if Length(perms[2]) > 0 then
             return perms[2][1];

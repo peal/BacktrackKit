@@ -51,12 +51,12 @@ BTKit_Con.GraphTrans := function(graphL, graphR)
                 fi;
                 return {x} -> filt[x];
             end;
-    return rec(
+    return Objectify(BTKitRefinerType, rec(
         name := "GraphTrans",
         check := {p} -> BTKit_OnGraph(p, graphL) = graphR,
         refine := rec(
             initialise := check, 
             changed := check
         )
-    );
+    ));
 end;

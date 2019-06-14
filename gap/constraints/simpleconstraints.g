@@ -18,14 +18,14 @@
 BTKit_MakeFixlistStabilizer := function(name, fixlist)
     local filters;
     filters := {i} -> fixlist[i];
-    return rec(
+    return Objectify(BTKitRefinerType, rec(
         name := name,
         check := {p} -> ForAll([1..Length(fixlist)], {i} -> fixlist[i] = fixlist[i^p]),
         refine := rec(
             initialise := function(ps, buildingRBase)
                 return filters;
             end)
-    );
+    ));
 end;
 
 # Make a refiner which accepts permutations p
@@ -34,7 +34,7 @@ BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR)
     local filtersL, filtersR;
     filtersL := {i} -> fixlistL[i];
     filtersR := {i} -> fixlistR[i];
-    return rec(
+    return Objectify(BTKitRefinerType, rec(
         name := name,
         check := {p} -> ForAll([1..Length(fixlistL)], {i} -> fixlistL[i] = fixlistR[i^p]),
         refine := rec(
@@ -45,7 +45,7 @@ BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR)
                     return filtersR;
                 fi;
             end)
-    );
+    ));
 end;
 
 BTKit_Con.TupleStab := function(n, fixpoints)
@@ -159,7 +159,7 @@ BTKit_Con.InGroup := function(n, group)
         check := {p} -> p in group,
         refine := rec(
             rBaseFinished := function(getRBase)
-                r.RBase := getRBase;
+                r!.RBase := getRBase;
             end,
             initialise := function(ps, buildingRBase)
                 local fixedpoints, mapval, points;
@@ -175,7 +175,7 @@ BTKit_Con.InGroup := function(n, group)
                     return {x} -> points[x];
                 else
                     fixedps := PS_FixedPoints(ps);
-                    fixedrbase := PS_FixedPoints(r.RBase);
+                    fixedrbase := PS_FixedPoints(r!.RBase);
                     fixedrbase := fixedrbase{[1..Length(fixedps)]};
                     p := RepresentativeAction(group, fixedps, fixedrbase, OnTuples);
                     Info(InfoBTKit, 1, "Find mapping (InGroup):\n"
@@ -192,7 +192,7 @@ BTKit_Con.InGroup := function(n, group)
                 fi;
             end)
         );
-        return r;
+        return Objectify(BTKitRefinerType, r);
     end;
 
 

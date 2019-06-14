@@ -51,6 +51,7 @@
 #!   Constraints which care about this can use this to remember the rBase
 #!   construction is finished.
 
-DeclareGlobalFunction("BTKit_SaveConstraintState");
-
-DeclareGlobalFunction("BTKit_RestoreConstraintState");
+DeclareRepresentation("IsBTKitRefiner", IsRefiner, ["name", "check", "refine"]);
+BindGlobal("BTKitRefinerType", NewType(BacktrackableStateFamily,
+                                       IsBTKitRefiner));
+                                       

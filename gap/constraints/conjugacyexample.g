@@ -17,11 +17,11 @@
 # The minimal requirements of a refiner -- give a 
 # name, a 'check' function, and an empty record called 'refine'
 BTKit_Con.MostBasicConjugacyTransporter := function(permL, permR)
-    return rec(
+    return Objectify(BTKitRefinerType,rec(
         name := "MostBasicConjugacy",
         check := {p} -> (permL^p = permR),
         refine := rec()
-    );
+    ));
 end;
 
 # Slightly cleverer refiner -- the function 'initialise' is called
@@ -41,7 +41,7 @@ BTKit_Con.BasicConjugacyTransporter := function(permL, permR)
         return {x} -> list[x];
     end;
 
-    return rec(
+    return Objectify(BTKitRefinerType,rec(
         name := "BasicConjugacy",
         check := {p} -> (permL^p = permR),
         refine := rec(
@@ -52,7 +52,7 @@ BTKit_Con.BasicConjugacyTransporter := function(permL, permR)
                     return mapToOrbitSize(permR, PS_Points(ps));
                 fi;
             end)
-    );
+    ));
 end;
 
 # Find the transporter of a permutation under conjugation
@@ -116,7 +116,7 @@ BTKit_Con.PermTransporter := function(n, fixedeltL, fixedeltR)
                                 fi;
                                return {x} -> points[x];
                              end) );
-    return r;
+    return Objectify(BTKitRefinerType,r);
 end;
 
 BTKit_Con.PermCentralizer := function(n, fixedelt)

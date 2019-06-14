@@ -12,6 +12,35 @@
 #!
 #! This section will describe the example methods of BacktrackKit.
 
+DeclareCategory("IsBacktrackableState", IsObject);
+BindGlobal("BacktrackableStateFamily", NewFamily("BacktrackableStateFamily", IsBacktrackableState));
+
+DeclareCategory("IsRefiner", IsBacktrackableState);
+BindGlobal("RefinerFamily", NewFamily("RefinerFamily", IsRefiner));
+
+
+#! @Description
+#! Return a small object which allows one to revert to this state from later
+#! the search. 
+#!
+#! @Returns The saved state
+DeclareOperation("SaveState", [IsBacktrackableState]);
+
+#! @Description
+#! Revert to a saved state from later in the search. The first argument
+#! <A>state</A> must be the current state object, and the second argument
+#! <A>saved</A> must be one of the objects produced by <C>SaveState</C>
+#! from earlier in the search.
+#!
+#! @Arguments state, saved
+#! @Returns nothing.
+DeclareOperation("RestoreState", [IsBacktrackableState, IsObject]);
+
+
+
+DeclareRepresentation("IsBTKitState", IsBacktrackableState, []);
+BindGlobal("BTKitStateType", NewType(BacktrackableStateFamily,
+                                       IsBTKitState));
 
 DeclareGlobalFunction( "BTKit_BuildRBase" );
 

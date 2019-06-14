@@ -8,11 +8,11 @@
 #     name := Concatenation("List(", List(conlist, {c} -> c.name), ")");
 #     r := rec(
 #         name := name,
-#         check := {p} -> ForAll(conlist, {c} -> c.check(p)),
+#         check := {p} -> ForAll(conlist, {c} -> c!.check(p)),
 #         refine := rec(
 #             initialise := function(ps, rbase)
 #                 local refines, gather;
-#                 refines := List(conlist, {c} -> c.initialise(ps, rbase));
+#                 refines := List(conlist, {c} -> c!.initialise(ps, rbase));
 #                 gather := List([1..PS_Points(ps)], {i} -> List([1..Length(refines)], {x} -> refines[i](x)));
 #                 return {i} -> gather[i];
 #             end,
@@ -33,11 +33,11 @@
 #     name := Concatenation("Set(", List(conlist, {c} -> c.name), ")");
 #     r := rec(
 #         name := name,
-#         check := {p} -> ForAll(conlist, {c} -> c.check(p)),
+#         check := {p} -> ForAll(conlist, {c} -> c!.check(p)),
 #         refine := rec(
 #             initialise := function(ps, rbase)
 #                 local refines, gather;
-#                 refines := List(conlist, {c} -> c.initialise(ps, rbase));
+#                 refines := List(conlist, {c} -> c!.initialise(ps, rbase));
 #                 gather := List([1..PS_Points(ps)], {i} -> List([1..Length(refines)], {x} -> refines[i](x)));
 #                 return {i} -> gather[i];
 #             end,
