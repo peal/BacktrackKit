@@ -28,6 +28,8 @@ end;
 #! @Arguments state
 #! @Returns a record.
 BTKit_SaveState := function(state)
+    if IsBound(state.graphs) then Error("???"); fi;
+
     return rec(depth := PS_Cells(state.ps),
                conState := BTKit_SaveConstraintState(state.conlist),
               );
@@ -42,6 +44,7 @@ end;
 #! @Arguments state, saved
 #! @Returns nothing.
 BTKit_RestoreState := function(state, saved)
+    if IsBound(state.graphs) then Error("???"); fi;
     PS_RevertToCellCount(state.ps, saved.depth);
     BTKit_RestoreConstraintState(state.conlist, saved.conState);
 end;

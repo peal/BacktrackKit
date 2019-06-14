@@ -4,7 +4,7 @@
 # This file runs package tests. It is also referenced in the package
 # metadata in PackageInfo.g.
 #
-LoadPackage( "BacktrackKit" );
+LoadPackage( "BacktrackKit", false );
 
 
 TestDirectory(DirectoriesPackageLibrary( "BacktrackKit", "tst" ),
