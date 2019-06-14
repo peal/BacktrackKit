@@ -37,10 +37,19 @@ DeclareOperation("SaveState", [IsBacktrackableState]);
 DeclareOperation("RestoreState", [IsBacktrackableState, IsObject]);
 
 
+#! @Description
+#! Some implementations of BacktrackableState can perform simplifications.
+#! This function gives a well-defined point for such operations to be
+#! performed. It can be ignored by implemtnations without such simplifications.
+DeclareOperation("ConsolidateState", [IsBacktrackableState, IsTracer]);
+InstallMethod(ConsolidateState, [IsBacktrackableState, IsTracer], ReturnTrue);
+
 
 DeclareRepresentation("IsBTKitState", IsBacktrackableState, []);
 BindGlobal("BTKitStateType", NewType(BacktrackableStateFamily,
                                        IsBTKitState));
+
+DeclareOperation("ApplyFilters", [IsBTKitState, IsTracer, IsObject]);
 
 DeclareGlobalFunction( "BTKit_BuildRBase" );
 

@@ -49,12 +49,13 @@ end);
 #!
 #! @Arguments ps, tracer, filter
 #! @Returns <K>true</K> or <K>false</K>.
-BTKit_ApplyFilters := function(ps, tracer, filter)
+InstallMethod(ApplyFilters, [IsBTKitState, IsTracer, IsObject],
+  function(state, tracer, filter)
     if filter = fail then
         Info(InfoBTKit, 1, "Failed filter");
         return false;
     elif IsFunction(filter) then
-        if not PS_SplitCellsByFunction(ps, tracer, filter) then
+        if not PS_SplitCellsByFunction(state!.ps, tracer, filter) then
             Info(InfoBTKit, 1, "Trace violation");
             return false;
         fi;
@@ -62,7 +63,7 @@ BTKit_ApplyFilters := function(ps, tracer, filter)
         ErrorNoReturn("Invalid filter?");
     fi;
     return true;
-end;
+end);
 
 #! @Description
 #! Refine the partition stack <C><A>state</A>.ps</C> according to the list of
@@ -80,7 +81,7 @@ end;
 #!
 #! @Arguments state, tracer, rbase
 #! @Returns <K>true</K> or <K>false</K>.
-BTKit_RefineConstraints := function(state, tracer, rbase)
+RefineConstraints := function(state, tracer, rbase)
     local c, filters, cellCount;
     cellCount := -1;
     while cellCount <> PS_Cells(state!.ps) do
@@ -88,11 +89,12 @@ BTKit_RefineConstraints := function(state, tracer, rbase)
         for c in state!.conlist do
             if IsBound(c!.refine.changed) then
                 filters := c!.refine.changed(state!.ps, rbase);
-                if not BTKit_ApplyFilters(state!.ps, tracer, filters) then
+                if not ApplyFilters(state, tracer, filters) then
                     return false;
                 fi;
             fi;
         od;
+        ConsolidateState(state, tracer);
     od;
     return true;
 end;
@@ -105,22 +107,23 @@ end;
 #! <K>false</K>. Otherwise, this function returns <K>true</K>.
 #!
 #! The second and third arguments <A>tracer</A> and <A>rbase</A> should be as in
-#! <C>BTKit_RefineConstraints</C>.
+#! <C>RefineConstraints</C>.
 #!
 #! @Arguments state, tracer, rbase
 #! @Returns <K>true</K> or <K>false</K>.
-BTKit_InitialiseConstraints := function(state, tracer, rbase)
+InitialiseConstraints := function(state, tracer, rbase)
     local c, filters;
     for c in state!.conlist do
         if IsBound(c!.refine.initialise) then
             filters := c!.refine.initialise(state!.ps, rbase);
-            if not BTKit_ApplyFilters(state!.ps, tracer, filters) then
+            if not ApplyFilters(state, tracer, filters) then
                 return false;
             fi;
         else
             ErrorNoReturn("constraint <c> has no refine.initialise member,");
         fi;
     od;
+    ConsolidateState(state, tracer);
     return true;
 end;
 
@@ -137,18 +140,18 @@ BTKit_FinaliseRBaseForConstraints := function(state, rbase)
 end;
 
 #! @Description
-#! Set up the list of constraints using <C>BTKit_InitialiseConstraints</C>, and
-#! then, if successful, refine using <C>BTKit_RefineConstraints</C>. This
+#! Set up the list of constraints using <C>InitialiseConstraints</C>, and
+#! then, if successful, refine using <C>RefineConstraints</C>. This
 #! function returns true if both of these functions return <K>true</K>.
 #!
 #! The second and third arguments <A>tracer</A> and <A>rbase</A> should be as in
-#! <C>BTKit_RefineConstraints</C>.
+#! <C>RefineConstraints</C>.
 #!
 #! @Arguments state, tracer, rbase
 #! @Returns <K>true</K> or <K>false</K>.
-BTKit_FirstFixedPoint := function(state, tracer, rbase)
-    return BTKit_InitialiseConstraints(state, tracer, rbase) and
-           BTKit_RefineConstraints(state, tracer, rbase);
+FirstFixedPoint := function(state, tracer, rbase)
+    return InitialiseConstraints(state, tracer, rbase) and
+           RefineConstraints(state, tracer, rbase);
 end;
 
 
@@ -188,7 +191,7 @@ InstallGlobalFunction( BTKit_BuildRBase,
         # partition stack as far as possible, to reach a stable point:
         # this is essentially reaching the root node of the search tree.
         # Record the trace into rbase.root.tracer.
-        BTKit_FirstFixedPoint(state, tracer, true);
+        FirstFixedPoint(state, tracer, true);
 
         # Continue building the RBase until a discrete partition is reached.
         while PS_Cells(state!.ps) <> PS_Points(state!.ps) do
@@ -205,7 +208,7 @@ InstallGlobalFunction( BTKit_BuildRBase,
                                     tracer := tracer
                                    ));
             PS_SplitCellByFunction(state!.ps, tracer, branchCell, {x} -> (x = branchPos));
-            BTKit_RefineConstraints(state, tracer, true);
+            RefineConstraints(state, tracer, true);
             Info(InfoBTKit, 2, "RBase level: ", PS_AsPartition(state!.ps));
         od;
 
@@ -293,7 +296,7 @@ InstallGlobalFunction( BTKit_Backtrack,
         # Split off point <v>, and then continue the backtrack search.
         saved := SaveState(state);
         if PS_SplitCellByFunction(state!.ps, tracer, branchInfo.cell, {x} -> x = v)
-           and BTKit_RefineConstraints(state, tracer, false)
+           and RefineConstraints(state, tracer, false)
            and BTKit_Backtrack(state, rbase, depth + 1, subgroup, special, find_single)
            then
             found := true;
@@ -323,7 +326,7 @@ InstallGlobalFunction( BTKit_SimpleSearch,
         perms := [ Group(()), [] ];
 
         tracer := FollowingTracer(rbase.root.tracer);
-        if BTKit_FirstFixedPoint(state, tracer, false) then
+        if FirstFixedPoint(state, tracer, false) then
             BTKit_Backtrack(state, rbase, 1, perms, true, false);
         fi;
         RestoreState(state, saved);
@@ -341,7 +344,7 @@ InstallGlobalFunction( BTKit_SimpleSinglePermSearch,
         perms := [ Group(()), [] ];
 
         tracer := FollowingTracer(rbase.root.tracer);
-        if BTKit_FirstFixedPoint(state, tracer, false) then
+        if FirstFixedPoint(state, tracer, false) then
             BTKit_Backtrack(state, rbase, 1, perms, true, true);
         fi;
 
