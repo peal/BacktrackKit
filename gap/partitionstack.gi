@@ -43,6 +43,10 @@
 InstallGlobalFunction(PartitionStack,
 function(n)
     local marks;
+    if n < 1 then
+        Error("Partition Stack: <n> must be a positive integer");
+    fi;
+    
     # Make array full of n+1 0s
     marks := ListWithIdenticalEntries(n + 1, 0);
     marks[1] := 1;

@@ -51,9 +51,16 @@ BindGlobal("BTKitStateType", NewType(BacktrackableStateFamily,
 
 DeclareOperation("ApplyFilters", [IsBTKitState, IsTracer, IsObject]);
 
-DeclareGlobalFunction( "BTKit_BuildRBase" );
 
-DeclareGlobalFunction( "BTKit_Backtrack" );
+#! @Description
+#! Takes a partition stack and a list of constraints and builds a 'Problem',
+#! Which can then be solved by passing the 'Problem' to BTKit_SimpleSearch or
+#! BT_SimpleSinglePermSearch.
+DeclareGlobalFunction("BTKit_BuildProblem");
+
+DeclareGlobalFunction( "BuildRBase" );
+
+DeclareGlobalFunction( "Backtrack" );
 
 DeclareGlobalFunction( "BTKit_SimpleSearch" );
 

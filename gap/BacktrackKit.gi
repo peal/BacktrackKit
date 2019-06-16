@@ -5,18 +5,18 @@
 #
 
 # The following few lines provide tools to collect statistics about a backtrack
-# search. These are stored in the record BTKit_Stats. Currently, the counter
-# BTKit_Stats.nodes is incremented via BTKit_Stats_AddNode each time the main
-# recursive search function BTKit_Backtrack is entered, and so it counts the
+# search. These are stored in the record _BTKit.Stats. Currently, the counter
+# _BTKit.Stats.nodes is incremented via BTKit_Stats_AddNode each time the main
+# recursive search function Backtrack is entered, and so it counts the
 # size of the search. This counter is reset manually, with BTKit_ResetStats.
-BTKit_Stats := rec( nodes := 0 );
+_BTKit.Stats := rec( nodes := 0 );
 
 BTKit_Stats_AddNode := function()
-    BTKit_Stats.nodes := BTKit_Stats.nodes + 1;
+    _BTKit.Stats.nodes := _BTKit.Stats.nodes + 1;
 end;
 
 BTKit_ResetStats := function()
-    BTKit_Stats := rec( nodes := 0 );
+    _BTKit.Stats := rec( nodes := 0 );
 end;
 
 InstallMethod(SaveState, [IsBTKitState],
@@ -94,7 +94,9 @@ RefineConstraints := function(state, tracer, rbase)
                 fi;
             fi;
         od;
-        ConsolidateState(state, tracer);
+        if not ConsolidateState(state, tracer) then
+            return false;
+        fi;
     od;
     return true;
 end;
@@ -123,14 +125,16 @@ InitialiseConstraints := function(state, tracer, rbase)
             ErrorNoReturn("constraint <c> has no refine.initialise member,");
         fi;
     od;
-    ConsolidateState(state, tracer);
+    if not ConsolidateState(state, tracer) then
+        return false;
+    fi;
     return true;
 end;
 
 #! @Description
 #! Set up a list of constraints. This should be called once, at
 #! the start of search after all constraints have been created.
-BTKit_FinaliseRBaseForConstraints := function(state, rbase)
+FinaliseRBaseForConstraints := function(state, rbase)
     local c;
     for c in state!.conlist do
         if IsBound(c!.refine.rBaseFinished) then
@@ -175,7 +179,27 @@ BranchSelector_MinSizeCell := function(ps)
     return cellpos;
 end;
 
-InstallGlobalFunction( BTKit_BuildRBase,
+#! @Description
+#! Return the position of the cell of <A>PS</A> that is not of size 1
+#! which contains the smallest number, or <K>fail</K> if all cells are
+#! of size 1.
+#!
+#! @Arguments PS
+#! @Returns a positive integer, or <K>fail</K>.
+BranchSelector_MinValueCell := function(ps)
+    local cellval, cellpos, i;
+    cellval := infinity;
+    cellpos := fail;
+    for i in [1..PS_Cells(ps)] do
+        if Minimum(PS_CellSlice(ps, i)) < cellval and PS_CellLen(ps, i) > 1 then
+            cellval := Minimum(PS_CellSlice(ps, i));
+            cellpos := i;
+        fi;
+    od;
+    return cellpos;
+end;
+
+InstallGlobalFunction( BuildRBase,
     function(state, branchselector)
         local rbase, tracer, saved, branchCell, branchPos;
         saved  := SaveState(state);
@@ -201,6 +225,7 @@ InstallGlobalFunction( BTKit_BuildRBase,
             # Record the trace into a new tracer.
             branchCell := branchselector(state!.ps);
             branchPos := Minimum(PS_CellSlice(state!.ps, branchCell));
+            Info(InfoBTKit, 2, "RBase braching: ", branchPos , " in cell ", branchCell, " : ", PS_AsPartition(state!.ps));
             tracer := RecordingTracer();
             # Record the info from this step of construction in rbase.branches.
             Add(rbase.branches, rec(cell   := branchCell,
@@ -237,7 +262,7 @@ end;
 
 BTKit_CheckSolution := {perm, conlist} -> ForAll(conlist, c -> c!.check(perm));
 
-InstallGlobalFunction( BTKit_Backtrack,
+InstallGlobalFunction( Backtrack,
     function(state, rbase, depth, subgroup, parent_special, find_single)
     local p, found, isSol, saved, vals, branchInfo, v, tracer, special;
 
@@ -262,7 +287,6 @@ InstallGlobalFunction( BTKit_Backtrack,
         fi;
         return isSol;
     fi;
-
     # The current state of search is not yet as long as the RBase, and so we
     # attempt to branch. We consult the RBase to guide this process.
 
@@ -297,7 +321,7 @@ InstallGlobalFunction( BTKit_Backtrack,
         saved := SaveState(state);
         if PS_SplitCellByFunction(state!.ps, tracer, branchInfo.cell, {x} -> x = v)
            and RefineConstraints(state, tracer, false)
-           and BTKit_Backtrack(state, rbase, depth + 1, subgroup, special, find_single)
+           and Backtrack(state, rbase, depth + 1, subgroup, special, find_single)
            then
             found := true;
         fi;
@@ -316,36 +340,64 @@ InstallGlobalFunction( BTKit_Backtrack,
     return false;
 end);
 
-InstallGlobalFunction( BTKit_SimpleSearch,
-    function(ps, conlist)
-        local rbase, perms, state, saved, tracer;
-        state := Objectify(BTKitStateType, rec(ps := ps, conlist := conlist));
+_BTKit.DefaultConfig :=
+    rec(cellSelector := BranchSelector_MinSizeCell);
+
+_BTKit.FillConfig := function(config, default)
+    local ret, r;
+    if config = [] then
+        return default;
+    fi;
+    if Length(config) > 1 then
+        ErrorNoReturn("Invalid config");
+    fi;
+    ret := ShallowCopy(default);
+    for r in RecNames(config[1]) do
+        if not IsBound(ret.(r)) then
+            ErrorNoReturn("Invalid argument: ", r);
+        fi;
+        ret.(r) := config[1].(r);
+    od;
+    return ret;
+end;
+
+_BTKit.BuildProblem :=
+   {ps, conlist, conf} -> Objectify(BTKitStateType, rec(ps := ps, conlist := conlist,
+                            config := _BTKit.FillConfig(conf, _BTKit.DefaultConfig)));
+
+_BTKit.SimpleSearch :=  
+  function(state)
+        local rbase, perms, saved, tracer;
+        
         saved := SaveState(state);
-        rbase := BTKit_BuildRBase(state, BranchSelector_MinSizeCell);
-        BTKit_FinaliseRBaseForConstraints(state, rbase);
+        rbase := BuildRBase(state, state!.config.cellSelector);
+
+        FinaliseRBaseForConstraints(state, rbase);
         perms := [ Group(()), [] ];
 
         tracer := FollowingTracer(rbase.root.tracer);
         if FirstFixedPoint(state, tracer, false) then
-            BTKit_Backtrack(state, rbase, 1, perms, true, false);
+            Backtrack(state, rbase, 1, perms, true, false);
         fi;
         RestoreState(state, saved);
         return perms[1];
-end);
+end;
 
+InstallGlobalFunction( BTKit_SimpleSearch,
+    {ps, conlist, conf...} -> _BTKit.SimpleSearch(_BTKit.BuildProblem(ps, conlist, conf)));
 
-InstallGlobalFunction( BTKit_SimpleSinglePermSearch,
-    function(ps, conlist)
-        local rbase, perms, state, saved, tracer;
-        state := Objectify(BTKitStateType, rec(ps := ps, conlist := conlist));
+_BTKit.SimpleSinglePermSearch :=
+    function(state)
+        local rbase, perms, saved, tracer;
+
         saved := SaveState(state);
-        rbase := BTKit_BuildRBase(state, BranchSelector_MinSizeCell);
-        BTKit_FinaliseRBaseForConstraints(state, rbase);
+        rbase := BuildRBase(state, state!.config.cellSelector);
+        FinaliseRBaseForConstraints(state, rbase);
         perms := [ Group(()), [] ];
 
         tracer := FollowingTracer(rbase.root.tracer);
         if FirstFixedPoint(state, tracer, false) then
-            BTKit_Backtrack(state, rbase, 1, perms, true, true);
+            Backtrack(state, rbase, 1, perms, true, true);
         fi;
 
         RestoreState(state, saved);
@@ -355,4 +407,8 @@ InstallGlobalFunction( BTKit_SimpleSinglePermSearch,
         else
             return fail;
         fi;
-end);
+end;
+
+InstallGlobalFunction( BTKit_SimpleSinglePermSearch,
+    {ps, conlist, conf...} -> _BTKit.SimpleSinglePermSearch(_BTKit.BuildProblem(ps, conlist, conf)));
+

@@ -4,6 +4,7 @@
 # Reading the declaration part of the package.
 #
 
+
 ReadPackage( "BacktrackKit", "gap/tracer.gd");
 ReadPackage( "BacktrackKit", "gap/partitionstack.gd");
 

@@ -7,7 +7,11 @@
 ReadPackage( "BacktrackKit", "gap/tracer.gi");
 ReadPackage( "BacktrackKit", "gap/partitionstack.gi");
 
+# A Store of the BTKit constraints
 BTKit_Con := AtomicRecord(rec());
+
+# Private members
+_BTKit := AtomicRecord(rec());
 
 ReadPackage( "BacktrackKit", "gap/BacktrackKit.gi");
 ReadPackage( "BacktrackKit", "gap/constraint.gi");
