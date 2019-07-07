@@ -415,8 +415,9 @@ end;
 InstallGlobalFunction( BTKit_SimpleSearch,
     {ps, conlist, conf...} -> _BTKit.SimpleSearch(_BTKit.BuildProblem(ps, conlist, conf)));
 
+
 _BTKit.SimpleSinglePermSearch :=
-    function(state)
+    function(state, find_single)
         local rbase, perms, saved, tracer;
 
         BTKit_ResetStats();
@@ -428,18 +429,24 @@ _BTKit.SimpleSinglePermSearch :=
 
         tracer := FollowingTracer(rbase.root.tracer);
         if FirstFixedPoint(state, tracer, false) then
-            Backtrack(state, rbase, 1, perms, true, true, false);
+            Backtrack(state, rbase, 1, perms, true, find_single, false);
         fi;
 
         RestoreState(state, saved);
 
-        if Length(perms[2]) > 0 then
-            return perms[2][1];
-        else
-            return fail;
-        fi;
+        return perms[2];
 end;
 
 InstallGlobalFunction( BTKit_SimpleSinglePermSearch,
-    {ps, conlist, conf...} -> _BTKit.SimpleSinglePermSearch(_BTKit.BuildProblem(ps, conlist, conf)));
+    function(ps, conlist, conf...)
+    local ret;
+    ret := _BTKit.SimpleSinglePermSearch(_BTKit.BuildProblem(ps, conlist, conf), true);
+    if IsEmpty(ret) then
+        return fail;
+    else
+        return ret[1];
+    fi;
+end);
 
+InstallGlobalFunction( BTKit_SimpleAllPermSearch,
+    {ps, conlist, conf...} -> _BTKit.SimpleSearch(_BTKit.BuildProblem(ps, conlist, conf), false));

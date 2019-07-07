@@ -66,6 +66,7 @@ DeclareGlobalFunction( "BTKit_SimpleSearch" );
 
 DeclareGlobalFunction( "BTKit_SimpleSinglePermSearch" );
 
+DeclareGlobalFunction( "BTKit_SimpleAllPermSearch" );
 
 #! @Description
 #! Information about backtrack search.
