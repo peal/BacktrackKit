@@ -210,9 +210,12 @@ InstallMethod(PS_SplitCellByFunction,
         for i in [slicelen-1, slicelen-2..1] do
             curval := f(slice[i]);
             if lastval <> curval then
+                Info(InfoBTKit, 9, "Splitting ",cell, " at ",i+1," because ",lastval,"<>",curval);
                 if not _PSR_SplitCell(ps, t, cell, i+1, curval) then
+                    Info(InfoBTKit, 9, "Split failed!");
                     return false;
                 fi;
+                Info(InfoBTKit, 9, "Got: ",PS_AsPartition(ps));
             fi;
             lastval := curval;
         od;
