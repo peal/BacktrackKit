@@ -9,15 +9,16 @@
 # _BTKit.Stats.nodes is incremented via BTKit_Stats_AddNode each time the main
 # recursive search function Backtrack is entered, and so it counts the
 # size of the search. This counter is reset manually, with BTKit_ResetStats.
-_BTKit.Stats := rec( nodes := 0 );
+BTKit_ResetStats := function()
+    _BTKit.Stats := rec( nodes := 0, badSolutions := 0 );
+end;
+
+BTKit_ResetStats();
 
 BTKit_Stats_AddNode := function()
     _BTKit.Stats.nodes := _BTKit.Stats.nodes + 1;
 end;
 
-BTKit_ResetStats := function()
-    _BTKit.Stats := rec( nodes := 0 );
-end;
 
 InstallMethod(SaveState, [IsBTKitState],
     function(state)
@@ -84,6 +85,7 @@ end);
 RefineConstraints := function(state, tracer, rbase)
     local c, filters, cellCount;
     cellCount := -1;
+    Info(InfoBTKit, 3, "Refining Constraints");
     while cellCount <> PS_Cells(state!.ps) do
         cellCount := PS_Cells(state!.ps);
         for c in state!.conlist do
@@ -199,6 +201,22 @@ BranchSelector_MinValueCell := function(ps)
     return cellpos;
 end;
 
+#! @Description
+#! Return the position of the first cell of <A>PS</A> that is not of size 1
+#! or <K>fail</K> if all cells are of size 1.
+#!
+#! @Arguments PS
+#! @Returns a positive integer, or <K>fail</K>.
+BranchSelector_MinValueCell := function(ps)
+    local i;
+    for i in [1..PS_Cells(ps)] do
+        if PS_CellLen(ps, i) > 1 then
+            return i;
+        fi;
+    od;
+    return fail;
+end;
+
 InstallGlobalFunction( BuildRBase,
     function(state, branchselector)
         local rbase, tracer, saved, branchCell, branchPos;
@@ -242,6 +260,8 @@ InstallGlobalFunction( BuildRBase,
         rbase.ps := Immutable(state!.ps);
         rbase.depth := Length(rbase.branches);
         Info(InfoBTKit, 1, "RBase built");
+        
+        _BTKit.Stats.rbase := rbase;
 
         RestoreState(state, saved);
         return rbase;
@@ -260,10 +280,17 @@ BTKit_GetCandidateSolution := function(ps, rbase)
     return PermList(image);
 end;
 
-BTKit_CheckSolution := {perm, conlist} -> ForAll(conlist, c -> c!.check(perm));
+BTKit_CheckSolution := function(perm, conlist)
+    local check;
+    check := ForAll(conlist, c -> c!.check(perm));
+    if not check then
+        _BTKit.Stats.badSolutions := _BTKit.Stats.badSolutions + 1;
+    fi;
+    return check;
+end;
 
 InstallGlobalFunction( Backtrack,
-    function(state, rbase, depth, subgroup, parent_special, find_single)
+    function(state, rbase, depth, subgroup, parent_special, find_single, find_gens)
     local p, found, isSol, saved, vals, branchInfo, v, tracer, special;
 
     Info(InfoBTKit, 2, "Partition: ", PS_AsPartition(state!.ps));
@@ -321,7 +348,7 @@ InstallGlobalFunction( Backtrack,
         saved := SaveState(state);
         if PS_SplitCellByFunction(state!.ps, tracer, branchInfo.cell, {x} -> x = v)
            and RefineConstraints(state, tracer, false)
-           and Backtrack(state, rbase, depth + 1, subgroup, special, find_single)
+           and Backtrack(state, rbase, depth + 1, subgroup, special, find_single, find_gens)
            then
             found := true;
         fi;
@@ -330,7 +357,7 @@ InstallGlobalFunction( Backtrack,
         # If this gave a solution, we return to the deepest special node above.
         # here. If the current node is special, then we are already here, and we
         # should just continue; if the parent node is special, then...
-        if found and (find_single or not parent_special) then
+        if found and (find_single or (find_gens and not parent_special)) then
             Print("\<");
             return true;
         fi;
@@ -368,6 +395,8 @@ _BTKit.BuildProblem :=
 _BTKit.SimpleSearch :=  
   function(state)
         local rbase, perms, saved, tracer;
+
+        BTKit_ResetStats();
         
         saved := SaveState(state);
         rbase := BuildRBase(state, state!.config.cellSelector);
@@ -377,7 +406,7 @@ _BTKit.SimpleSearch :=
 
         tracer := FollowingTracer(rbase.root.tracer);
         if FirstFixedPoint(state, tracer, false) then
-            Backtrack(state, rbase, 1, perms, true, false);
+            Backtrack(state, rbase, 1, perms, true, false, true);
         fi;
         RestoreState(state, saved);
         return perms[1];
@@ -390,6 +419,8 @@ _BTKit.SimpleSinglePermSearch :=
     function(state)
         local rbase, perms, saved, tracer;
 
+        BTKit_ResetStats();
+
         saved := SaveState(state);
         rbase := BuildRBase(state, state!.config.cellSelector);
         FinaliseRBaseForConstraints(state, rbase);
@@ -397,7 +428,7 @@ _BTKit.SimpleSinglePermSearch :=
 
         tracer := FollowingTracer(rbase.root.tracer);
         if FirstFixedPoint(state, tracer, false) then
-            Backtrack(state, rbase, 1, perms, true, true);
+            Backtrack(state, rbase, 1, perms, true, true, false);
         fi;
 
         RestoreState(state, saved);
