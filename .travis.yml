@@ -2,7 +2,7 @@ dist: xenial
 language: c
 env:
   global:
-    - GAP_PKGS_TO_CLONE="datastructures"
+    - GAP_PKGS_TO_CLONE="datastructures ChrisJefferson/QuickCheck"
     - GAP_PKGS_TO_BUILD="io profiling datastructures json digraphs orb grape"
 
 addons:
