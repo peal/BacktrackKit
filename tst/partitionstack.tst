@@ -11,7 +11,7 @@ gap> PS_Cells(p);
 1
 gap> PS_CellLen(p, 1);
 6
-gap> s := PS_CellSlice(p, 1);
+gap> s := List(PS_CellSlice(p, 1));
 [ 1, 2, 3, 4, 5, 6 ]
 gap> PS_SplitCellByFunction(p, t, 1, {x} -> x mod 2 = 0);;
 gap> PS_AsPartition(p);
