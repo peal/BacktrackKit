@@ -207,7 +207,7 @@ end;
 #!
 #! @Arguments PS
 #! @Returns a positive integer, or <K>fail</K>.
-BranchSelector_MinValueCell := function(ps)
+BranchSelector_FirstNonTrivialCell := function(ps)
     local i;
     for i in [1..PS_Cells(ps)] do
         if PS_CellLen(ps, i) > 1 then
@@ -294,7 +294,6 @@ InstallGlobalFunction( Backtrack,
     local p, found, isSol, saved, vals, branchInfo, v, tracer, special;
 
     Info(InfoBTKit, 2, "Partition: ", PS_AsPartition(state!.ps));
-    BTKit_Stats_AddNode();
 
     if depth > Length(rbase.branches) then
         # The current state is as long as the RBase. Therefore no further search
@@ -346,6 +345,8 @@ InstallGlobalFunction( Backtrack,
 
         # Split off point <v>, and then continue the backtrack search.
         saved := SaveState(state);
+        BTKit_Stats_AddNode();
+
         if PS_SplitCellByFunction(state!.ps, tracer, branchInfo.cell, {x} -> x = v)
            and RefineConstraints(state, tracer, false)
            and Backtrack(state, rbase, depth + 1, subgroup, special, find_single, find_gens)
