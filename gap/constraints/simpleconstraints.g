@@ -48,8 +48,17 @@ BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR)
     ));
 end;
 
+BTKit_CheckInScope := function(n, list)
+    local i;
+    for i in [1..Length(list)] do
+        if i < 1 then ErrorNoReturn("Value too small: ", i); fi;
+        if i > n then ErrorNoReturn("Value ", i, " above upper bound ", n); fi;
+    od;
+end;
+
 BTKit_Con.TupleStab := function(n, fixpoints)
     local fixlist, i;
+    BTKit_CheckInScope(n, fixpoints);
     fixlist := ListWithIdenticalEntries(n, 0);
     for i in [1..Length(fixpoints)] do
         fixlist[fixpoints[i]] := i;
@@ -59,6 +68,8 @@ end;
 
 BTKit_Con.TupleTransporter := function(n, fixpointsL, fixpointsR)
     local fixlistL, fixlistR, i;
+    BTKit_CheckInScope(n, fixpointsL);
+    BTKit_CheckInScope(n, fixpointsR);
     fixlistL := ListWithIdenticalEntries(n, 0);
     for i in [1..Length(fixpointsL)] do
         fixlistL[fixpointsL[i]] := i;
@@ -72,6 +83,7 @@ end;
 
 BTKit_Con.SetStab := function(n, fixset)
     local fixlist, i;
+    BTKit_CheckInScope(n, fixset);
     fixlist := ListWithIdenticalEntries(n, 0);
     for i in [1..Length(fixset)] do
         fixlist[fixset[i]] := 1;
@@ -81,6 +93,8 @@ end;
 
 BTKit_Con.SetTransporter := function(n, fixsetL, fixsetR)
     local fixlistL, fixlistR, i;
+    BTKit_CheckInScope(n, fixsetL);
+    BTKit_CheckInScope(n, fixsetR);
     fixlistL := ListWithIdenticalEntries(n, 0);
     for i in [1..Length(fixsetL)] do
         fixlistL[fixsetL[i]] := 1;
@@ -94,6 +108,7 @@ end;
 
 BTKit_Con.OrderedPartitionStab := function(n, fixpart)
     local fixlist, i, j;
+    BTKit_CheckInScope(n, Concatenation(fixpart));
     fixlist := ListWithIdenticalEntries(n, 0);
     for i in [1..Length(fixpart)] do
         for j in fixpart[i] do
@@ -105,6 +120,8 @@ end;
 
 BTKit_Con.OrderedPartitionTransporter := function(n, fixpartL, fixpartR)
     local fixlistL, fixlistR, i, j;
+    BTKit_CheckInScope(n, Concatenation(fixpartL));
+    BTKit_CheckInScope(n, Concatenation(fixpartR));
     fixlistL := ListWithIdenticalEntries(n, 0);
     for i in [1..Length(fixpartL)] do
         for j in fixpartL[i] do
