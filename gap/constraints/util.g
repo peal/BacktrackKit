@@ -96,14 +96,15 @@ _BTKit.getOrbitalList := function(sc, maxval)
 		od;
 	od;
     #Print(sc, ":", maxval, ":", graphlist, "\n");
-	return List(graphlist, Digraph);
+	return List(graphlist, {x} -> Immutable(Digraph(x)));
 end;
 
 _BTKit.InNeighboursSafe := function(graph, v)
+
     if v > DigraphNrVertices(graph) then
         return [];
     else
-        return InNeighboursOfVertex(graph, v);
+        return InNeighbours(graph)[v];
     fi;
 end;
 
@@ -111,6 +112,6 @@ _BTKit.OutNeighboursSafe := function(graph, v)
     if v > DigraphNrVertices(graph) then
         return [];
     else
-        return OutNeighboursOfVertex(graph, v);
+        return OutNeighbours(graph)[v];
     fi;
 end;
