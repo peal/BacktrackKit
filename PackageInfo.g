@@ -10,8 +10,8 @@ SetPackageInfo( rec(
 
 PackageName := "BacktrackKit",
 Subtitle := "An Extensible, easy to understand backtracking framework",
-Version := "0.1",
-Date := "13/11/2018", # dd/mm/yyyy format
+Version := "0.2",
+Date := "27/10/2019", # dd/mm/yyyy format
 
 Persons := [
   rec(
@@ -69,7 +69,7 @@ PackageDoc := rec(
 
 Dependencies := rec(
   GAP := ">= 4.9",
-  NeededOtherPackages := [ ["datastructures", ">= 0.2.2"] ],
+  NeededOtherPackages := [ ["datastructures", ">= 0.2.2"], ["digraphs", ">= 1.0.0" ] ],
   SuggestedOtherPackages := [ ],
   ExternalConditions := [ ],
 ),

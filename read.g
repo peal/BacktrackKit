@@ -14,6 +14,7 @@ BTKit_Con := AtomicRecord(rec());
 _BTKit := AtomicRecord(rec());
 
 ReadPackage( "BacktrackKit", "gap/BacktrackKit.gi");
+ReadPackage( "BacktrackKit", "gap/constraints/util.g");
 ReadPackage( "BacktrackKit", "gap/constraint.gi");
 ReadPackage( "BacktrackKit", "gap/constraints/simpleconstraints.g");
 ReadPackage( "BacktrackKit", "gap/constraints/conjugacyexample.g");
