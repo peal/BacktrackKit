@@ -15,7 +15,7 @@ gap> G = Intersection(AlternatingGroup(6),
 >                     Stabilizer(AlternatingGroup(6), [2,4,6], OnSets),
 >                     Stabilizer(AlternatingGroup(6), [1,2], OnTuples));
 true
-gap> graph := [ [ [1,2] ], [ [1,3] ], [ [1,1] ] ];;
+gap> graph := Digraph([ [2], [3], [1] ]);;
 gap> BTKit_SimpleSearch(ps3, [BTKit_Con.GraphTrans(graph, graph)]) = Group( (1,2,3) );
 true
 
@@ -25,6 +25,10 @@ gap> g2 := Group([(1,2,4,3), (5,6,8,7), (9,10,12,11)]);;
 gap> Set(BTKit_SimpleSearch(PartitionStack(12),
 >                           [BTKit_Con.InGroup(12, g1),
 >                            BTKit_Con.InGroup(12, g2)]));
+[ () ]
+gap> Set(BTKit_SimpleSearch(PartitionStack(12),
+>                           [BTKit_Con.InGroupWithOrbitals(12, g1),
+>                            BTKit_Con.InGroupWithOrbitals(12, g2)]));
 [ () ]
 
 # Trivial intersection of two primitive groups in S_10

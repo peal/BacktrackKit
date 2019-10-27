@@ -213,4 +213,125 @@ BTKit_Con.InGroup := function(n, group)
     end;
 
 
+#####
+#####
+#####
 
+##### Code from here is only temporary and will eventually be rewritten or removed.
+
+_BTKit.RefineGraphs := function(points, ps, graphlist)
+        local graph, cellcount, hm, v, ret;
+        cellcount := -1;
+        ret := List([1..points], x -> []);
+        for graph in graphlist do
+            #Print(graph,"\n");
+            for v in [1..points] do
+                hm := [];
+                hm := List(_BTKit.OutNeighboursSafe(graph, v), {x} -> PS_CellOfPoint(ps, x));
+                # We negate to distinguish in and out neighbours ---------v
+                Append(hm, List(_BTKit.InNeighboursSafe(graph, v), {x} -> -PS_CellOfPoint(ps, x)));
+                #Print(v,":",hm[v],"\n");
+                Sort(hm);
+                Append(ret[v], hm);
+            od;
+        od;
+        return ret;
+end;
+
+BTKit_Con.InCosetWithOrbitals := function(n, group, perm)
+    local orbList,fillOrbits, fillOrbitals, orbMap, orbitalMap, pointMap, r, invperm;
+    invperm := perm^-1;
+    fillOrbits := function(pointlist)
+        local orbs, array, i, j;
+        # caching
+        if IsBound(pointMap[pointlist]) then
+            return pointMap[pointlist];
+        fi;
+
+        orbs := Orbits(Stabilizer(group, pointlist, OnTuples), [1..n]);
+        orbMap[pointlist] := Set(orbs, Set);
+        array := [];
+        for i in [1..Length(orbs)] do
+            for j in orbs[i] do
+                array[j] := i;
+            od;
+        od;
+        pointMap[pointlist] := array;
+        return array;
+    end;
+
+    fillOrbitals := function(pointlist)
+        local orbs, array, i, j;
+        if IsBound(orbitalMap[pointlist]) then
+            return orbitalMap[pointlist];
+        fi;
+
+        orbs := _BTKit.getOrbitalList(Stabilizer(group, pointlist, OnTuples), n);
+        orbitalMap[pointlist] := orbs;
+        return orbs;
+    end;
+
+    orbMap := HashMap();
+    pointMap := HashMap();
+    orbitalMap := HashMap();
+
+    r := rec(
+        name := "InGroupWithCoset-BTKit",
+        check := {p} -> p in RightCoset(group, perm),
+        refine := rec(
+            rBaseFinished := function(getRBase)
+                r!.RBase := getRBase;
+            end,
+
+            initialise := function(ps, buildingRBase)
+                return r!.refine.changed(ps, buildingRBase);
+            end,
+
+            changed := function(ps, buildingRBase)
+                local fixedpoints, points, fixedps, fixedrbase, p, graphs, refinedgraphs;
+                if buildingRBase then
+                    fixedpoints := PS_FixedPoints(ps);
+                    points := fillOrbits(fixedpoints);
+                    graphs := fillOrbitals(fixedpoints);
+                    Info(InfoBTKit, 5, "Building RBase:", points);
+                    refinedgraphs := _BTKit.RefineGraphs(n, ps, graphs);
+                    return {x} -> [points[x], refinedgraphs[x]];
+                else
+                    fixedps := PS_FixedPoints(ps);
+                    Info(InfoBTKit, 1, "fixed: ", fixedps);
+                    fixedrbase := PS_FixedPoints(r!.RBase);
+                    fixedrbase := fixedrbase{[1..Length(fixedps)]};
+                    Info(InfoBTKit, 1, "Initial rbase: ", fixedrbase);
+
+                    if perm <> () then
+                        fixedps := OnTuples(fixedps, invperm);
+                        Info(InfoBTKit, 1, "fixed coset: ", fixedrbase);
+                    fi;
+
+                    p := RepresentativeAction(group, fixedps, fixedrbase, OnTuples);
+                    Info(InfoBTKit, 1, "Find mapping (InGroup):\n"
+                         , "    fixed points:   ", fixedps, "\n"
+                         , "    fixed by rbase: ", fixedrbase, "\n"
+                         , "    map:            ", p);
+
+                    if p = fail then
+                        return fail;
+                    fi;
+
+                    points := pointMap[fixedrbase];
+                    graphs := orbitalMap[fixedrbase];
+                    if perm = () then
+                        refinedgraphs := _BTKit.RefineGraphs(n, ps, List(graphs, {g} -> OnDigraphs(g, p^-1)));
+                        return {x} -> [points[x^p], refinedgraphs[x]];
+                    else
+                        Info(InfoBTKit, 5, fixedps, fixedrbase, List([1..n], i -> points[i^(p*invperm)]));
+                        refinedgraphs := _BTKit.RefineGraphs(n, ps, List(graphs, {g} -> OnDigraphs(g, (invperm*p)^-1)));
+                        return {x} -> [points[x^(invperm*p)], refinedgraphs[x]];
+                    fi;
+                fi;
+            end)
+        );
+        return Objectify(BTKitRefinerType, r);
+    end;
+
+BTKit_Con.InGroupWithOrbitals := {n, group} -> BTKit_Con.InCosetWithOrbitals(n, group, ());

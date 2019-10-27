@@ -118,7 +118,7 @@ CentralizerTest := function()
 end;
 
 IntersectionTests := function(k)
-    local g, h, e, t, i, d, ps, gap, btkit;
+    local g, h, e, t, i, d, ps, gap, btkit, btkitorb;
 
     for i in [1..k] do
         Info(InfoBTKitTest, 5, "Creating \"random\" groups");
@@ -150,8 +150,13 @@ IntersectionTests := function(k)
         t := NanosecondsSinceEpoch() - t;
         Info(InfoBTKitTest, 5, "BTKit:  ", t / 1000000000., " size: ", Size(btkit));
 
+        btkitorb := BTKit_SimpleSearch(ps, [ BTKit_Con.InGroupWithOrbitals(d, g), BTKit_Con.InGroupWithOrbitals(d, h) ] );
+
         if gap <> btkit then
             Error("ERROR: GAP and BTKit disagree!\n");
+        fi;
+        if btkit <> btkitorb then
+            Error("ERROR: BTKit with and without orbitals disagree!\n");
         fi;
     od;
     return true;

@@ -8,40 +8,24 @@
 # For directed graphs, make the 'colour' of the edge in both directions different
 # (for example 1 in the forward direction, -1 in the backward direction)
 BTKit_FilterGraph := function(ps, graph)
-    local list, points, i, j;
+    local list, points, i, v;
     points := PS_Points(ps);
     list := [];
     for i in [1..points] do
-        list[i] := [];
-        for j in graph[i] do
-            Add(list[i], [j[1], PS_CellOfPoint(ps, j[2])]);
-        od;
+        list[i] := List(_BTKit.OutNeighboursSafe(graph, i), {x} -> PS_CellOfPoint(ps, x));
+        # We negate to distinguish in and out neighbours ---------v
+        Append(list[i], List(_BTKit.InNeighboursSafe(graph, i), {x} -> -PS_CellOfPoint(ps, x)));
+        #Print(v,":",hm[v],"\n");
         Sort(list[i]);
     od;
     return list;
 end;
 
-BTKit_OnGraph := function(p, graph)
-    local graphimg, neighbours,i,j;
-    graphimg := [];
-    for i in [1..Length(graph)] do
-        neighbours := [];
-        for j in graph[i] do
-            Add(neighbours, [j[1], j[2]^p]);
-        od;
-        graphimg[i^p] := SortedList(neighbours);
-    od;
-    return graphimg;
-end;
-
-
 # Make a refiner which accepts permutations p
-# such that fixlistL[i] = fixlistR[i^p]
+# such that graphL = OnDigraphs(graphR, p)
 BTKit_Con.GraphTrans := function(graphL, graphR)
     local filtersL, filtersR, check;
     # Give an initial sort
-    graphL := List(graphL, SortedList);
-    graphR := List(graphR, SortedList);
     check := function(ps, buildingRBase)
                 local filt;
                 if buildingRBase then
@@ -53,7 +37,7 @@ BTKit_Con.GraphTrans := function(graphL, graphR)
             end;
     return Objectify(BTKitRefinerType, rec(
         name := "GraphTrans",
-        check := {p} -> BTKit_OnGraph(p, graphL) = graphR,
+        check := {p} -> OnDigraphs(graphL, p) = graphR,
         refine := rec(
             initialise := check, 
             changed := check

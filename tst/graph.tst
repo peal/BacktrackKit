@@ -1,21 +1,9 @@
 gap> LoadPackage("backtrackkit", false);;
 gap> LoadPackage("digraphs", false);;
-gap> ToBTKit_Graph := function(g, verts)
->    local graph, max, edge, i;
->    graph := List([1..verts], x -> []);
->    for edge in DigraphEdges(g) do
->        Add(graph[edge[1]], [1,edge[2]]);
->    od;
->    for i in [1..Length(graph)] do
->      Sort(graph[i]);
->    od;
->    return graph;
-> end;;
 gap> testGraph := function(graph,verts)
-> local g1, g2, btgraph, ps;
+> local g1, g2, ps;
 > ps := PartitionStack(verts);
-> btgraph := ToBTKit_Graph(graph, verts);
-> g1 := BTKit_SimpleSearch(ps, [BTKit_Con.GraphTrans(btgraph, btgraph)]);
+> g1 := BTKit_SimpleSearch(ps, [BTKit_Con.GraphTrans(graph, graph)]);
 > g2 := AutomorphismGroup(graph);
 > if g1 <> g2 then PrintFormatted("failure: {} {} {}", graph, g1, g2); fi;
 > end;;
