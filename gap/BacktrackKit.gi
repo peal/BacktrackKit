@@ -450,4 +450,4 @@ InstallGlobalFunction( BTKit_SimpleSinglePermSearch,
 end);
 
 InstallGlobalFunction( BTKit_SimpleAllPermSearch,
-    {ps, conlist, conf...} -> _BTKit.SimpleSearch(_BTKit.BuildProblem(ps, conlist, conf), false));
+    {ps, conlist, conf...} -> _BTKit.SimpleSearch(_BTKit.BuildProblem(ps, conlist, conf)));

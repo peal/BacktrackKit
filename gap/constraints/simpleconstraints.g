@@ -146,8 +146,9 @@ end;
 # other refiner we have ever seen does not need to worry about the values
 # in the rBase, so don't use this as a model for another refiner, unless
 # that one is also based around a group given as a list of generators.
-BTKit_Con.InGroup := function(n, group)
-    local orbList,fillOrbits, orbMap, pointMap, r;
+BTKit_Con.InCoset := function(n, group, perm)
+    local orbList,fillOrbits, orbMap, pointMap, r, invperm;
+    invperm := perm^-1;
     fillOrbits := function(pointlist)
         local orbs, array, i, j;
         # caching
@@ -172,17 +173,15 @@ BTKit_Con.InGroup := function(n, group)
     pointMap := HashMap();
 
     r := rec(
-        name := "InGroup",
-        check := {p} -> p in group,
+        name := "InCoset",
+        check := {p} -> p in RightCoset(group, perm),
         refine := rec(
             rBaseFinished := function(getRBase)
                 r!.RBase := getRBase;
             end,
             initialise := function(ps, buildingRBase)
                 local fixedpoints, mapval, points;
-                fixedpoints := PS_FixedPoints(ps);
-                points := fillOrbits(fixedpoints);
-                return {x} -> points[x];
+                return r!.refine.changed(ps, buildingRBase);
             end,
             changed := function(ps, buildingRBase)
                 local fixedpoints, points, fixedps, fixedrbase, p;
@@ -194,24 +193,36 @@ BTKit_Con.InGroup := function(n, group)
                     fixedps := PS_FixedPoints(ps);
                     fixedrbase := PS_FixedPoints(r!.RBase);
                     fixedrbase := fixedrbase{[1..Length(fixedps)]};
+
+                    if perm <> () then
+                        fixedps := OnTuples(fixedps, invperm);
+                    fi;
+
                     p := RepresentativeAction(group, fixedps, fixedrbase, OnTuples);
                     Info(InfoBTKit, 1, "Find mapping (InGroup):\n"
                          , "    fixed points:   ", fixedps, "\n"
                          , "    fixed by rbase: ", fixedrbase, "\n"
                          , "    map:            ", p);
-
+                    
+                    
                     if p = fail then
                         return fail;
                     fi;
+
                     # this could as well call fillOrbits
                     points := pointMap[fixedrbase];
-                    return {x} -> points[x^p];
+                    if perm = () then
+                        return {x} -> points[x^p];
+                    else
+                        return {x} -> points[x^(invperm*p)];
+                    fi;
                 fi;
             end)
         );
         return Objectify(BTKitRefinerType, r);
     end;
 
+BTKit_Con.InGroup := {n, group} -> BTKit_Con.InCoset(n, group, ());
 
 #####
 #####
