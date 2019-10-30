@@ -38,7 +38,10 @@
 ## fixed:     [3]          - A list of cells of size 1, in the order that they
 ##                           become fixed. When a cell of size 2 is split into
 ##                           two cells of size 1, the original cell comes first.
-
+## cellof:   [2,2,1,3,1]     i is in cell[i]. This technically makes adding/removing
+##                           a cell into an O(n) instead of an O(1) operation,
+##                           but can be done very efficiently. In more complex
+##                           implementations this can be done lazily
 
 InstallGlobalFunction(PartitionStack,
 function(n)
@@ -59,12 +62,13 @@ function(n)
             cellstart := [1],
             cellsize := [n],
             fixed := [],
-            splits := [-1]));
+            splits := [-1],
+            cellof := ListWithIdenticalEntries(n, 1)));
 end);
 
 InstallMethod(IsInternallyConsistent, [IsPartitionStack],
     function(ps)
-        local n, i, fixedcells;
+        local n, i, j, fixedcells;
         n := ps!.len;
         if Length(ps!.marks) <> n+1 then return false; fi;
         if ps!.marks[1] <> 1 or ps!.marks[n+1] <> n+1 then return false; fi;
@@ -78,6 +82,14 @@ InstallMethod(IsInternallyConsistent, [IsPartitionStack],
                    )) then
             return false;
         fi;
+
+        for i in [1..Length(ps!.cellstart)] do
+            for j in [ps!.cellstart[i]..ps!.cellstart[i]+ps!.cellsize[i]-1] do
+                if ps!.cellof[j] <> i then
+                    return false;
+                fi;
+            od;
+        od;
 
         if ForAny([1..Length(ps!.cellstart)],
              {i} -> ps!.marks[ps!.cellstart[i]] <> i) then
@@ -132,12 +144,14 @@ InstallMethod(PS_FixedPoints, [IsPartitionStackRep],
 
 InstallMethod(PS_CellOfPoint, [IsPartitionStackRep, IsPosInt],
     function(ps, i)
-        local pos;
-        pos := ps!.invvals[i];
-        while ps!.marks[pos] = 0 do
-            pos := pos - 1;
-        od;
-        return ps!.marks[pos];
+        local pos, pos2;
+#        pos := ps!.invvals[i];
+#        while ps!.marks[pos] = 0 do
+#            pos := pos - 1;
+#        od;
+        pos2 := ps!.cellof[ps!.invvals[i]];
+#        Assert(0, ps!.marks[pos] = pos2);
+        return pos2;
     end);
 
 
@@ -156,7 +170,7 @@ InstallMethod(PS_UNSAFE_FixupCell, [IsPartitionStackRep, IsPosInt],
 
 BindGlobal("_PSR_SplitCell",
     function(ps, t, cell, index, reason)
-        local splitpos, newcellid, splitcellsize;
+        local splitpos, newcellid, splitcellsize, i;
         Assert(2, index >= 1 and index <= ps!.cellsize[cell]);
         splitpos := ps!.cellstart[cell] + index - 1;
         splitcellsize := ps!.cellsize[cell];
@@ -165,6 +179,10 @@ BindGlobal("_PSR_SplitCell",
 
         ps!.cellstart[newcellid] := splitpos;
         ps!.cellsize[newcellid] := splitcellsize - (index - 1);
+
+        for i in [ps!.cellstart[newcellid]..ps!.cellstart[newcellid]+ps!.cellsize[newcellid]-1] do
+            ps!.cellof[i] := newcellid;
+        od;
 
         ps!.marks[splitpos] := newcellid;
 
@@ -244,11 +262,15 @@ InstallMethod(PS_SplitCellByUnorderedFunction,
 
 InstallMethod(PS_RevertToCellCount, [IsPartitionStackRep, IsPosInt],
     function(ps, depth)
-        local revertcell, revertstart, revertlen;
+        local revertcell, revertstart, revertlen, i;
         while depth < Length(ps!.cellstart) do
             revertcell := Remove(ps!.splits);
             revertstart := Remove(ps!.cellstart);
             revertlen := Remove(ps!.cellsize);
+
+            for i in [revertstart..revertstart+revertlen-1] do
+                ps!.cellof[i] := revertcell;
+            od;
 
             ps!.marks[revertstart] := 0;
 
