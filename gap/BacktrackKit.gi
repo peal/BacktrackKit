@@ -15,8 +15,10 @@ end;
 
 BTKit_ResetStats();
 
+BTKit_NodeLimit := infinity;
 BTKit_Stats_AddNode := function()
     _BTKit.Stats.nodes := _BTKit.Stats.nodes + 1;
+    return _BTKit.Stats.nodes < BTKit_NodeLimit;
 end;
 
 
@@ -343,9 +345,12 @@ InstallGlobalFunction( Backtrack,
         tracer := FollowingTracer(rbase.branches[depth].tracer);
         found := false;
 
+        if not BTKit_Stats_AddNode() then
+            return false;
+        fi;
+
         # Split off point <v>, and then continue the backtrack search.
         saved := SaveState(state);
-        BTKit_Stats_AddNode();
 
         if PS_SplitCellByFunction(state!.ps, tracer, branchInfo.cell, {x} -> x = v)
            and RefineConstraints(state, tracer, false)
