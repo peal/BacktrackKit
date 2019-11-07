@@ -10,5 +10,7 @@ It requires (currently):
 
 ## Contact
 
-If you have any issues with using this package, please post an issue
-at https://github.com/ChrisJefferson/BacktrackKit/issues
+This package is a work in progress, both in terms of code and documentation.
+
+If you have any issues or questions about this package, please post an issue
+at https://github.com/peal/BacktrackKit/issues
