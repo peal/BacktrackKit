@@ -43,6 +43,9 @@ InstallMethod(RestoreState, [IsBTKitState, IsObject],
         od;
 end);
 
+#! @Chapter Implementation
+#! @Section Filters
+
 #! @Description
 #! Split the cells of the partition stack <A>ps</A>, if possible, according
 #! to a given <A>filter</A>. If the filter is <K>fail</K>, or if the split is

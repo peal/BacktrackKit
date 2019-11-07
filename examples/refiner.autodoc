@@ -45,4 +45,4 @@ To begin, we will just consider the case where $P=Q$. Then, we need to provide a
 
 * Invariance: Given a permutation $g$ such that $P^g=g$, then $R(ps^g) = R(ps)^g$. Here, we define $ps^g$ as applying $g$ to each point in each cell of `ps`, and we define $(R(ps)^g)(x) := R(ps)(x^g)$.
 
-<TO COMPLETE>
+(TO COMPLETE)

@@ -10,8 +10,8 @@ SetPackageInfo( rec(
 
 PackageName := "BacktrackKit",
 Subtitle := "An Extensible, easy to understand backtracking framework",
-Version := "0.2",
-Date := "27/10/2019", # dd/mm/yyyy format
+Version := "0.3",
+Date := "07/11/2019", # dd/mm/yyyy format
 
 Persons := [
   rec(
@@ -34,10 +34,10 @@ Persons := [
 
 SourceRepository := rec(
     Type := "git",
-    URL := "https://github.com/ChrisJefferson/BacktrackKit",
+    URL := "https://github.com/peal/BacktrackKit",
 ),
 IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
-PackageWWWHome  := "https://ChrisJefferson.github.io/BacktrackKit/",
+PackageWWWHome  := "https://peal.github.io/BacktrackKit/",
 PackageInfoURL  := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
 README_URL      := Concatenation( ~.PackageWWWHome, "README.md" ),
 ArchiveURL      := Concatenation( ~.SourceRepository.URL,
