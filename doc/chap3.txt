@@ -1,0 +1,16 @@
+  
+  [1X3 [33X[0;0YImplementation[133X[101X
+  
+  
+  [1X3.1 [33X[0;0YFilters[133X[101X
+  
+  [1X3.1-1 ApplyFilters[101X
+  
+  [33X[1;0Y[29X[2XApplyFilters[102X( [3Xps[103X, [3Xtracer[103X, [3Xfilter[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X.[133X
+  
+  [33X[0;0YSplit the cells of the partition stack [3Xps[103X, if possible, according to a given
+  [3Xfilter[103X.  If  the  filter is [9Xfail[109X, or if the split is rejected by the [3Xtracer[103X,
+  then  this  function  returns  [9Xfalse[109X. Otherwise, the split is applied and is
+  consistent with the [3Xtracer[103X, and this function returns [9Xtrue[109X.[133X
+  

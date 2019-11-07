@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (BacktrackKit) - Chapter 7: Tutorial</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap7"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap6.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chapInd.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p id="mathjaxlink" class="pcenter"><a href="chap7_mj.html">[MathJax on]</a></p>
+<p><a id="X81932F777898AD72" name="X81932F777898AD72"></a></p>
+<div class="ChapSects"><a href="chap7.html#X81932F777898AD72">7 <span class="Heading">Tutorial</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap7.html#X86BC65BE838451F0">7.1 <span class="Heading">Partition Stacks</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap7.html#X786EF6928319D57A">7.2 <span class="Heading">Refiners</span></a>
+</span>
+</div>
+</div>
+
+<h3>7 <span class="Heading">Tutorial</span></h3>
+
+<p><a id="X86BC65BE838451F0" name="X86BC65BE838451F0"></a></p>
+
+<h4>7.1 <span class="Heading">Partition Stacks</span></h4>
+
+<p>A Partition Stack represents an ordered partition which can be modified in two ways:</p>
+
+
+<ul>
+<li><p>A cell in the ordered partition can be split into two pieces</p>
+
+</li>
+<li><p>The ordered partition can be reverted to an earlier state, when it had fewer cells.</p>
+
+</li>
+</ul>
+<p>Let's look at an example! Firstly, we will create a partition stack which partitions [1..8] (Partition Stacks are always defined on a range of integers starting from 1). In the initial state, the partition has a single cell of size 1.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">LoadPackage("BacktrackKit", false);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">p := PartitionStack(8);</span>
+[ [ 1, 2, 3, 4, 5, 6, 7, 8 ] ]
+</pre></div>
+
+<p>In most applications of Partition Stacks, we want to record the list of changes which are made. These are stored in an object known as a Tracer. We will make one.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">t := RecordingTracer();;</span>
+</pre></div>
+
+<p>The main method used for splitting partitions is PS_SplitCellsByFunction. This takes a partition stack, a tracer and a function. It splits each cell of the partition by introducing a cell for each different value the function takes.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">PS_SplitCellsByFunction(p, t, {x} -&gt; x mod 3);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">p;</span>
+[ [ 3, 6 ], [ 2, 5, 8 ], [ 1, 4, 7 ] ]
+</pre></div>
+
+<p>We can further divide the partition with another function</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">PS_SplitCellsByFunction(p, t, {x} -&gt; x mod 2);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">p;</span>
+[ [ 6 ], [ 2, 8 ], [ 4 ], [ 3 ], [ 5 ], [ 1, 7 ] ]
+</pre></div>
+
+<p>From this example we can see that whenever an existing cell is split, the new cell is always placed at the end.</p>
+
+<p>There are a range of functions which can be used to find out information about a partition stack,</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># Number of cells</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">PS_Cells(p);</span>
+6
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># Cells of size 1, in the order they were created</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">PS_FixedCells(p);</span>
+[ 1, 4, 5, 3 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># Contents of the cells of size 1</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">PS_FixedPoints(p);</span>
+[ 6, 3, 5, 4 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># The contents of a cell, as a slice (a type of list)</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">PS_CellSlice(p, 2)</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ 2, 8 ]</span>
+</pre></div>
+
+<p>Note that PS_CellSlice does not make a copy of the list, but gives a "view" inside the partition stack. This means it is fast, but the value will become invalid if another split is made in the Partition Stack. Also, in general the list returned by PS_CellSlice is *NOT* sorted.</p>
+
+<p>We can revert to an earlier state of the partition stack. This includes states we may never have explicitly created, while a cell was being split into pieces.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">PS_RevertToCellCount(p, 3);</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">p;</span>
+[ [ 3, 6 ], [ 2, 5, 8 ], [ 1, 4, 7 ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">PS_RevertToCellCount(p, 2);</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">p;</span>
+[ [ 1, 3, 4, 6, 7 ], [ 2, 5, 8 ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">PS_CellSlice(p, 1);</span>
+[ 6, 3, 4, 1, 7 ]
+</pre></div>
+
+<p><a id="X786EF6928319D57A" name="X786EF6928319D57A"></a></p>
+
+<h4>7.2 <span class="Heading">Refiners</span></h4>
+
+<p>In partition backtrack, the search takes a list of refiners, each of which represents a group or coset, and calculates their intersection.</p>
+
+<p>Let us begin by calculating the intersection of two groups, <span class="Math">G</span> and <span class="Math">H</span>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">LoadPackage("BacktrackKit", false);</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G := Group((1,2,3),(4,5,6),(1,4)(2,5)(3,6));;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := Group((1,2,3,4,5,6),(2,3)(4,5));;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># Need to make a partition stack to search over</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">ps := PartitionStack(6);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># We create a refiner for each group</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput"># We have to give this how many points we want the group to act on</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">rg := BTKit_Con.InGroup(6, G);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">rh := BTKit_Con.InGroup(6, H);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># Finally, intersect the groups</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">BTKit_SimpleSearch(ps, [rg, rh]);</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Group([ (1,2,3)(4,6,5), (1,4)(2,5)(3,6) ])</span>
+</pre></div>
+
+<p>The refiner BTKit_Con.InGroup represents a group represented as a Permutation Group in GAP. There are many other ways of representing groups. For example, we could calculate a set stabilizer:</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># This represents the group which stabilizes the set [3,4,5,6]</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">ss := BTKit_Con.SetStab(6, [3,4,5,6]);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># We can prove this by just "searching" on this group</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">BTKit_SimpleSearch(ps, [ss]);</span>
+Group([ (5,6), (4,5), (3,4), (1,2) ])
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># We can intersect this with G</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">BTKit_SimpleSearch(ps, [rg,ss]);</span>
+Group([ (4,5,6) ])
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># We can also intersect G and H and the set stabilizer at the same time!</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">gap&gt; BTKit_SimpleSearch(ps, [rg,rh,ss]);</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Group(())</span>
+</pre></div>
+
+<p>Writing a new refiner requires some understanding of the Partition Backtracking framework by Jeffry Leon. We will give a (very brief, and incomplete!) overview here.</p>
+
+<p>In general, a refiner represents either a group or coset. Here we will consider the case where we are building a coset which represents mapping some permutation <span class="Math">P</span> to another permutation <span class="Math">Q</span> under conjugation. This is a group when <span class="Math">P=Q</span>.</p>
+
+<p>To begin, we will just consider the case where <span class="Math">P=Q</span>. Then, we need to provide a GAP function <span class="Math">R</span> which, given an ordered partition <code class="code">ps</code> on <span class="Math">\{1..n\}</span> returns a function <span class="Math">f: \{1..n\} -&gt; O</span> (where <span class="Math">O</span> is any valid GAP object) which satisfies the following conditions:</p>
+
+
+<ul>
+<li><p>Invariance: Given a permutation <span class="Math">g</span> such that <span class="Math">P^g=g</span>, then <span class="Math">R(ps^g) = R(ps)^g</span>. Here, we define <span class="Math">ps^g</span> as applying <span class="Math">g</span> to each point in each cell of <code class="code">ps</code>, and we define <span class="Math">(R(ps)^g)(x) := R(ps)(x^g)</span>.</p>
+
+</li>
+</ul>
+<p>(TO COMPLETE)</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap6.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chapInd.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (BacktrackKit) - Chapter 4: Constraints</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap4"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap3.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap5.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p id="mathjaxlink" class="pcenter"><a href="chap4_mj.html">[MathJax on]</a></p>
+<p><a id="X79EAB456814AB11C" name="X79EAB456814AB11C"></a></p>
+<div class="ChapSects"><a href="chap4.html#X79EAB456814AB11C">4 <span class="Heading">Constraints</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X87747BA382104C75">4.1 <span class="Heading">The record <code class="code">refine</code></span></a>
+</span>
+</div>
+</div>
+
+<h3>4 <span class="Heading">Constraints</span></h3>
+
+<p>Informally, a <em>constraint</em> is a <code class="keyw">true</code>/<code class="keyw">false</code> mathematical property of permutations that is used to define a search problem in the symmetric group. For example, the property could be "belongs to the permutation group G", or "commutes with the permutation x", or "maps set A to set B", or "is an automorphism of the digraph D".</p>
+
+<p>In backtrackKit, a constraint is implemented as a record that must contain:</p>
+
+
+<ul>
+<li><p>A member called <code class="code">name</code>, which is a string giving the name of the constraint;</p>
+
+</li>
+<li><p>A member called <code class="code">check</code>, which is a function taking two arguments, the constraint and a permutation, and which checks whether the permutation satisfies the constraint; and</p>
+
+</li>
+<li><p>A member called <code class="code">refine</code>, which is a record; more information is given below.</p>
+
+</li>
+</ul>
+<p>A constraint may also optionally contain any of the following members:</p>
+
+
+<ul>
+<li><p>A member called <code class="code">btdata</code>. The data in this member will be automatically saved and restored on backtrack.</p>
+
+</li>
+</ul>
+<p><a id="X87747BA382104C75" name="X87747BA382104C75"></a></p>
+
+<h4>4.1 <span class="Heading">The record <code class="code">refine</code></span></h4>
+
+<p>The <code class="code">refine</code> member of a constraint is a record that contains functions which, if present, will be called to inform the constraint of behaviour as search progresses, and to give the constraint the opportunity to influence the search. The permissible functions are given described below.</p>
+
+<p>These functions will always be passed at least two arguments: firstly the constraint itself, and then the partition stack. Details of any further arguments are described with the relevant function, below.</p>
+
+
+<ul>
+<li><p><code class="code">initialise</code> <em>(required)</em>. This is called when search begins. Note that, since the <code class="code">refine.initialise</code> function is called for all relevant constraints at the beginning of search, the partition may have already been split by some earlier constraint by the time that <code class="code">refine.initialise</code> is called for a later constraint.</p>
+
+</li>
+</ul>
+
+<ul>
+<li><p><code class="code">changed</code> - One or splits occurred.</p>
+
+</li>
+</ul>
+
+<ul>
+<li><p><code class="code">rBaseFinished</code> - The rBase has been created (is passed the rbase). Constraints which care about this can use this to remember the rBase construction is finished.</p>
+
+</li>
+</ul>
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap3.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap5.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

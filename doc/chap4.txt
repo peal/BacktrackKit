@@ -1,0 +1,50 @@
+  
+  [1X4 [33X[0;0YConstraints[133X[101X
+  
+  [33X[0;0YInformally,   a   [13Xconstraint[113X   is  a  [9Xtrue[109X/[9Xfalse[109X  mathematical  property  of
+  permutations that is used to define a search problem in the symmetric group.
+  For  example, the property could be "belongs to the permutation group G", or
+  "commutes  with  the  permutation  x",  or  "maps set A to set B", or "is an
+  automorphism of the digraph D".[133X
+  
+  [33X[0;0YIn backtrackKit, a constraint is implemented as a record that must contain:[133X
+  
+  [30X    [33X[0;6YA  member  called  [10Xname[110X,  which  is  a  string  giving the name of the
+        constraint;[133X
+  
+  [30X    [33X[0;6YA  member  called [10Xcheck[110X, which is a function taking two arguments, the
+        constraint and a permutation, and which checks whether the permutation
+        satisfies the constraint; and[133X
+  
+  [30X    [33X[0;6YA  member  called [10Xrefine[110X, which is a record; more information is given
+        below.[133X
+  
+  [33X[0;0YA constraint may also optionally contain any of the following members:[133X
+  
+  [30X    [33X[0;6YA  member called [10Xbtdata[110X. The data in this member will be automatically
+        saved and restored on backtrack.[133X
+  
+  
+  [1X4.1 [33X[0;0YThe record [10Xrefine[110X[101X[1X[133X[101X
+  
+  [33X[0;0YThe [10Xrefine[110X member of a constraint is a record that contains functions which,
+  if  present,  will be called to inform the constraint of behaviour as search
+  progresses,  and  to  give  the  constraint the opportunity to influence the
+  search. The permissible functions are given described below.[133X
+  
+  [33X[0;0YThese  functions  will  always be passed at least two arguments: firstly the
+  constraint  itself,  and  then  the  partition stack. Details of any further
+  arguments are described with the relevant function, below.[133X
+  
+  [30X    [33X[0;6Y[10Xinitialise[110X  [13X(required)[113X.  This is called when search begins. Note that,
+        since  the  [10Xrefine.initialise[110X  function  is  called  for  all relevant
+        constraints at the beginning of search, the partition may have already
+        been   split   by   some   earlier   constraint   by   the  time  that
+        [10Xrefine.initialise[110X is called for a later constraint.[133X
+  
+  [30X    [33X[0;6Y[10Xchanged[110X - One or splits occurred.[133X
+  
+  [30X    [33X[0;6Y[10XrBaseFinished[110X  -  The  rBase  has  been created (is passed the rbase).
+        Constraints  which  care about this can use this to remember the rBase
+        construction is finished.[133X
+  
