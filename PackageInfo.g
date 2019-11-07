@@ -6,12 +6,18 @@
 # manual of the "Example" package as well as the comments in its
 # PackageInfo.g file.
 #
+
+_STANDREWSCS := Concatenation(["Jack Cole Building, North Haugh, ",
+                               "St Andrews, Fife, KY16 9SX, Scotland"]);
+
+
 SetPackageInfo( rec(
 
 PackageName := "BacktrackKit",
 Subtitle := "An Extensible, easy to understand backtracking framework",
-Version := "0.3",
+Version := "0.3.1",
 Date := "07/11/2019", # dd/mm/yyyy format
+
 
 Persons := [
   rec(
@@ -30,6 +36,29 @@ Persons := [
     Place := "St Andrews",
     Institution := "University of St Andrews",
   ),
+
+    rec(
+    LastName      := "Wilson",
+    FirstNames    := "Wilf",
+    IsAuthor      := true,
+    IsMaintainer  := true,
+    Email         := "gap@wilf-wilson.net",
+    WWWHome       := "http://wilf.me",
+    PostalAddress := Concatenation(["Theodor-Lieser-Straße 5, ",
+                                    "06120 Halle (Saale), Germany"]),
+    Place         := "Halle (Saale), Germany",
+    Institution   := "University of Halle-Wittenberg"),
+      rec(
+    LastName      := "Pfeiffer",
+    FirstNames    := "Markus",
+    IsAuthor      := false,
+    IsMaintainer  := false,
+    Email         := "markus.pfeiffer@morphism.de",
+    WWWHome       := "https://www.morphism.de/~markusp",
+    PostalAddress := _STANDREWSCS,
+    Place         := "St Andrews",
+    Institution   := "University of St Andrews"),
+
 ],
 
 SourceRepository := rec(
