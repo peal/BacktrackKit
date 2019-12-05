@@ -1,19 +1,3 @@
-# Any refiner which can be expressed as "stabilize an ordered partition"
-# can be implemented easily and efficently, as we only need to handle
-# the root node of search (as we never gain more information as search
-# progresses).
-# Therefore we have two general functions which implement:
-#
-# MakeFixlistStabilizer: Returns the refiner which implements
-#                        fixlist[i] = fixlist[i^p]
-#
-# MakeFixListTransporter: Returns the refiner which implements
-#                         fixlistL[i] = fixlistR[i^p]
-#
-# These are used to then implement refiners for sets, tuples
-# and ordered partitions.
-
-
 # The minimal requirements of a refiner -- give a 
 # name, a 'check' function, and an empty record called 'refine'
 BTKit_Con.MostBasicConjugacyTransporter := function(permL, permR)
