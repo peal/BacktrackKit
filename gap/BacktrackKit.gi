@@ -160,10 +160,10 @@ end;
 #!
 #! @Arguments state, tracer, rbase
 #! @Returns <K>true</K> or <K>false</K>.
-FirstFixedPoint := function(state, tracer, rbase)
+InstallGlobalFunction(FirstFixedPoint, function(state, tracer, rbase)
     return InitialiseConstraints(state, tracer, rbase) and
            RefineConstraints(state, tracer, rbase);
-end;
+end);
 
 
 #! @Description

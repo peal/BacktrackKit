@@ -1,16 +1,20 @@
 # The minimal requirements of a refiner -- give a 
 # name, a 'check' function, and an empty record called 'refine'
-BTKit_Con.MostBasicConjugacyTransporter := function(permL, permR)
+BTKit_Con.MostBasicPermConjugacy := function(permL, permR)
     return Objectify(BTKitRefinerType,rec(
-        name := "MostBasicConjugacy",
+        name := "MostBasicPermConjugacy",
         check := {p} -> (permL^p = permR),
-        refine := rec()
-    ));
+        refine := rec(
+                initialise := function(ps, buildingRbase)
+                    return ReturnTrue;
+                end)
+        )
+    );
 end;
 
 # Slightly cleverer refiner -- the function 'initialise' is called
 # once at the start of search. It should return a function
-BTKit_Con.BasicConjugacyTransporter := function(permL, permR)
+BTKit_Con.BasicPermConjugacy := function(permL, permR)
     local mapToOrbitSize;
 
     mapToOrbitSize := function(p,n)
@@ -26,7 +30,7 @@ BTKit_Con.BasicConjugacyTransporter := function(permL, permR)
     end;
 
     return Objectify(BTKitRefinerType,rec(
-        name := "BasicConjugacy",
+        name := "BasicPermConjugacy",
         check := {p} -> (permL^p = permR),
         refine := rec(
             initialise := function(ps, buildingRbase)

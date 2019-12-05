@@ -10,3 +10,4 @@ ReadPackage( "BacktrackKit", "gap/partitionstack.gd");
 
 ReadPackage( "BacktrackKit", "gap/BacktrackKit.gd");
 ReadPackage( "BacktrackKit", "gap/constraint.gd");
+ReadPackage( "BacktrackKit", "gap/canonical.gd");

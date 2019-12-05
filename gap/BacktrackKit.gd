@@ -58,6 +58,8 @@ DeclareOperation("ApplyFilters", [IsBTKitState, IsTracer, IsObject]);
 #! BT_SimpleSinglePermSearch.
 DeclareGlobalFunction("BTKit_BuildProblem");
 
+DeclareGlobalFunction( "FirstFixedPoint" );
+
 DeclareGlobalFunction( "BuildRBase" );
 
 DeclareGlobalFunction( "Backtrack" );
