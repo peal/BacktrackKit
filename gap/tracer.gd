@@ -26,7 +26,8 @@ DeclareGlobalFunction("FollowingTracer");
 #! Constructor for canonicalising tracers.
 #! @Arguments
 #! @Returns a canonicalising tracer.
-DeclareGlobalFunction("CanonicalisingTracer");
+DeclareGlobalFunction("CanonicalisingTracerFromTracer");
+DeclareGlobalFunction("EmptyCanonicalisingTracer");
 
 
 #! @Description
@@ -81,6 +82,13 @@ DeclareOperation("TraceLength", [IsTracer]);
 #! @Returns a GAP object.
 #! @Arguments t, i
 DeclareOperation("TraceEvent", [IsTracer, IsPosInt]);
+
+#! @Description
+#! Get a list of all events in the tracer.
+#!
+#! @ Returns a GAP list
+#! @Arguments t
+DeclareOperation("GetEvents", [IsTracer]);
 
 DeclareInfoClass("InfoTrace");
 SetInfoLevel(InfoTrace, 0);

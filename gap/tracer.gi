@@ -57,5 +57,70 @@ function(t)
 end);
 
 
-InstallGlobalFunction(CanonicalisingTracer,
-{} -> Objectify(CanonicalisingTracerTypeMutable, rec(trace := [], pos := 1)));
+InstallGlobalFunction(CanonicalisingTracerFromTracer,
+function(trace)
+    if not IsCanonicalisingTracerRep(trace) then
+        ErrorNoReturn("a canonicalising tracer must be based on another canonicalising tracer,");
+    fi;
+    return Objectify(CanonicalisingTracerTypeMutable,
+        rec(trace := List(trace!.trace), pos := 1, improvedTrace := false) );
+end);
+
+InstallGlobalFunction(EmptyCanonicalisingTracer,
+function()
+    return Objectify(CanonicalisingTracerTypeMutable,
+        rec(trace := [], pos := 1, improvedTrace := false) );
+end);
+
+
+
+InstallMethod(AddEvent, [IsCanonicalisingTracerRep and IsMutable, IsObject],
+    function(tracer, o)
+        Assert(2, tracer!.pos >= 1 and tracer!.pos <= Length(tracer!.trace) + 1);
+        # Extending trace (always fine)
+        if tracer!.pos = Length(tracer!.trace) + 1 then
+            Add(tracer!.trace, o);
+            tracer!.pos := tracer!.pos + 1;
+
+            # Record the fact we improved the trace, as this effects search
+            tracer!.improvedTrace := true;
+            return true;
+        fi;
+
+        # On the trace
+        if tracer!.trace[tracer!.pos] = o then
+            tracer!.pos := tracer!.pos + 1;
+            return true;
+        fi;
+
+        # Trace beats us
+        if tracer!.trace[tracer!.pos] < o then
+            return false;
+        fi;
+
+
+        # Replacing previous trace
+        Assert(2, tracer!.trace[tracer!.pos] > o);
+        Info(InfoTrace, 2, "New best trace: ", tracer!.pos, o);
+        tracer!.trace[tracer!.trace] := o;
+        tracer!.trace := tracer!.trace{[1..tracer!.pos]};
+        
+        # Record the fact we improved the trace, as this effects search
+        tracer!.improvedTrace := true;
+        return true;
+    end);
+
+InstallMethod(TraceLength, [IsCanonicalisingTracerRep],
+{x} -> TraceLength(x!.trace));
+InstallMethod(TraceEvent, [IsCanonicalisingTracerRep, IsPosInt],
+{x,i} -> TraceEvent(x!.trace, i));
+
+InstallMethod(GetEvents, [IsCanonicalisingTracerRep],
+{x} -> x!.trace);
+
+
+
+InstallMethod(ViewObj, [IsCanonicalisingTracerRep],
+function(t)
+    PrintFormatted("<canonicalising tracer of length {}>", TraceLength(t));
+end);
