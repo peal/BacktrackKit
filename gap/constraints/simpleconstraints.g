@@ -50,7 +50,7 @@ end;
 
 BTKit_CheckInScope := function(n, list)
     local i;
-    for i in [1..Length(list)] do
+    for i in list do
         if i < 1 then ErrorNoReturn("Value too small: ", i); fi;
         if i > n then ErrorNoReturn("Value ", i, " above upper bound ", n); fi;
     od;
