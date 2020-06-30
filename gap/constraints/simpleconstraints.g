@@ -20,7 +20,8 @@ BTKit_MakeFixlistStabilizer := function(name, fixlist)
     filters := {i} -> fixlist[i];
     return Objectify(BTKitRefinerType, rec(
         name := name,
-        check := {p} -> ForAll([1..Length(fixlist)], {i} -> fixlist[i] = fixlist[i^p]),
+        image := {p} -> List([1..Length(fixlist)], {i} -> fixlist[i^p]),
+        result := {} -> fixlist,
         refine := rec(
             initialise := function(ps, buildingRBase)
                 return filters;
@@ -36,7 +37,8 @@ BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR)
     filtersR := {i} -> fixlistR[i];
     return Objectify(BTKitRefinerType, rec(
         name := name,
-        check := {p} -> ForAll([1..Length(fixlistL)], {i} -> fixlistL[i] = fixlistR[i^p]),
+        image := {p} -> List([1..Length(fixlistR)], {i} -> fixlistR[i^p]),
+        result := {} -> fixlistL,
         refine := rec(
             initialise := function(ps, buildingRBase)
                 if buildingRBase then
@@ -174,6 +176,8 @@ BTKit_Con.InCoset := function(n, group, perm)
 
     r := rec(
         name := "InCoset",
+        image := {p} -> RightCoset(group, p),
+        result := {} -> RightCoset(group, perm),
         check := {p} -> p in RightCoset(group, perm),
         refine := rec(
             rBaseFinished := function(getRBase)
@@ -288,6 +292,9 @@ BTKit_Con.InCosetWithOrbitals := function(n, group, perm)
 
     r := rec(
         name := "InGroupWithCoset-BTKit",
+        
+        image := {p} -> RightCoset(group, p),
+        result := {} -> RightCoset(group, perm),
         check := {p} -> p in RightCoset(group, perm),
         refine := rec(
             rBaseFinished := function(getRBase)

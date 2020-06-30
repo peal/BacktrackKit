@@ -3,7 +3,8 @@
 BTKit_Con.MostBasicPermConjugacy := function(permL, permR)
     return Objectify(BTKitRefinerType,rec(
         name := "MostBasicPermConjugacy",
-        check := {p} -> (permL^p = permR),
+        image := {p} -> permL^p,
+        result := {} -> permR,
         refine := rec(
                 initialise := function(ps, buildingRbase)
                     return ReturnTrue;
@@ -31,7 +32,8 @@ BTKit_Con.BasicPermConjugacy := function(permL, permR)
 
     return Objectify(BTKitRefinerType,rec(
         name := "BasicPermConjugacy",
-        check := {p} -> (permL^p = permR),
+        image := {p} -> permL^p,
+        result := {} -> permR,
         refine := rec(
             initialise := function(ps, buildingRbase)
                 if buildingRbase then
@@ -83,7 +85,8 @@ BTKit_Con.PermTransporter := function(n, fixedeltL, fixedeltR)
 
 
     r := rec( name := "PermTransporter",
-              check := {p} -> fixedeltL ^ p = fixedeltR,
+              image := {p} -> fixedeltL^p,
+              result := {} -> fixedeltR,
               refine := rec( initialise := function(ps, buildingRBase)
                                local points;
                                # Pass cyclepart just on the first call, for efficency

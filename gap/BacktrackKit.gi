@@ -285,9 +285,21 @@ BTKit_GetCandidateSolution := function(ps, rbase)
     return PermList(image);
 end;
 
+
+BTKit_CheckPermutation := function(perm, con)
+    local check;
+    if IsBound(con!.check) then
+        check := con!.check(perm);
+        Assert(2, check = (con!.result() = con!.image(perm)));
+    else
+        return con!.result() = con!.image(perm);
+    fi;
+    return check;
+end;
+
 BTKit_CheckSolution := function(perm, conlist)
     local check;
-    check := ForAll(conlist, c -> c!.check(perm));
+    check := ForAll(conlist, {c} -> BTKit_CheckPermutation(perm, c));
     if not check then
         _BTKit.Stats.badSolutions := _BTKit.Stats.badSolutions + 1;
     fi;

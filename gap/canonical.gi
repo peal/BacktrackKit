@@ -1,5 +1,6 @@
-BTKit_GetCandidateCanonicalSolution := function(ps)
-    local image, i;
+BTKit_GetCandidateCanonicalSolution := function(state)
+    local image, i, ps, perm;
+    ps := state!.ps;
     # When this is called, the current partition state of ps should be discrete.
     # The candidate solution is the perm that, for each i, maps the value in
     # cell i of the discrete partition of the RBase to the value in cell i of
@@ -9,19 +10,20 @@ BTKit_GetCandidateCanonicalSolution := function(ps)
         image[ps!.vals[i]] := i; # TODO: Make less scary! PS_CellSlice(ps, i)[1];
     od;
     Print(ps!.vals);
-    return PermList(image);
+    perm := PermList(image);
+    return rec(perm := perm, image := List(state!.conlist, {x} -> x!.image(perm)));
 end;
 
 InstallGlobalFunction( CanonicalBacktrack,
     function(state, canonicaltraces, depth, canonical, branchselector)
-    local p, found, isSol, saved, vals, branchCell, branchPos, v, tracer;
+    local p, found, saved, vals, branchCell, branchPos, v, tracer;
 
     Info(InfoBTKit, 2, "Partition: ", PS_AsPartition(state!.ps));
 
     if PS_Fixed(state!.ps) then
-        p := BTKit_GetCandidateCanonicalSolution(state!.ps);
-        Info(InfoBTKit, 2, "Maybe canonical solution? ", p, " : ", isSol);
-        Add(canonical[1], p);
+        p := BTKit_GetCandidateCanonicalSolution(state);
+        Info(InfoBTKit, 2, "Maybe canonical solution? ", p);
+        Add(canonical[1], p.perm);
         return false;
     fi;
 

@@ -37,7 +37,8 @@ BTKit_Con.GraphTrans := function(graphL, graphR)
             end;
     return Objectify(BTKitRefinerType, rec(
         name := "GraphTrans",
-        check := {p} -> OnDigraphs(graphL, p) = graphR,
+        image := {p} -> OnDigraphs(graphL, p),
+        result := {} -> graphR,
         refine := rec(
             initialise := check, 
             changed := check

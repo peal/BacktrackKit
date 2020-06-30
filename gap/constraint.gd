@@ -13,11 +13,24 @@
 #!
 #! * A member called <C>name</C>, which is a string giving the name of the
 #!   constraint;
+#! * A member called <C>refine</C>, which is a record; more information is
+#!   given below.
+#!
+#! and a method of check permutations, either:
+#!
+#! * Two members, called <C>image</C> and <C>result</C>, where <C>image</C>
+#!   takes a permutation and <C>result</C> which is a function which takes
+#!   no arguments, where <C>image(perm)=result</C> if the permutation satisfies
+#!   the constraint
+#!
+#! Or:
+#!
 #! * A member called <C>check</C>, which is a function taking two arguments,
 #!   the constraint and a permutation, and which checks whether the permutation
 #!   satisfies the constraint; and
-#! * A member called <C>refine</C>, which is a record; more information is
-#!   given below.
+#!
+#! <C>image</C> and <C>result</C> must be implemented for finding canonical
+#! images. All 3 functions can be implemented, as long as they are consistent.
 #!
 #! A constraint may also optionally contain any of the following members:
 #!

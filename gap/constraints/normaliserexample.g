@@ -7,7 +7,8 @@
 BTKit_Con.MostBasicGroupConjugacy := function(grpL, grpR)
     return Objectify(BTKitRefinerType,rec(
         name := "MostBasicGroupPermConjugacy",
-        check := {p} -> (grpL^p = grpR),
+        image := {p} -> grpL^p,
+        result := {} -> grpR,
         refine := rec(
                 initialise := function(ps, buildingRbase)
                     return ReturnTrue;
@@ -35,7 +36,8 @@ BTKit_Con.BasicGroupConjugacy := function(grpL, grpR)
 
     return Objectify(BTKitRefinerType,rec(
         name := "BasicGroupConjugacy",
-        check := {p} -> (grpL^p = grpR),
+        image := {p} -> grpL^p,
+        result := {} -> grpR,
         refine := rec(
             initialise := function(ps, buildingRbase)
                 if buildingRbase then
@@ -65,7 +67,8 @@ BTKit_Con.SimpleGroupConjugacy := function(grpL, grpR)
 
     return Objectify(BTKitRefinerType,rec(
         name := "BasicGroupConjugacy",
-        check := {p} -> (grpL^p = grpR),
+        image := {p} -> grpL^p,
+        result := {} -> grpR,
         refine := rec(
             initialise := function(ps, buildingRbase)
                 if buildingRbase then
