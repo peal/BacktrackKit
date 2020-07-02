@@ -15,13 +15,13 @@
 
 # Make a refiner which accepts permutations p
 # such that fixlist[i] = fixlist[i^p]
-BTKit_MakeFixlistStabilizer := function(name, fixlist)
+BTKit_MakeFixlistStabilizer := function(name, fixlist, o, action)
     local filters;
     filters := {i} -> fixlist[i];
     return Objectify(BTKitRefinerType, rec(
         name := name,
-        image := {p} -> List([1..Length(fixlist)], {i} -> fixlist[i^p]),
-        result := {} -> fixlist,
+        image := {p} -> action(o,p),
+        result := {} -> o,
         refine := rec(
             initialise := function(ps, buildingRBase)
                 return filters;
@@ -31,14 +31,14 @@ end;
 
 # Make a refiner which accepts permutations p
 # such that fixlistL[i] = fixlistR[i^p]
-BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR)
+BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR, oL, oR, action)
     local filtersL, filtersR;
     filtersL := {i} -> fixlistL[i];
     filtersR := {i} -> fixlistR[i];
     return Objectify(BTKitRefinerType, rec(
         name := name,
-        image := {p} -> List([1..Length(fixlistR)], {i} -> fixlistR[i^p]),
-        result := {} -> fixlistL,
+        image := {p} -> action(oL,p),
+        result := {} -> oR,
         refine := rec(
             initialise := function(ps, buildingRBase)
                 if buildingRBase then
@@ -65,7 +65,7 @@ BTKit_Con.TupleStab := function(n, fixpoints)
     for i in [1..Length(fixpoints)] do
         fixlist[fixpoints[i]] := i;
     od;
-    return BTKit_MakeFixlistStabilizer("TupleStab", fixlist);
+    return BTKit_MakeFixlistStabilizer("TupleStab", fixlist, fixpoints, OnTuples);
 end;
 
 BTKit_Con.TupleTransporter := function(n, fixpointsL, fixpointsR)
@@ -80,7 +80,7 @@ BTKit_Con.TupleTransporter := function(n, fixpointsL, fixpointsR)
     for i in [1..Length(fixpointsR)] do
         fixlistR[fixpointsR[i]] := i;
     od;
-    return BTKit_MakeFixlistTransporter("TupleTransport", fixlistL, fixlistR);
+    return BTKit_MakeFixlistTransporter("TupleTransport", fixlistL, fixlistR, fixpointsL, fixpointsR, OnTuples);
 end;
 
 BTKit_Con.SetStab := function(n, fixset)
@@ -90,7 +90,7 @@ BTKit_Con.SetStab := function(n, fixset)
     for i in [1..Length(fixset)] do
         fixlist[fixset[i]] := 1;
     od;
-    return BTKit_MakeFixlistStabilizer("SetStab", fixlist);
+    return BTKit_MakeFixlistStabilizer("SetStab", fixlist, fixset, OnSets);
 end;
 
 BTKit_Con.SetTransporter := function(n, fixsetL, fixsetR)
@@ -105,7 +105,7 @@ BTKit_Con.SetTransporter := function(n, fixsetL, fixsetR)
     for i in [1..Length(fixsetR)] do
         fixlistR[fixsetR[i]] := 1;
     od;
-    return BTKit_MakeFixlistTransporter("SetTransport", fixlistL, fixlistR);
+    return BTKit_MakeFixlistTransporter("SetTransport", fixlistL, fixlistR, fixsetL, fixsetR, OnSets);
 end;
 
 BTKit_Con.OrderedPartitionStab := function(n, fixpart)
@@ -136,7 +136,7 @@ BTKit_Con.OrderedPartitionTransporter := function(n, fixpartL, fixpartR)
             fixlistR[j] := i;
         od;
     od;
-    return BTKit_MakeFixlistTransporter("OrdredPartitionTransport", fixlistL, fixlistR);
+    return BTKit_MakeFixlistTransporter("OrdredPartitionTransport", fixlistL, fixlistR, fixpartL, fixpartR, OnTuplesSets);
 end;
 
 

@@ -45,3 +45,6 @@ BTKit_Con.GraphTrans := function(graphL, graphR)
         )
     ));
 end;
+
+
+BTKit_Con.GraphStab := {graph} -> BTKit_Con.GraphTrans(graph, graph);

@@ -7,9 +7,9 @@ BTKit_GetCandidateCanonicalSolution := function(state)
     # the current (discrete) partition state of ps.
     image := [];
     for i in [1..PS_Points(ps)] do
-        image[ps!.vals[i]] := i; # TODO: Make less scary! PS_CellSlice(ps, i)[1];
+        image[PS_CellSlice(ps,i)[1]] := i; # TODO: Make less scary! PS_CellSlice(ps, i)[1];
     od;
-    Print(ps!.vals);
+    Info(InfoBTKit, 2, "Considering mapping: ", ps!.vals, image, PermList(image));
     perm := PermList(image);
     return rec(perm := perm, image := List(state!.conlist, {x} -> x!.image(perm)));
 end;
@@ -23,7 +23,12 @@ InstallGlobalFunction( CanonicalBacktrack,
     if PS_Fixed(state!.ps) then
         p := BTKit_GetCandidateCanonicalSolution(state);
         Info(InfoBTKit, 2, "Maybe canonical solution? ", p);
-        Add(canonical[1], p.perm);
+        if not IsBound(canonical.image) or p.image < canonical.image then
+            canonical.image := p.image;
+            canonical.perms := [p.perm];
+        elif IsBound(canonical.image) and p.image = canonical.image then
+            Add(canonical.perms, p.perm);
+        fi;
         return false;
     fi;
 
@@ -76,7 +81,7 @@ end);
 _BTKit.SimpleCanonicalSearch := 
     function(state)
         local canonical, tracer;
-        canonical := [[]];
+        canonical := rec(perms := []);
         BTKit_ResetStats();
 
         tracer := EmptyCanonicalisingTracer();

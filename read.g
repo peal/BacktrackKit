@@ -20,6 +20,7 @@ ReadPackage( "BacktrackKit", "gap/constraints/simpleconstraints.g");
 ReadPackage( "BacktrackKit", "gap/constraints/conjugacyexample.g");
 ReadPackage( "BacktrackKit", "gap/constraints/normaliserexample.g");
 ReadPackage( "BacktrackKit", "gap/constraints/graphconstraints.g");
+ReadPackage( "BacktrackKit", "gap/constraints/canonicalconstraints.g");
 ReadPackage( "BacktrackKit", "gap/constraints/tree/tree.g");
 
 ReadPackage( "BacktrackKit", "gap/canonical.gi");
