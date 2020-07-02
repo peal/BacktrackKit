@@ -95,15 +95,17 @@ InstallMethod(AddEvent, [IsCanonicalisingTracerRep and IsMutable, IsObject],
 
         # Trace beats us
         if tracer!.trace[tracer!.pos] < o then
+            Info(InfoTrace, 2, "Trace beats: ", tracer!.pos, ":", tracer!.trace[tracer!.pos], ":", o);
             return false;
         fi;
 
 
         # Replacing previous trace
         Assert(2, tracer!.trace[tracer!.pos] > o);
-        Info(InfoTrace, 2, "New best trace: ", tracer!.pos, o);
-        tracer!.trace[tracer!.trace] := o;
+        Info(InfoTrace, 2, "New best trace: ", tracer!.pos, ":", tracer!.trace[tracer!.pos], ":", o);
+        tracer!.trace[tracer!.pos] := o;
         tracer!.trace := tracer!.trace{[1..tracer!.pos]};
+        tracer!.pos := tracer!.pos + 1;
         
         # Record the fact we improved the trace, as this effects search
         tracer!.improvedTrace := true;

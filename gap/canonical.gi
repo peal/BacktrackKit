@@ -1,33 +1,47 @@
-BTKit_GetCandidateCanonicalSolution := function(state)
-    local image, i, ps, perm;
+BTKit_GetCandidateCanonicalSolution := function(state, group)
+    local preimage, postimage, image, i, ps, perm;
     ps := state!.ps;
     # When this is called, the current partition state of ps should be discrete.
     # The candidate solution is the perm that, for each i, maps the value in
     # cell i of the discrete partition of the RBase to the value in cell i of
     # the current (discrete) partition state of ps.
+    preimage := List([1..PS_Points(ps)], {x} -> PS_CellSlice(ps,x)[1]);
+    if group = false then
+        postimage := [1..PS_Points(ps)];
+    else
+        postimage := MinimalImage(group, preimage, OnTuples);
+    fi;
+
     image := [];
     for i in [1..PS_Points(ps)] do
-        image[PS_CellSlice(ps,i)[1]] := i; # TODO: Make less scary! PS_CellSlice(ps, i)[1];
+        image[preimage[i]] := postimage[i];
     od;
-    Info(InfoBTKit, 2, "Considering mapping: ", ps!.vals, image, PermList(image));
     perm := PermList(image);
+
+    Assert(2, group = false or perm in group);
+
+    Info(InfoBTKit, 2, "Considering mapping: ", preimage, postimage, perm);
     return rec(perm := perm, image := List(state!.conlist, {x} -> x!.image(perm)));
 end;
 
 InstallGlobalFunction( CanonicalBacktrack,
-    function(state, canonicaltraces, depth, canonical, branchselector)
+    function(state, canonicaltraces, depth, canonical, branchselector, group)
     local p, found, saved, vals, branchCell, branchPos, v, tracer;
 
     Info(InfoBTKit, 2, "Partition: ", PS_AsPartition(state!.ps));
 
     if PS_Fixed(state!.ps) then
-        p := BTKit_GetCandidateCanonicalSolution(state);
+        p := BTKit_GetCandidateCanonicalSolution(state, group);
         Info(InfoBTKit, 2, "Maybe canonical solution? ", p);
         if not IsBound(canonical.image) or p.image < canonical.image then
             canonical.image := p.image;
             canonical.perms := [p.perm];
+            Info(InfoBTKit, 2, "New best!");
         elif IsBound(canonical.image) and p.image = canonical.image then
             Add(canonical.perms, p.perm);
+            Info(InfoBTKit, 2, "Equal");
+        else
+            Info(InfoBTKit, 2, "Beaten");
         fi;
         return false;
     fi;
@@ -47,8 +61,10 @@ InstallGlobalFunction( CanonicalBacktrack,
     for v in vals do
         Info(InfoBTKit, 2, StringFormatted("Branch: {}", v));
         if IsBound(canonicaltraces[depth]) then
+            Info(InfoBTKit, 3, "Reusing previous trace at depth ", depth, " : ", GetEvents(canonicaltraces[depth]));
             tracer := CanonicalisingTracerFromTracer(canonicaltraces[depth]);
         else
+            Info(InfoBTKit, 3, "Using new trace for depth ", depth);
             tracer := EmptyCanonicalisingTracer();
         fi;
         found := false;
@@ -64,10 +80,13 @@ InstallGlobalFunction( CanonicalBacktrack,
            and RefineConstraints(state, tracer, false) then
                 if tracer!.improvedTrace = true then
                     # We improved the canonical image!
+                    Info(InfoBTKit, 2, "Found new best trace, clearing old stuff");
                     canonicaltraces[depth] := tracer;
                     canonicaltraces := canonicaltraces{[1..depth]};
+                    Unbind(canonical.image);
+                    canonical.perms := [];
                 fi;
-                if CanonicalBacktrack(state, canonicaltraces, depth + 1, canonical, branchselector) then
+                if CanonicalBacktrack(state, canonicaltraces, depth + 1, canonical, branchselector, group) then
                     found := true;
                 fi;
         fi;
@@ -79,7 +98,7 @@ end);
 
 
 _BTKit.SimpleCanonicalSearch := 
-    function(state)
+    function(state, group)
         local canonical, tracer;
         canonical := rec(perms := []);
         BTKit_ResetStats();
@@ -87,7 +106,7 @@ _BTKit.SimpleCanonicalSearch :=
         tracer := EmptyCanonicalisingTracer();
         FirstFixedPoint(state, tracer, false);
 
-        CanonicalBacktrack(state, [], 1, canonical, state!.config.cellSelector);
+        CanonicalBacktrack(state, [], 1, canonical, state!.config.cellSelector, group);
         return canonical;
     end;
 
@@ -95,7 +114,16 @@ _BTKit.SimpleCanonicalSearch :=
 BTKit_SimpleCanonicalSearch :=
     function(ps, conlist, conf...)
         local ret;
-        ret := _BTKit.SimpleCanonicalSearch(_BTKit.BuildProblem(ps, conlist, conf));
+        ret := _BTKit.SimpleCanonicalSearch(_BTKit.BuildProblem(ps, conlist, conf), false);
         return ret;
 end;
 
+
+BTKit_SimpleCanonicalSearchInGroup :=
+    function(ps, conlist, group, conf...)
+        local ret;
+        ret := _BTKit.SimpleCanonicalSearch(_BTKit.BuildProblem(ps, Concatenation(conlist, [BTKit_Con.InGroupSimple(PS_Points(ps),group)]), conf), group);
+        # Remove extra group we added
+        Remove(ret.image);
+        return ret;
+end;
