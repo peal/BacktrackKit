@@ -36,19 +36,15 @@ Persons := [
     Place := "St Andrews",
     Institution := "University of St Andrews",
   ),
-
-    rec(
+  rec(
     LastName      := "Wilson",
-    FirstNames    := "Wilf",
+    FirstNames    := "Wilf A.",
     IsAuthor      := true,
     IsMaintainer  := true,
     Email         := "gap@wilf-wilson.net",
-    WWWHome       := "http://wilf.me",
-    PostalAddress := Concatenation(["Theodor-Lieser-Straße 5, ",
-                                    "06120 Halle (Saale), Germany"]),
-    Place         := "Halle (Saale), Germany",
-    Institution   := "University of Halle-Wittenberg"),
-      rec(
+    WWWHome       := "https://wilf.me",
+  ),
+  rec(
     LastName      := "Pfeiffer",
     FirstNames    := "Markus",
     IsAuthor      := false,
@@ -57,8 +53,8 @@ Persons := [
     WWWHome       := "https://www.morphism.de/~markusp",
     PostalAddress := _STANDREWSCS,
     Place         := "St Andrews",
-    Institution   := "University of St Andrews"),
-
+    Institution   := "University of St Andrews"
+  ),
 ],
 
 SourceRepository := rec(
