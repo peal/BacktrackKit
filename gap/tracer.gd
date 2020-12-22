@@ -86,7 +86,7 @@ DeclareOperation("TraceEvent", [IsTracer, IsPosInt]);
 #! @Description
 #! Get a list of all events in the tracer.
 #!
-#! @ Returns a GAP list
+#! @Returns a GAP list
 #! @Arguments t
 DeclareOperation("GetEvents", [IsTracer]);
 
