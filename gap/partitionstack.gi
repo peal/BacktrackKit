@@ -56,6 +56,7 @@ function(n)
     marks[n+1] := n+1;
     return Objectify(PartitionStackTypeMutable,
         rec(len := n,
+            original_len := n,
             vals := [1..n],
             invvals := [1..n],
             marks := marks,
@@ -98,7 +99,7 @@ InstallMethod(IsInternallyConsistent, [IsPartitionStack],
 
         if Sum(ps!.cellsize) <> n then return false; fi;
 
-        fixedcells := Filtered([1..Length(ps!.cellsize)], x -> ps!.cellsize[x] = 1);
+        fixedcells := Filtered([1..Length(ps!.cellsize)], x -> ps!.cellsize[x] = 1 and ps!.vals[ps!.cellstart[x]] <= ps!.original_len);
         if Set(ps!.fixed) <> Set(fixedcells) or
            Length(Set(ps!.fixed)) <> Length(ps!.fixed) then
             return false;
@@ -122,13 +123,35 @@ InstallMethod(ViewString, "for a partition stack",
     {ps} -> STRINGIFY(PS_AsPartition(ps)) );
 
 InstallMethod(PS_Points, [IsPartitionStackRep],
+    {ps} -> ps!.original_len);
+
+InstallMethod(PS_ExtendedPoints, [IsPartitionStackRep],
     {ps} -> ps!.len);
+
+InstallMethod(PS_Extend, [IsPartitionStackRep, IsPosInt],
+    function(ps, pnts)
+        local curlen, newlen;
+        curlen := ps!.len;
+        newlen := ps!.len + pnts;
+        Append(ps!.vals, [curlen+1..newlen]);
+        Append(ps!.invvals, [curlen+1..newlen]);
+        Append(ps!.marks, [curlen+1..newlen]*0);
+        ps!.marks[curlen+1] := Length(ps!.cellstart) + 1;
+        ps!.marks[newlen+1] := newlen+1;
+        Add(ps!.cellstart, curlen+1);
+        Add(ps!.cellsize, pnts);
+        # Don't add to ps!.fixed, even if size 1, as we only
+        # add points which are "in the original set"
+        Add(ps!.splits, -2);
+        Append(ps!.cellof, ListWithIdenticalEntries(pnts, Length(ps!.cellstart)));
+        ps!.len := newlen;
+    end);
 
 InstallMethod(PS_Cells, [IsPartitionStackRep],
     {ps} -> Length(ps!.cellstart));
 
 InstallMethod(PS_Fixed, [IsPartitionStackRep],
-    {ps} -> PS_Points(ps) = PS_Cells(ps) );
+    {ps} -> PS_ExtendedPoints(ps) = PS_Cells(ps) );
 
 InstallMethod(PS_CellLen, [IsPartitionStackRep, IsPosInt],
     {ps, cell} -> ps!.cellsize[cell]);
@@ -188,11 +211,11 @@ BindGlobal("_PSR_SplitCell",
 
         ps!.cellsize[cell] := (index - 1);
 
-        if (index - 1) = 1 then
+        if (index - 1) = 1 and ps!.vals[ps!.cellstart[cell]] <= ps!.original_len then
             Add(ps!.fixed, cell);
         fi;
 
-        if splitcellsize - (index - 1) = 1 then
+        if splitcellsize - (index - 1) = 1 and ps!.vals[ps!.cellstart[newcellid]] <= ps!.original_len then
             Add(ps!.fixed, newcellid);
         fi;
 
@@ -208,8 +231,10 @@ InstallMethod(PS_SplitCellsByFunction, [IsPartitionStack, IsTracer, IsFunction],
     function(ps, t, f)
         local i;
         for i in [1..PS_Cells(ps)] do
-            if not PS_SplitCellByFunction(ps, t, i, f) then
-                return false;
+            if PS_CellSlice(ps,i)[1] <= PS_Points(ps) then
+                if not PS_SplitCellByFunction(ps, t, i, f) then
+                    return false;
+                fi;
             fi;
         od;
         return true;
@@ -268,20 +293,30 @@ InstallMethod(PS_RevertToCellCount, [IsPartitionStackRep, IsPosInt],
             revertstart := Remove(ps!.cellstart);
             revertlen := Remove(ps!.cellsize);
 
-            for i in [revertstart..revertstart+revertlen-1] do
-                ps!.cellof[i] := revertcell;
-            od;
+            if revertcell = -2 then
+                # This was an extra cell was grew the partition
+                ps!.len := ps!.len - revertlen;
+                ps!.vals := ps!.vals{[1..ps!.len]};
+                ps!.invvals := ps!.invvals{[1..ps!.len]};
+                ps!.marks := ps!.marks{[1..ps!.len+1]};
+                ps!.marks[ps!.len+1] := ps!.len+1;
+                ps!.cellof := ps!.cellof{[1..ps!.len]};
+            else
+                for i in [revertstart..revertstart+revertlen-1] do
+                    ps!.cellof[i] := revertcell;
+                od;
 
-            ps!.marks[revertstart] := 0;
+                ps!.marks[revertstart] := 0;
 
-            if ps!.cellsize[revertcell] = 1 then
-                Remove(ps!.fixed);
+                if ps!.cellsize[revertcell] = 1 and ps!.vals[ps!.cellstart[revertcell]] <= ps!.original_len then
+                    Remove(ps!.fixed);
+                fi;
+
+                if revertlen = 1 and ps!.vals[ps!.cellstart[revertcell]] <= ps!.original_len then
+                    Remove(ps!.fixed);
+                fi;
+
+                ps!.cellsize[revertcell] := ps!.cellsize[revertcell] + revertlen;
             fi;
-
-            if revertlen = 1 then
-                Remove(ps!.fixed);
-            fi;
-
-            ps!.cellsize[revertcell] := ps!.cellsize[revertcell] + revertlen;
         od;
     end);

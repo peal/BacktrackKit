@@ -31,12 +31,27 @@ BindGlobal( "PartitionStackTypeMutable",
             NewType(PartitionStackFamily, IsPartitionStackRep and IsMutable));
 
 #! @Description
-#! Return the number of points on which the partition stack <A>PS</A> is
-#! defined.
+#! Return the number of points on which the partition stack <A>PS</A> was
+#! originally defined.
 #!
 #! @Arguments PS
 #! @Returns a positive integer.
 DeclareOperation("PS_Points", [IsPartitionStack]);
+
+#! @Description
+#! Return the number of points on which the partition stack <A>PS</A> is
+#! currently defined on (which includes extra points added during refinement)
+#!
+#! @Arguments PS
+#! @Returns a positive integer.
+DeclareOperation("PS_ExtendedPoints", [IsPartitionStack]);
+
+#! @Description
+#! Adds <A>NewPoints</A> to PS, as a new cell at the end. Will be removed
+#! on backtracking.
+#!
+#! @Arguments PS, NewPoints
+DeclareOperation("PS_Extend", [IsPartitionStack, IsPosInt]);
 
 #! @Description
 #! The number of cells in the current partition state of the partition stack
@@ -48,7 +63,7 @@ DeclareOperation("PS_Cells", [IsPartitionStack]);
 
 #! @Description
 #! Return <K>true</K> if all the cells of the current partition state of the
-#! partition stack <A>PS</A> have size 1.
+#! partition stack <A>PS</A> have size 1 and were in the 'original partition'.
 #!
 #! @Arguments PS
 #! @Returns <K>true</K> or <K>false</K>.
@@ -82,7 +97,8 @@ DeclareOperation("PS_CellSlice", [IsPartitionStack, IsPosInt]);
 
 #! @Description
 #! Return a list of the 1-element cells of the current state of the partition
-#! stack <A>PS</A>, in the order in which the cells came to have size 1.
+#! stack <A>PS</A> which contain points from the original size of the partition,
+#! in the order in which the cells came to have size 1.
 #!
 #! @Arguments PS
 #! @Returns a list of 1-element lists of positive integers.
@@ -100,7 +116,7 @@ DeclareOperation("PS_FixedPoints", [IsPartitionStack]);
 #! @Description
 #! Return the index of the cell containing the value <A>i</A> in the current
 #! partition state of the partition stack <A>PS</A>.
-#! This requires that <A>i</A> is contained in <C>[1..PS_Points(<A>PS</A>)]</C>.
+#! This requires that <A>i</A> is contained in <C>[1..PS_ExtededPoints(<A>PS</A>)]</C>.
 #!
 #! @Arguments PS, i
 #! @Returns a positive integer.
@@ -130,7 +146,7 @@ DeclareOperation("PS_SplitCellByFunction",
 
 #! @Description
 #! Apply <C>PS_SplitCellByFunction</C> to every active cell in the partition
-#! stack <A>PS</A>.
+#! stack <A>PS</A> (ignoring points added after search starts).
 #!
 #! @Arguments PS, t, f
 #! @Returns <K>true</K> or <K>false</K>.

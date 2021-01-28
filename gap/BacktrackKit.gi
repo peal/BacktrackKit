@@ -241,7 +241,7 @@ InstallGlobalFunction( BuildRBase,
         FirstFixedPoint(state, tracer, true);
 
         # Continue building the RBase until a discrete partition is reached.
-        while PS_Cells(state!.ps) <> PS_Points(state!.ps) do
+        while PS_Cells(state!.ps) <> PS_ExtendedPoints(state!.ps) do
 
             # Split off the min value of the cell chosen by the branch selector.
             # Use the constraints to refine until the next stable point.
@@ -273,14 +273,20 @@ InstallGlobalFunction( BuildRBase,
     end);
 
 BTKit_GetCandidateSolution := function(ps, rbase)
-    local image, i;
+    local image, i, prepnt;
     # When this is called, the current partition state of ps should be discrete.
     # The candidate solution is the perm that, for each i, maps the value in
     # cell i of the discrete partition of the RBase to the value in cell i of
     # the current (discrete) partition state of ps.
+
+    # Our 'candidate solution' should only be defined on the original Points,
+    # not any 'Extended Points' added during refinement.
     image := [];
-    for i in [1..PS_Points(ps)] do
-        image[PS_CellSlice(rbase.ps, i)[1]] := PS_CellSlice(ps, i)[1];
+    for i in [1..PS_Cells(ps)] do
+        prepnt := PS_CellSlice(rbase.ps, i)[1];
+        if prepnt <= PS_Points(ps) then
+            image[prepnt] := PS_CellSlice(ps, i)[1];
+        fi;
     od;
     return PermList(image);
 end;
@@ -319,6 +325,7 @@ InstallGlobalFunction( Backtrack,
         # - If the partition state is discrete, then this defines a candidate
         #   solution. Construct the candidate, and check it.
         if not PS_Fixed(state!.ps) then
+            Info(InfoBTKit, 2, "Reached end of rbase without fixing all points");
             return false;
         fi;
         p := BTKit_GetCandidateSolution(state!.ps, rbase);
