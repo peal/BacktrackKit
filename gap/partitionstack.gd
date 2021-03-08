@@ -51,6 +51,7 @@ DeclareOperation("PS_ExtendedPoints", [IsPartitionStack]);
 #! on backtracking.
 #!
 #! @Arguments PS, NewPoints
+#! @Returns the label of the new cell
 DeclareOperation("PS_Extend", [IsPartitionStack, IsPosInt]);
 
 #! @Description

@@ -145,6 +145,7 @@ InstallMethod(PS_Extend, [IsPartitionStackRep, IsPosInt],
         Add(ps!.splits, -2);
         Append(ps!.cellof, ListWithIdenticalEntries(pnts, Length(ps!.cellstart)));
         ps!.len := newlen;
+        return Length(ps!.cellstart);
     end);
 
 InstallMethod(PS_Cells, [IsPartitionStackRep],
