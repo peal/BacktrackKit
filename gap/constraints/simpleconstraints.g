@@ -185,9 +185,9 @@ BTKit_Con.InCoset := function(n, group, perm)
             end,
             initialise := function(ps, buildingRBase)
                 local fixedpoints, mapval, points;
-                return r!.refine.changed(ps, buildingRBase);
+                return r!.refine.fixed(ps, buildingRBase);
             end,
-            changed := function(ps, buildingRBase)
+            fixed := function(ps, buildingRBase)
                 local fixedpoints, points, fixedps, fixedrbase, p;
                 if buildingRBase then
                     fixedpoints := PS_FixedPoints(ps);
@@ -302,10 +302,10 @@ BTKit_Con.InCosetWithOrbitals := function(n, group, perm)
             end,
 
             initialise := function(ps, buildingRBase)
-                return r!.refine.changed(ps, buildingRBase);
+                return r!.refine.fixed(ps, buildingRBase);
             end,
 
-            changed := function(ps, buildingRBase)
+            fixed := function(ps, buildingRBase)
                 local fixedpoints, points, fixedps, fixedrbase, p, graphs, refinedgraphs;
                 if buildingRBase then
                     fixedpoints := PS_FixedPoints(ps);

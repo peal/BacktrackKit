@@ -100,6 +100,12 @@ RefineConstraints := function(state, tracer, rbase)
                     return false;
                 fi;
             fi;
+            if IsBound(c!.refine.fixed) then
+                filters := c!.refine.fixed(state!.ps, rbase);
+                if not ApplyFilters(state, tracer, filters) then
+                    return false;
+                fi;
+            fi;
         od;
         if not ConsolidateState(state, tracer) then
             return false;

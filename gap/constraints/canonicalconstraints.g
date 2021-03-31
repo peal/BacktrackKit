@@ -40,9 +40,9 @@ BTKit_Con.InCosetSimple := function(n, group, perm)
         check := {p} -> p in RightCoset(group, perm),
         refine := rec(
             initialise := function(ps, buildingRBase)
-                return r!.refine.changed(ps, buildingRBase);
+                return r!.refine.fixed(ps, buildingRBase);
             end,
-            changed := function(ps, buildingRBase)
+            fixed := function(ps, buildingRBase)
                 local fixedpoints, points, p;
                 fixedpoints := PS_FixedPoints(ps);
                 

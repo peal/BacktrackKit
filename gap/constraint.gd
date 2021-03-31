@@ -57,7 +57,10 @@
 #!   <C>refine.initialise</C> is called for a later constraint.
 #!
 #TODO: this is incomplete
+#! At most one of the following two functions will generally be implemented.
+
 #! * <C>changed</C> - One or splits occurred.
+#! * <C>fixed</C> - One or more points in the partition became fixed
 #!
 #TODO: this is unclear. Also unimplemented.
 #! * <C>rBaseFinished</C> - The rBase has been created (is passed the rbase).
