@@ -6,17 +6,9 @@ BTKit_Con.InCosetSimple := function(n, group, perm)
     invperm := perm^-1;
 
     getOrbits := function(pointlist)
-        local orbs, array, i, j, minperm,minpoints,minorbs;
-        # caching
-        if IsBound(pointMap[pointlist]) then
-            return pointMap[pointlist];
-        fi;
+        local orbs, array, i, j;
 
-        minperm := MinimalImagePerm(group, pointlist, OnTuples);
-        minpoints := OnTuples(pointlist, minperm);
-        minorbs := Orbits(Stabilizer(group, minpoints, OnTuples), [1..n]);
-        minorbs := Set(minorbs, Set);
-        orbs := OnTuplesSets(minorbs,minperm^-1);
+        orbs := StabTreeStabilizerOrbits(group, pointlist, [1..n]);
 
         array := [];
 
@@ -25,7 +17,7 @@ BTKit_Con.InCosetSimple := function(n, group, perm)
                 array[j] := i;
             od;
         od;
-        #Print(pointlist, minperm, minorbs, orbs,"\n");
+        #Print(group, pointlist, orbs, array, "\n");
         return array;
     end;
 

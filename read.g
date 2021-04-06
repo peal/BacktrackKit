@@ -10,6 +10,8 @@ BTKit_Con := AtomicRecord(rec());
 # Private members
 _BTKit := AtomicRecord(rec());
 
+ReadPackage( "BacktrackKit", "gap/stabtree.g");
+
 ReadPackage( "BacktrackKit", "gap/tracer.gi");
 ReadPackage( "BacktrackKit", "gap/partitionstack.gi");
 

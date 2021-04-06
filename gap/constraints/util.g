@@ -30,7 +30,7 @@ _BTKit.getOrbitalList := function(sc, maxval)
   fi;
   
   # Catch stupid case early
-  if Size(sc) = 1 then
+  if Size(G) = 1 then
     return [];
   fi;
 
