@@ -1,4 +1,3 @@
-gap> START_TEST("partitionstack.tst");
 gap> LoadPackage("backtrackkit", false);;
 gap> t := RecordingTracer();;
 gap> p := PartitionStack(6);
@@ -68,4 +67,3 @@ gap> List([1..6], x -> PS_CellOfPoint(p, x));
 [ 1, 4, 6, 3, 5, 2 ]
 gap> IsInternallyConsistent(p);
 true
-gap> STOP_TEST("partitionstack.tst");
