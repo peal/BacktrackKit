@@ -1,4 +1,9 @@
-gap> LoadPackage("BacktrackKit", false);;
+#@local ps3, ps6, p
+gap> START_TEST("basicTransport.tst");
+gap> LoadPackage("backtrackkit", false);
+true
+
+#
 gap> ps3 := PartitionStack(3);
 [ [ 1, 2, 3 ] ]
 gap> ps6 := PartitionStack(6);
@@ -22,3 +27,6 @@ gap> p := BTKit_SimpleSinglePermSearch(ps6,
 >            BTKit_Con.TupleTransporter(6,[2,4,6], [1,2,3]) ]);;
 gap> OnTuples([2,4,6], p) = [1,2,3];
 true
+
+#
+gap> STOP_TEST("basicTransport.tst");

@@ -1,5 +1,10 @@
+#@local lmp
+gap> START_TEST("quickcheck-canonical.tst");
 gap> LoadPackage("quickcheck", false);;
-gap> LoadPackage("backtrackkit", false);;
+gap> LoadPackage("backtrackkit", false);
+true
+
+#
 gap> lmp := {l...} -> Maximum(1,Maximum(List(l, LargestMovedPoint)));;
 gap> QC_SetConfig(rec(limit := 6));
 gap> QC_Check([IsPerm, QC_SetOf(IsPosInt)], 
@@ -57,3 +62,6 @@ gap> QC_Check([IsPerm, QC_ListOf(IsPosInt)],
 >  return true;
 > end);
 true
+
+#
+gap> STOP_TEST("quickcheck-canonical.tst");

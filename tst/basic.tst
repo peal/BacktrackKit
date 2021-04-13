@@ -1,4 +1,9 @@
-gap> LoadPackage("BacktrackKit", false);;
+#@local ps3, ps6, G, graph, g1, g2
+gap> START_TEST("basic.tst");
+gap> LoadPackage("backtrackkit", false);
+true
+
+#
 gap> ps3 := PartitionStack(3);
 [ [ 1, 2, 3 ] ]
 gap> ps6 := PartitionStack(6);
@@ -36,3 +41,6 @@ gap> Set(BTKit_SimpleSearch(PartitionStack(10),
 >                           [BTKit_Con.InGroup(10, PrimitiveGroup(10, 1)),
 >                            BTKit_Con.InGroup(10, PrimitiveGroup(10, 3))]));
 [ () ]
+
+#
+gap> STOP_TEST("basic.tst");

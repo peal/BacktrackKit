@@ -1,5 +1,10 @@
+#@local lmp
+gap> START_TEST("quickcheck-conj.tst");
+gap> LoadPackage("backtrackkit", false);
+true
 gap> LoadPackage("quickcheck", false);;
-gap> LoadPackage("backtrackkit", false);;
+
+#
 gap> lmp := {l...} -> Maximum(1,Maximum(List(l, LargestMovedPoint)));;
 gap> QC_Check([IsPermGroup, IsPerm], 
 > function(g1,p1)
@@ -29,3 +34,6 @@ gap> QC_Check([IsPermGroup, IsPerm, IsPerm],
 >  return true;
 > end);
 true
+
+#
+gap> STOP_TEST("quickcheck-conj.tst");
