@@ -1,6 +1,5 @@
 #@local testGraph, dir, graphs, g
 gap> LoadPackage("backtrackkit", false);;
-gap> LoadPackage("digraphs", false);;
 gap> LoadPackage("QuickCheck", false);;
 gap> testGraph := function(graph,verts)
 > local g1, g2, ps;

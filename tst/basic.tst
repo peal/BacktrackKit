@@ -32,7 +32,6 @@ gap> Set(BTKit_SimpleSearch(PartitionStack(12),
 [ () ]
 
 # Trivial intersection of two primitive groups in S_10
-gap> LoadPackage("primgrp", false);;
 gap> Set(BTKit_SimpleSearch(PartitionStack(10),
 >                           [BTKit_Con.InGroup(10, PrimitiveGroup(10, 1)),
 >                            BTKit_Con.InGroup(10, PrimitiveGroup(10, 3))]));
