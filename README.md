@@ -1,3 +1,6 @@
+[![Build Status](https://github.com/peal/BacktrackKit/workflows/CI/badge.svg?branch=master)](https://github.com/peal/BacktrackKit/actions?query=workflow%3ACI+branch%3Amaster)
+[![Code Coverage](https://codecov.io/github/peal/BacktrackKit/coverage.svg?branch=master&token=)](https://codecov.io/gh/peal/BacktrackKit)
+
 # The GAP package BacktrackKit
 
 This package provides a simple implementation of Leon's partition backtrack
