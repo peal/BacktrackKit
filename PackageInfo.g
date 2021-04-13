@@ -93,8 +93,13 @@ PackageDoc := rec(
 ),
 
 Dependencies := rec(
-  GAP := ">= 4.9",
-  NeededOtherPackages := [ ["datastructures", ">= 0.2.2"], ["digraphs", ">= 1.0.0" ] ],
+  GAP := ">= 4.11",
+  NeededOtherPackages := [
+                           ["datastructures", ">=0.2.6"],
+                           ["digraphs", ">=1.1.1" ],
+                           ["images", ">=1.3.0"],   # For MinimalImagePerm
+                           ["primgrp", ">=3.4.0" ], # For the tests
+                         ],
   SuggestedOtherPackages := [ ],
   ExternalConditions := [ ],
 ),
@@ -106,5 +111,3 @@ TestFile := "tst/testall.g",
 #Keywords := [ "TODO" ],
 
 ));
-
-

@@ -1,6 +1,3 @@
-# For MinimalImagePerm
-LoadPackage("images",false);
-
 BTKit_Con.InCosetSimple := function(n, group, perm)
     local orbList,getOrbits, orbMap, pointMap, r, invperm,minperm;
     invperm := perm^-1;

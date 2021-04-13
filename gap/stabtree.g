@@ -1,6 +1,3 @@
-LoadPackage("datastructures");
-
-
 ### STABILISER TREES
 # A stabiliser tree represents many different stabiliser chains for a group, represented as a tree.
 # The way they are stored makes several operations very cheap (hopefully), currently:

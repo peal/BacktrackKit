@@ -3,10 +3,16 @@
 This package provides a simple implementation of Leon's partition backtrack
 framework.
 
-It requires (currently):
-
-* The master branch of gap.
-* The master branch of the Datastructures package.
+BacktrackKit currently requires (currently) GAP version >= 4.11.0, and
+sufficiently recent versions of the following packages (see the `PackageInfo.g`
+file for specific versions):
+* datastructures
+* digraphs
+* images
+* primgrp
+Additionally, [the QuickCheck
+package](https://github.com/ChrisJefferson/QuickCheck) is required in order to
+run all of the tests.
 
 ## Contact
 
