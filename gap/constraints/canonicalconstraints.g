@@ -1,5 +1,5 @@
 BTKit_Con.InCosetSimple := function(n, group, perm)
-    local orbList,getOrbits, orbMap, pointMap, r, invperm,minperm;
+    local orbList,getOrbits, r, invperm,minperm;
     invperm := perm^-1;
 
     getOrbits := function(pointlist)
@@ -17,10 +17,6 @@ BTKit_Con.InCosetSimple := function(n, group, perm)
         #Print(group, pointlist, orbs, array, "\n");
         return array;
     end;
-
-    # OrbMap is unused?
-    orbMap := HashMap();
-    pointMap := HashMap();
 
     r := rec(
         name := "InGroupSimple",
