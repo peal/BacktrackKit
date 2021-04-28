@@ -69,9 +69,12 @@ _ST.makeSTfromSC := function(sc, size, conj, base)
     local tree, grp, orbits, moved, orbitmin, orbitminmap, o, i, gens;
     if not IsBound(sc.orbit) then
         Assert(2, size = 1);
-        return rec(size := 1, moved := [], orbitmin := [], orbitminmap := [], orbits := [], base := base);
+        return rec(gens := [()], size := 1, moved := [], orbitmin := [], orbitminmap := [], orbits := [], base := base);
     fi;
     gens := List(sc.generators, x -> x^conj);
+    if IsEmpty(gens) then
+        gens := [()];
+    fi;
     Assert(2, ForAll(base, {b} -> ForAll(gens, {g} -> b^g=b)));
     #Print(gens,"\n");
     grp := Group(gens);
@@ -148,4 +151,25 @@ StabTreeStabilizerOrbits := function(group, points, omega)
     Sort(fixpnts);
     fixpnts := List(fixpnts, x -> [x]);
     return OnTuplesSets(Concatenation(ret.tree.orbits, fixpnts), ret.minperm^-1);
+end;
+
+
+StabTreeStabilizerReducedOrbitalGraphs := function(group, points, omega)
+    local ret, fixpnts, g, ondigraphs_extraverts, graphs;
+    ret := StabTreeStabilizer(group, points);
+    if not IsBound(ret.reducedOrbitals) then
+        g := Group(ret.tree.gens);
+        SetSize(g, ret.tree.size);
+        ret.reducedOrbitals := _BTKit.getOrbitalList(g, Maximum(omega));
+    fi;
+
+    #ondigraphs_extraverts := function(g,p)
+    #    if Size(DigraphVertices(g)) < LargestMovedPoint(p) then
+    #        g := DigraphAddVertices(g, LargestMovedPoint(p) - DigraphVertices(g));
+    #    fi;
+    #    return OnDigraphs(g,p);
+    #end;
+    graphs := List(ret.reducedOrbitals, g -> OnDigraphs(g, ret.minperm^-1));
+    Assert(5, ForAll(graphs, graph -> ForAll(GeneratorsOfGroup(Stabilizer(group, points, OnTuples)), p -> OnDigraphs(graph,p) = graph)));
+    return graphs;
 end;
