@@ -37,7 +37,8 @@ _BTKit.getOrbitalList := function(sc, maxval)
   cutoff := infinity;
 
 	graphlist := [];
-	orbitsG := Orbits(G,[1..maxval]);
+  # Make sure orbits are sorted, so we always get the same list of graphs
+	orbitsG := Set(Orbits(G,[1..maxval]), Set);
 	
 	orbsizes := [];
 	orbpos := [];
@@ -57,7 +58,7 @@ _BTKit.getOrbitalList := function(sc, maxval)
     fi;
 	
     stabtime := timefunc();
-	innerorblist := List(orbitsG, o -> Orbits(Stabilizer(G, o[1]), [1..LargestMovedPoint(G)]));
+	innerorblist := List(orbitsG, o -> Set(Orbits(Stabilizer(G, o[1]), [1..LargestMovedPoint(G)]), Set));
     #_YAPB_stabTime := _YAPB_stabTime + (timefunc() - stabtime);
 
   orbitsizes := List([1..Length(orbitsG)], 
