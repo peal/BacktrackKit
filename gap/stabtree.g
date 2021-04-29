@@ -69,7 +69,7 @@ _ST.makeSTfromSC := function(sc, size, conj, base)
     local tree, grp, orbits, moved, orbitmin, orbitminmap, o, i, gens;
     if not IsBound(sc.orbit) then
         Assert(2, size = 1);
-        return rec(gens := [()], size := 1, moved := [], orbitmin := [], orbitminmap := [], orbits := [], base := base);
+        return rec(gens := [()], group := Group([()]), size := 1, moved := [], orbitmin := [], orbitminmap := [], orbits := [], base := base);
     fi;
     gens := List(sc.generators, x -> x^conj);
     if IsEmpty(gens) then
@@ -78,6 +78,7 @@ _ST.makeSTfromSC := function(sc, size, conj, base)
     Assert(2, ForAll(base, {b} -> ForAll(gens, {g} -> b^g=b)));
     #Print(gens,"\n");
     grp := Group(gens);
+    SetSize(grp, size);
     orbits := Set(Orbits(grp), Set);
     moved := Immutable(Set(Flat(orbits)));
 
@@ -90,7 +91,7 @@ _ST.makeSTfromSC := function(sc, size, conj, base)
         od;
     od;
 
-    tree := rec(gens := gens, moved := moved, size := size, orbitmin := orbitmin, orbitminmap := orbitminmap, orbits := orbits, transversal := [], children := [], base := base);
+    tree := rec(group := grp, gens := gens, moved := moved, size := size, orbitmin := orbitmin, orbitminmap := orbitminmap, orbits := orbits, transversal := [], children := [], base := base);
 
     _ST.fillTree(tree, sc, conj);
     return tree;
@@ -106,9 +107,7 @@ end;
 
 _fillTreeFromPoints := function(tree, points)
     local g;
-    g := Group(tree.gens);
-    SetSize(g, tree.size);
-    _ST.fillTree(tree, StabChain(g, points), ());
+    _ST.fillTree(tree, StabChain(tree.group, points), ());
 end;
 
 _ST.MinImage := function(tree, points)
@@ -157,10 +156,8 @@ end;
 StabTreeStabilizerReducedOrbitalGraphs := function(group, points, omega)
     local ret, fixpnts, g, ondigraphs_extraverts, graphs;
     ret := StabTreeStabilizer(group, points);
-    if not IsBound(ret.reducedOrbitals) then
-        g := Group(ret.tree.gens);
-        SetSize(g, ret.tree.size);
-        ret.reducedOrbitals := _BTKit.getOrbitalList(g, Maximum(omega));
+    if not IsBound(ret.tree.reducedOrbitals) then
+        ret.tree.reducedOrbitals := _BTKit.getOrbitalList(ret.tree.group, Maximum(omega));
     fi;
 
     #ondigraphs_extraverts := function(g,p)
@@ -169,7 +166,7 @@ StabTreeStabilizerReducedOrbitalGraphs := function(group, points, omega)
     #    fi;
     #    return OnDigraphs(g,p);
     #end;
-    graphs := List(ret.reducedOrbitals, g -> OnDigraphs(g, ret.minperm^-1));
+    graphs := List(ret.tree.reducedOrbitals, g -> OnDigraphs(g, ret.minperm^-1));
     Assert(5, ForAll(graphs, graph -> ForAll(GeneratorsOfGroup(Stabilizer(group, points, OnTuples)), p -> OnDigraphs(graph,p) = graph)));
     return graphs;
 end;
