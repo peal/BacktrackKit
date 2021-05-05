@@ -66,7 +66,7 @@ InstallMethod(ApplyFilters, [IsBTKitState, IsTracer, IsObject],
             return false;
         fi;
     else
-        ErrorNoReturn("Invalid filter?");
+        ErrorNoReturn("BacktrackKit refiners must be 'fail' or a single function");
     fi;
     return true;
 end);
