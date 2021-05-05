@@ -30,11 +30,13 @@
 <div class="ContSSBlock">
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6_mj.html#X8077D83F7B216046">6.1-1 RecordingTracer</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6_mj.html#X7E24117A856F8F34">6.1-2 FollowingTracer</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6_mj.html#X84F9F24382961372">6.1-3 CanonicalisingTracer</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6_mj.html#X81DC25027CDA2EB0">6.1-4 IsTracer</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6_mj.html#X79B4735E7C125A9F">6.1-5 AddEvent</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6_mj.html#X7C6CD4FF86E300D4">6.1-6 TraceLength</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6_mj.html#X8051C986836DB892">6.1-7 TraceEvent</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6_mj.html#X86E206497A80D4DE">6.1-3 CanonicalisingTracerFromTracer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6_mj.html#X7E3E796E8059BEE8">6.1-4 EmptyCanonicalisingTracer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6_mj.html#X81DC25027CDA2EB0">6.1-5 IsTracer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6_mj.html#X79B4735E7C125A9F">6.1-6 AddEvent</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6_mj.html#X7C6CD4FF86E300D4">6.1-7 TraceLength</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6_mj.html#X8051C986836DB892">6.1-8 TraceEvent</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6_mj.html#X83F9A7CD7FC5DFE5">6.1-9 GetEvents</a></span>
 </div></div>
 </div>
 
@@ -64,18 +66,23 @@
 
 <p>If the argument <var class="Arg">t</var> is a tracer, then this constructs a tracer that follows <var class="Arg">t</var>.</p>
 
-<p><a id="X84F9F24382961372" name="X84F9F24382961372"></a></p>
+<p><a id="X86E206497A80D4DE" name="X86E206497A80D4DE"></a></p>
 
-<h5>6.1-3 CanonicalisingTracer</h5>
+<h5>6.1-3 CanonicalisingTracerFromTracer</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; CanonicalisingTracer</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; CanonicalisingTracerFromTracer</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a canonicalising tracer.</p>
 
 <p>Constructor for canonicalising tracers.</p>
 
+<p><a id="X7E3E796E8059BEE8" name="X7E3E796E8059BEE8"></a></p>
+
+<h5>6.1-4 EmptyCanonicalisingTracer</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EmptyCanonicalisingTracer</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p><a id="X81DC25027CDA2EB0" name="X81DC25027CDA2EB0"></a></p>
 
-<h5>6.1-4 IsTracer</h5>
+<h5>6.1-5 IsTracer</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsTracer</code>( <var class="Arg">t</var> )</td><td class="tdright">(&nbsp;filter&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code>.</p>
@@ -84,7 +91,7 @@
 
 <p><a id="X79B4735E7C125A9F" name="X79B4735E7C125A9F"></a></p>
 
-<h5>6.1-5 AddEvent</h5>
+<h5>6.1-6 AddEvent</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AddEvent</code>( <var class="Arg">t</var>, <var class="Arg">o</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code>.</p>
@@ -93,7 +100,7 @@
 
 <p><a id="X7C6CD4FF86E300D4" name="X7C6CD4FF86E300D4"></a></p>
 
-<h5>6.1-6 TraceLength</h5>
+<h5>6.1-7 TraceLength</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; TraceLength</code>( <var class="Arg">t</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>Returns: an integer.</p>
@@ -102,12 +109,21 @@
 
 <p><a id="X8051C986836DB892" name="X8051C986836DB892"></a></p>
 
-<h5>6.1-7 TraceEvent</h5>
+<h5>6.1-8 TraceEvent</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; TraceEvent</code>( <var class="Arg">t</var>, <var class="Arg">i</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>Returns: a GAP object.</p>
 
 <p>Get the event at position <var class="Arg">i</var> in the tracer <var class="Arg">t</var>. The argument <var class="Arg">i</var> must lie in the range <code class="code">[1..TraceLength(<var class="Arg">t</var>)]</code>.</p>
+
+<p><a id="X83F9A7CD7FC5DFE5" name="X83F9A7CD7FC5DFE5"></a></p>
+
+<h5>6.1-9 GetEvents</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; GetEvents</code>( <var class="Arg">t</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a GAP list</p>
+
+<p>Get a list of all events in the tracer.</p>
 
 
 <div class="chlinkprevnextbot">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap5_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap7_mj.html">[Next Chapter]</a>&nbsp;  </div>

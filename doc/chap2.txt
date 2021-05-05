@@ -45,7 +45,7 @@
   
   [1X2.1-6 InfoBTKit[101X
   
-  [33X[1;0Y[29X[2XInfoBTKit[102X[32X info class[133X
+  [33X[1;0Y[29X[2XInfoBTKit[102X [32X info class[133X
   
   [33X[0;0YInformation about backtrack search.[133X
   

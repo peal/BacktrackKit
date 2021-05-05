@@ -20,21 +20,25 @@
   
   [33X[0;0YIf the argument [3Xt[103X is a tracer, then this constructs a tracer that follows [3Xt[103X.[133X
   
-  [1X6.1-3 CanonicalisingTracer[101X
+  [1X6.1-3 CanonicalisingTracerFromTracer[101X
   
-  [33X[1;0Y[29X[2XCanonicalisingTracer[102X(  ) [32X function[133X
+  [33X[1;0Y[29X[2XCanonicalisingTracerFromTracer[102X(  ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya canonicalising tracer.[133X
   
   [33X[0;0YConstructor for canonicalising tracers.[133X
   
-  [1X6.1-4 IsTracer[101X
+  [1X6.1-4 EmptyCanonicalisingTracer[101X
+  
+  [33X[1;0Y[29X[2XEmptyCanonicalisingTracer[102X( [3Xarg[103X ) [32X function[133X
+  
+  [1X6.1-5 IsTracer[101X
   
   [33X[1;0Y[29X[2XIsTracer[102X( [3Xt[103X ) [32X filter[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X.[133X
   
   [33X[0;0YThe category of tracers.[133X
   
-  [1X6.1-5 AddEvent[101X
+  [1X6.1-6 AddEvent[101X
   
   [33X[1;0Y[29X[2XAddEvent[102X( [3Xt[103X, [3Xo[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X.[133X
@@ -43,18 +47,25 @@
   [9Xtrue[109X  if  the  event is accepted by the tracer, and [9Xfalse[109X if not. Events are
   always accepted by recording tracers.[133X
   
-  [1X6.1-6 TraceLength[101X
+  [1X6.1-7 TraceLength[101X
   
   [33X[1;0Y[29X[2XTraceLength[102X( [3Xt[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Yan integer.[133X
   
   [33X[0;0YGet the number of events in the tracer [3Xt[103X.[133X
   
-  [1X6.1-7 TraceEvent[101X
+  [1X6.1-8 TraceEvent[101X
   
   [33X[1;0Y[29X[2XTraceEvent[102X( [3Xt[103X, [3Xi[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Ya GAP object.[133X
   
   [33X[0;0YGet  the event at position [3Xi[103X in the tracer [3Xt[103X. The argument [3Xi[103X must lie in the
   range [10X[1..TraceLength([3Xt[103X[10X)][110X.[133X
+  
+  [1X6.1-9 GetEvents[101X
+  
+  [33X[1;0Y[29X[2XGetEvents[102X( [3Xt[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya GAP list[133X
+  
+  [33X[0;0YGet a list of all events in the tracer.[133X
   

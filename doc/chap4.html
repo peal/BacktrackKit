@@ -38,13 +38,28 @@
 <li><p>A member called <code class="code">name</code>, which is a string giving the name of the constraint;</p>
 
 </li>
-<li><p>A member called <code class="code">check</code>, which is a function taking two arguments, the constraint and a permutation, and which checks whether the permutation satisfies the constraint; and</p>
-
-</li>
 <li><p>A member called <code class="code">refine</code>, which is a record; more information is given below.</p>
 
 </li>
 </ul>
+<p>and a method of check permutations, either:</p>
+
+
+<ul>
+<li><p>Two members, called <code class="code">image</code> and <code class="code">result</code>, where <code class="code">image</code> takes a permutation and <code class="code">result</code> which is a function which takes no arguments, where <code class="code">image(perm)=result</code> if the permutation satisfies the constraint</p>
+
+</li>
+</ul>
+<p>Or:</p>
+
+
+<ul>
+<li><p>A member called <code class="code">check</code>, which is a function taking two arguments, the constraint and a permutation, and which checks whether the permutation satisfies the constraint; and</p>
+
+</li>
+</ul>
+<p><code class="code">image</code> and <code class="code">result</code> must be implemented for finding canonical images. All 3 functions can be implemented, as long as they are consistent.</p>
+
 <p>A constraint may also optionally contain any of the following members:</p>
 
 
@@ -67,9 +82,14 @@
 
 </li>
 </ul>
+<p>At most one of the following two functions will generally be implemented.</p>
+
 
 <ul>
 <li><p><code class="code">changed</code> - One or splits occurred.</p>
+
+</li>
+<li><p><code class="code">fixed</code> - One or more points in the partition became fixed</p>
 
 </li>
 </ul>

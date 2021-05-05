@@ -12,12 +12,23 @@
   [30X    [33X[0;6YA  member  called  [10Xname[110X,  which  is  a  string  giving the name of the
         constraint;[133X
   
+  [30X    [33X[0;6YA  member  called [10Xrefine[110X, which is a record; more information is given
+        below.[133X
+  
+  [33X[0;0Yand a method of check permutations, either:[133X
+  
+  [30X    [33X[0;6YTwo  members, called [10Ximage[110X and [10Xresult[110X, where [10Ximage[110X takes a permutation
+        and  [10Xresult[110X  which  is  a  function  which  takes  no arguments, where
+        [10Ximage(perm)=result[110X if the permutation satisfies the constraint[133X
+  
+  [33X[0;0YOr:[133X
+  
   [30X    [33X[0;6YA  member  called [10Xcheck[110X, which is a function taking two arguments, the
         constraint and a permutation, and which checks whether the permutation
         satisfies the constraint; and[133X
   
-  [30X    [33X[0;6YA  member  called [10Xrefine[110X, which is a record; more information is given
-        below.[133X
+  [33X[0;0Y[10Ximage[110X  and  [10Xresult[110X  must  be implemented for finding canonical images. All 3
+  functions can be implemented, as long as they are consistent.[133X
   
   [33X[0;0YA constraint may also optionally contain any of the following members:[133X
   
@@ -42,7 +53,11 @@
         been   split   by   some   earlier   constraint   by   the  time  that
         [10Xrefine.initialise[110X is called for a later constraint.[133X
   
+  [33X[0;0YAt most one of the following two functions will generally be implemented.[133X
+  
   [30X    [33X[0;6Y[10Xchanged[110X - One or splits occurred.[133X
+  
+  [30X    [33X[0;6Y[10Xfixed[110X - One or more points in the partition became fixed[133X
   
   [30X    [33X[0;6Y[10XrBaseFinished[110X  -  The  rBase  has  been created (is passed the rbase).
         Constraints  which  care about this can use this to remember the rBase

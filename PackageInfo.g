@@ -15,8 +15,8 @@ SetPackageInfo( rec(
 
 PackageName := "BacktrackKit",
 Subtitle := "An Extensible, easy to understand backtracking framework",
-Version := "0.3.1",
-Date := "07/11/2019", # dd/mm/yyyy format
+Version := "0.4",
+Date := "5/5/2021", # dd/mm/yyyy format
 
 
 Persons := [
@@ -36,19 +36,15 @@ Persons := [
     Place := "St Andrews",
     Institution := "University of St Andrews",
   ),
-
-    rec(
+  rec(
     LastName      := "Wilson",
-    FirstNames    := "Wilf",
+    FirstNames    := "Wilf A.",
     IsAuthor      := true,
     IsMaintainer  := true,
     Email         := "gap@wilf-wilson.net",
-    WWWHome       := "http://wilf.me",
-    PostalAddress := Concatenation(["Theodor-Lieser-Straße 5, ",
-                                    "06120 Halle (Saale), Germany"]),
-    Place         := "Halle (Saale), Germany",
-    Institution   := "University of Halle-Wittenberg"),
-      rec(
+    WWWHome       := "https://wilf.me",
+  ),
+  rec(
     LastName      := "Pfeiffer",
     FirstNames    := "Markus",
     IsAuthor      := false,
@@ -57,8 +53,8 @@ Persons := [
     WWWHome       := "https://www.morphism.de/~markusp",
     PostalAddress := _STANDREWSCS,
     Place         := "St Andrews",
-    Institution   := "University of St Andrews"),
-
+    Institution   := "University of St Andrews"
+  ),
 ],
 
 SourceRepository := rec(
@@ -97,8 +93,13 @@ PackageDoc := rec(
 ),
 
 Dependencies := rec(
-  GAP := ">= 4.9",
-  NeededOtherPackages := [ ["datastructures", ">= 0.2.2"], ["digraphs", ">= 1.0.0" ] ],
+  GAP := ">= 4.11",
+  NeededOtherPackages := [
+                           ["datastructures", ">=0.2.6"],
+                           ["digraphs", ">=1.1.1" ],
+                           ["images", ">=1.3.0"],   # For MinimalImagePerm
+                           ["primgrp", ">=3.4.0" ], # For the tests
+                         ],
   SuggestedOtherPackages := [ ],
   ExternalConditions := [ ],
 ),
@@ -110,5 +111,3 @@ TestFile := "tst/testall.g",
 #Keywords := [ "TODO" ],
 
 ));
-
-
