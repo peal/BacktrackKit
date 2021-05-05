@@ -6,7 +6,7 @@
            [1X An Extensible, easy to understand backtracking framework [101X
   
   
-                                      0.4
+                                     0.4.1
   
   
                                    5 May 2021
