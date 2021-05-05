@@ -51,9 +51,10 @@ doc-html: doc/chap0.html
 doc-pdf: doc/manual.pdf
 citeas: |
     <p class='BibEntry'>
-    [<span class='BibKey'>JW</span>]   <b class='BibAuthor'>Jefferson, C. and Wilson, W. A.</b>,
+    [<span class='BibKey'>JW21</span>]   <b class='BibAuthor'>Jefferson, C. and Wilson, W. A.</b>,
      <i class='BibTitle'>BacktrackKit, An Extensible, easy to understand backtracking framework,
-             Version 0.4</i><br />
+             Version 0.4</i>
+     (<span class='BibYear'>2021</span>)<br />
     (<span class='BibNote'>GAP package</span>),
     <span class='BibHowpublished'><a href="https://peal.github.io/BacktrackKit/">https://peal.github.io/BacktrackKit/</a></span>.
     </p>
@@ -64,10 +65,12 @@ bibtex: |
       author =           {Jefferson, C. and Wilson, W. A.},
       title =            {{BacktrackKit},  An  Extensible,  easy  to  understand
                           backtracking framework, {V}ersion 0.4},
+      month =            {May},
+      year =             {2021},
       note =             {GAP package},
       howpublished =     {\href           {https://peal.github.io/BacktrackKit/}
                           {\texttt{https://peal.github.io/}\discretionary
                           {}{}{}\texttt{BacktrackKit/}}},
-      printedkey =       {JW}
+      printedkey =       {JW21}
     }
 
