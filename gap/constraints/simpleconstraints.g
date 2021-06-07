@@ -353,3 +353,28 @@ BTKit_Con.InCosetWithOrbitals := function(n, group, perm)
     end;
 
 BTKit_Con.InGroupWithOrbitals := {n, group} -> BTKit_Con.InCosetWithOrbitals(n, group, ());
+
+
+BTKit_Con.Nothing := {} -> Objectify(BTKitRefinerType, rec(
+        name := "Nothing",
+        image := {p} -> true,
+        result := {} -> false,
+        refine := rec(
+            initialise := function(ps, buildingRBase)
+                return fail;
+            end)
+    ));
+
+
+BTKit_Con.Nothing2 := {} -> Objectify(BTKitRefinerType, rec(
+        name := "Nothing2",
+        image := {p} -> true,
+        result := {} -> false,
+        refine := rec(
+            initialise := function(ps, buildingRBase)
+                return {x} -> 1;
+            end,
+            fixed := function(ps, buildingRBase)
+                return fail;
+            end)
+    ));

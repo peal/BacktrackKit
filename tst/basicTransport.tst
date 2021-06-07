@@ -27,6 +27,12 @@ gap> p := BTKit_SimpleSinglePermSearch(ps6,
 >            BTKit_Con.TupleTransporter(6,[2,4,6], [1,2,3]) ]);;
 gap> OnTuples([2,4,6], p) = [1,2,3];
 true
+gap> p := BTKit_SimpleSinglePermSearch(ps6,
+>           [BTKit_Con.Nothing()]);
+fail
+gap> p := BTKit_SimpleSinglePermSearch(ps6,
+>           [BTKit_Con.Nothing2()]);
+fail
 
 #
 gap> STOP_TEST("basicTransport.tst");
