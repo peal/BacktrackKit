@@ -7,6 +7,7 @@
 BTKit_Con.MostBasicGroupConjugacy := function(grpL, grpR)
     return Objectify(BTKitRefinerType,rec(
         name := "MostBasicGroupPermConjugacy",
+        largest_required_point := Maximum(LargestMovedPoint(grpL), LargestMovedPoint(grpR)),
         image := {p} -> grpL^p,
         result := {} -> grpR,
         refine := rec(
@@ -36,6 +37,7 @@ BTKit_Con.BasicGroupConjugacy := function(grpL, grpR)
 
     return Objectify(BTKitRefinerType,rec(
         name := "BasicGroupConjugacy",
+        largest_required_point := Maximum(LargestMovedPoint(grpL), LargestMovedPoint(grpR)),
         image := {p} -> grpL^p,
         result := {} -> grpR,
         refine := rec(
@@ -67,6 +69,7 @@ BTKit_Con.SimpleGroupConjugacy := function(grpL, grpR)
 
     return Objectify(BTKitRefinerType,rec(
         name := "BasicGroupConjugacy",
+        largest_required_point := Maximum(LargestMovedPoint(grpL), LargestMovedPoint(grpR)),
         image := {p} -> grpL^p,
         result := {} -> grpR,
         refine := rec(

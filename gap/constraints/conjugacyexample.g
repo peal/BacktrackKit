@@ -3,6 +3,7 @@
 BTKit_Con.MostBasicPermConjugacy := function(permL, permR)
     return Objectify(BTKitRefinerType,rec(
         name := "MostBasicPermConjugacy",
+        largest_required_point := Maximum(LargestMovedPoint(permL),LargestMovedPoint(permR)),
         image := {p} -> permL^p,
         result := {} -> permR,
         refine := rec(
@@ -32,6 +33,7 @@ BTKit_Con.BasicPermConjugacy := function(permL, permR)
 
     return Objectify(BTKitRefinerType,rec(
         name := "BasicPermConjugacy",
+        largest_required_point := Maximum(LargestMovedPoint(permL),LargestMovedPoint(permR)),
         image := {p} -> permL^p,
         result := {} -> permR,
         refine := rec(
@@ -85,6 +87,7 @@ BTKit_Con.PermTransporter := function(n, fixedeltL, fixedeltR)
 
 
     r := rec( name := "PermTransporter",
+              largest_required_point := Maximum(LargestMovedPoint(fixedeltL),LargestMovedPoint(fixedeltR)),
               image := {p} -> fixedeltL^p,
               result := {} -> fixedeltR,
               refine := rec( initialise := function(ps, buildingRBase)

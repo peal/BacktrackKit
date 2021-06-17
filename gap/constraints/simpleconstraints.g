@@ -20,6 +20,7 @@ BTKit_MakeFixlistStabilizer := function(name, fixlist, o, action)
     filters := {i} -> fixlist[i];
     return Objectify(BTKitRefinerType, rec(
         name := name,
+        largest_required_point := Length(o),
         image := {p} -> action(o,p),
         result := {} -> o,
         refine := rec(
@@ -37,6 +38,7 @@ BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR, oL, oR, actio
     filtersR := {i} -> fixlistR[i];
     return Objectify(BTKitRefinerType, rec(
         name := name,
+        largest_required_point := Length(oL),
         image := {p} -> action(oL,p),
         result := {} -> oR,
         refine := rec(
@@ -176,6 +178,8 @@ BTKit_Con.InCoset := function(n, group, perm)
 
     r := rec(
         name := "InCoset",
+        largest_required_point := Maximum(LargestMovedPoint(group), LargestMovedPoint(perm)),
+        largest_moved_point :=  Maximum(LargestMovedPoint(group), LargestMovedPoint(perm)),
         image := {p} -> RightCoset(group, p),
         result := {} -> RightCoset(group, perm),
         check := {p} -> p in RightCoset(group, perm),
@@ -292,7 +296,8 @@ BTKit_Con.InCosetWithOrbitals := function(n, group, perm)
 
     r := rec(
         name := "InGroupWithCoset-BTKit",
-        
+        largest_required_point := Maximum(LargestMovedPoint(group), LargestMovedPoint(perm)),
+        largest_moved_point :=  Maximum(LargestMovedPoint(group), LargestMovedPoint(perm)),
         image := {p} -> RightCoset(group, p),
         result := {} -> RightCoset(group, perm),
         check := {p} -> p in RightCoset(group, perm),
@@ -357,6 +362,8 @@ BTKit_Con.InGroupWithOrbitals := {n, group} -> BTKit_Con.InCosetWithOrbitals(n, 
 
 BTKit_Con.Nothing := {} -> Objectify(BTKitRefinerType, rec(
         name := "Nothing",
+        largest_required_point := 1,
+        largest_moved_point := 1,
         image := {p} -> true,
         result := {} -> false,
         refine := rec(
@@ -368,6 +375,8 @@ BTKit_Con.Nothing := {} -> Objectify(BTKitRefinerType, rec(
 
 BTKit_Con.Nothing2 := {} -> Objectify(BTKitRefinerType, rec(
         name := "Nothing2",
+        largest_required_point := 1,
+        largest_moved_point := 1,
         image := {p} -> true,
         result := {} -> false,
         refine := rec(

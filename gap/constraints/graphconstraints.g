@@ -37,6 +37,7 @@ BTKit_Con.GraphTrans := function(graphL, graphR)
             end;
     return Objectify(BTKitRefinerType, rec(
         name := "GraphTrans",
+        largest_required_point := Maximum(Maximum(DigraphVertices(graphL), Maximum(DigraphVertices(graphR)))),
         image := {p} -> OnDigraphs(graphL, p),
         result := {} -> graphR,
         refine := rec(

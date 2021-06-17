@@ -13,6 +13,14 @@
 #!
 #! * A member called <C>name</C>, which is a string giving the name of the
 #!   constraint;
+#! * A member called <C>largest_required_point</C>, which is an integer
+#!   which gives the smallest size partition this refiner will work on.
+#!   For example, given a set we would expect this to be the largest element
+#!   of the set.
+#! * An optional member called <C>largest_moved_point</C>, which is an integer
+#!   giving an upper bound on the largest point this refiner could ever move.
+#!   For many refiners this will not exist -- for example a 'set stabilizer'
+#!   refiner will always permute values outside the set.
 #! * A member called <C>refine</C>, which is a record; more information is
 #!   given below.
 #!

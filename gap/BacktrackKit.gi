@@ -129,6 +129,10 @@ end;
 InitialiseConstraints := function(state, tracer, rbase)
     local c, filters;
     for c in state!.conlist do
+        if c!.largest_required_point > PS_Points(state!.ps) then
+            ErrorNoReturn(StringFormatted("Refiner {} requires {} points, but the partition only has {}",
+                           c!.name, c!.largest_required_point, PS_Points(state!.ps)));
+        fi;
         if IsBound(c!.refine.initialise) then
             filters := c!.refine.initialise(state!.ps, rbase);
             if not ApplyFilters(state, tracer, filters) then
