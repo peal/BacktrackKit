@@ -12,6 +12,16 @@
   [30X    [33X[0;6YA  member  called  [10Xname[110X,  which  is  a  string  giving the name of the
         constraint;[133X
   
+  [30X    [33X[0;6YA  member  called  [10Xlargest_required_point[110X,  which  is an integer which
+        gives  the  smallest  size  partition  this  refiner will work on. For
+        example, given a set we would expect this to be the largest element of
+        the set.[133X
+  
+  [30X    [33X[0;6YAn  optional  member  called  [10Xlargest_moved_point[110X, which is an integer
+        giving  an  upper  bound  on the largest point this refiner could ever
+        move.  For  many  refiners  this  will not exist -- for example a 'set
+        stabilizer' refiner will always permute values outside the set.[133X
+  
   [30X    [33X[0;6YA  member  called [10Xrefine[110X, which is a record; more information is given
         below.[133X
   

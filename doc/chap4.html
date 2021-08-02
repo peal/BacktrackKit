@@ -38,6 +38,12 @@
 <li><p>A member called <code class="code">name</code>, which is a string giving the name of the constraint;</p>
 
 </li>
+<li><p>A member called <code class="code">largest_required_point</code>, which is an integer which gives the smallest size partition this refiner will work on. For example, given a set we would expect this to be the largest element of the set.</p>
+
+</li>
+<li><p>An optional member called <code class="code">largest_moved_point</code>, which is an integer giving an upper bound on the largest point this refiner could ever move. For many refiners this will not exist -- for example a 'set stabilizer' refiner will always permute values outside the set.</p>
+
+</li>
 <li><p>A member called <code class="code">refine</code>, which is a record; more information is given below.</p>
 
 </li>
