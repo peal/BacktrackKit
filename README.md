@@ -23,3 +23,11 @@ This package is a work in progress, both in terms of code and documentation.
 
 If you have any issues or questions about this package, please post an issue
 at https://github.com/peal/BacktrackKit/issues
+
+
+## History
+
+0.5.0
+-----
+
+* Significant change to the API -- remove the requirement to give the size of the partition to most refiners
