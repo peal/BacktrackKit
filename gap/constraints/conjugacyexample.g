@@ -48,28 +48,30 @@ BTKit_Con.BasicPermConjugacy := function(permL, permR)
 end;
 
 # Find the transporter of a permutation under conjugation
-BTKit_Con.PermTransporter := function(n, fixedeltL, fixedeltR)
+BTKit_Con.PermTransporter := function(fixedeltL, fixedeltR)
     local cyclepartL, cyclepartR,
           i, c, s, r,
-          fixByFixed, pointMap;
+          fixByFixed, pointMap, setupCycleparts;
 
-    cyclepartL := [];
-    for c in Cycles(fixedeltL, [1..n]) do
-        s := Length(c);
-        for i in c do
-            cyclepartL[i] := s;
+    setupCycleparts := function(n)
+        cyclepartL := [];
+        for c in Cycles(fixedeltL, [1..n]) do
+            s := Length(c);
+            for i in c do
+                cyclepartL[i] := s;
+            od;
         od;
-    od;
 
-    cyclepartR := [];
-    for c in Cycles(fixedeltR, [1..n]) do
-        s := Length(c);
-        for i in c do
-            cyclepartR[i] := s;
+        cyclepartR := [];
+        for c in Cycles(fixedeltR, [1..n]) do
+            s := Length(c);
+            for i in c do
+                cyclepartR[i] := s;
+            od;
         od;
-    od;
+    end;
 
-    fixByFixed := function(pointlist, fixedElt)
+    fixByFixed := function(pointlist, fixedElt, n)
         local part, s, p;
         part := [1..n] * 0;
         s := 1;
@@ -92,27 +94,28 @@ BTKit_Con.PermTransporter := function(n, fixedeltL, fixedeltR)
               result := {} -> fixedeltR,
               refine := rec( initialise := function(ps, buildingRBase)
                                local points;
+                               setupCycleparts(PS_Points(ps));
                                # Pass cyclepart just on the first call, for efficency
                                if buildingRBase then
-                                   points := fixByFixed(PS_FixedPoints(ps), fixedeltL);
+                                   points := fixByFixed(PS_FixedPoints(ps), fixedeltL, PS_Points(ps));
                                    return {x} -> [points[x], cyclepartL[x]];
                                else
-                                   points := fixByFixed(PS_FixedPoints(ps), fixedeltR);
+                                   points := fixByFixed(PS_FixedPoints(ps), fixedeltR, PS_Points(ps));
                                    return {x} -> [points[x], cyclepartR[x]];
                                fi;
                              end,
                              changed := function(ps, buildingRBase)
                                local points;
                                if buildingRBase then
-                                    points := fixByFixed(PS_FixedPoints(ps), fixedeltL);
+                                    points := fixByFixed(PS_FixedPoints(ps), fixedeltL, PS_Points(ps));
                                 else
-                                    points := fixByFixed(PS_FixedPoints(ps), fixedeltR);
+                                    points := fixByFixed(PS_FixedPoints(ps), fixedeltR, PS_Points(ps));
                                 fi;
                                return {x} -> points[x];
                              end) );
     return Objectify(BTKitRefinerType,r);
 end;
 
-BTKit_Con.PermCentralizer := function(n, fixedelt)
-    return BTKit_Con.PermTransporter(n, fixedelt, fixedelt);
+BTKit_Con.PermCentralizer := function(fixedelt)
+    return BTKit_Con.PermTransporter(fixedelt, fixedelt);
 end;
