@@ -63,7 +63,7 @@ PermCentralizerTests := function(k)
 
         g := Group(GeneratorsOfGroup(g));
         t := NanosecondsSinceEpoch();
-        btkit := BTKit_SimpleSearch(ps, [ BTKit_Con.InGroup(g), BTKit_Con.PermCentralizer(d, e) ] );
+        btkit := BTKit_SimpleSearch(ps, [ BTKit_Con.InGroup(g), BTKit_Con.PermCentralizer(e) ] );
         t := NanosecondsSinceEpoch() - t;
         Info(InfoBTKitTest, 5, "BTKit:  ", t / 1000000000., " size: ", Size(btkit));
 
@@ -102,7 +102,7 @@ CentralizerTest := function()
 
     g := Group(GeneratorsOfGroup(g));
 
-    l := List(GeneratorsOfGroup(h), x -> BTKit_Con.PermCentralizer(d, x));
+    l := List(GeneratorsOfGroup(h), x -> BTKit_Con.PermCentralizer(x));
     Add(l, BTKit_Con.InGroup(g));
 
     t := NanosecondsSinceEpoch();
