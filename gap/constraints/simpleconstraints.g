@@ -17,7 +17,7 @@
 # such that fixlist[i] = fixlist[i^p]
 BTKit_MakeFixlistStabilizer := function(name, fixlist, o, action, lrp)
     local filters;
-    filters := {i} -> fixlist[i];
+    filters := {i} -> GetWithDefault(fixlist, i, 0);
     return Objectify(BTKitRefinerType, rec(
         name := name,
         largest_required_point := lrp,
@@ -34,8 +34,8 @@ end;
 # such that fixlistL[i] = fixlistR[i^p]
 BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR, oL, oR, action, lrp)
     local filtersL, filtersR;
-    filtersL := {i} -> fixlistL[i];
-    filtersR := {i} -> fixlistR[i];
+    filtersL := {i} -> GetWithDefault(fixlistL, i, 0);
+    filtersR := {i} -> GetWithDefault(fixlistR, i, 0);
     return Objectify(BTKitRefinerType, rec(
         name := name,
         largest_required_point := lrp,
@@ -52,64 +52,52 @@ BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR, oL, oR, actio
     ));
 end;
 
-BTKit_CheckInScope := function(n, list)
-    local i;
-    for i in list do
-        if i < 1 then ErrorNoReturn("Value too small: ", i); fi;
-        if i > n then ErrorNoReturn("Value ", i, " above upper bound ", n); fi;
-    od;
-end;
-
-BTKit_Con.TupleStab := function(n, fixpoints)
-    local fixlist, i;
-    BTKit_CheckInScope(n, fixpoints);
-    fixlist := ListWithIdenticalEntries(n, 0);
+BTKit_Con.TupleStab := function(fixpoints)
+    local fixlist, i, max;
+    max := MaximumList(fixpoints, 1);
+    fixlist := ListWithIdenticalEntries(max, 0);
     for i in [1..Length(fixpoints)] do
         fixlist[fixpoints[i]] := i;
     od;
-    return BTKit_MakeFixlistStabilizer("TupleStab", fixlist, fixpoints, OnTuples, MaximumList(fixpoints, 1));
+    return BTKit_MakeFixlistStabilizer("TupleStab", fixlist, fixpoints, OnTuples, max);
 end;
 
-BTKit_Con.TupleTransporter := function(n, fixpointsL, fixpointsR)
-    local fixlistL, fixlistR, i;
-    BTKit_CheckInScope(n, fixpointsL);
-    BTKit_CheckInScope(n, fixpointsR);
-    fixlistL := ListWithIdenticalEntries(n, 0);
+BTKit_Con.TupleTransporter := function(fixpointsL, fixpointsR)
+    local fixlistL, fixlistR, i, max;
+    max := Maximum(MaximumList(fixpointsL,1),MaximumList(fixpointsR,1));
+    fixlistL := ListWithIdenticalEntries(max, 0);
     for i in [1..Length(fixpointsL)] do
         fixlistL[fixpointsL[i]] := i;
     od;
-    fixlistR := ListWithIdenticalEntries(n, 0);
+    fixlistR := ListWithIdenticalEntries(max, 0);
     for i in [1..Length(fixpointsR)] do
         fixlistR[fixpointsR[i]] := i;
     od;
-    return BTKit_MakeFixlistTransporter("TupleTransport", fixlistL, fixlistR, fixpointsL, fixpointsR, OnTuples,
-                                         Maximum(MaximumList(fixpointsL,1),MaximumList(fixpointsR,1)));
+    return BTKit_MakeFixlistTransporter("TupleTransport", fixlistL, fixlistR, fixpointsL, fixpointsR, OnTuples, max);
 end;
 
-BTKit_Con.SetStab := function(n, fixset)
-    local fixlist, i;
-    BTKit_CheckInScope(n, fixset);
-    fixlist := ListWithIdenticalEntries(n, 0);
+BTKit_Con.SetStab := function(fixset)
+    local fixlist, i, max;
+    max := MaximumList(fixset, 1);
+    fixlist := ListWithIdenticalEntries(max, 0);
     for i in [1..Length(fixset)] do
         fixlist[fixset[i]] := 1;
     od;
-    return BTKit_MakeFixlistStabilizer("SetStab", fixlist, fixset, OnSets, MaximumList(fixset, 1));
+    return BTKit_MakeFixlistStabilizer("SetStab", fixlist, fixset, OnSets, max);
 end;
 
-BTKit_Con.SetTransporter := function(n, fixsetL, fixsetR)
-    local fixlistL, fixlistR, i;
-    BTKit_CheckInScope(n, fixsetL);
-    BTKit_CheckInScope(n, fixsetR);
-    fixlistL := ListWithIdenticalEntries(n, 0);
+BTKit_Con.SetTransporter := function(fixsetL, fixsetR)
+    local fixlistL, fixlistR, i, max;
+    max := Maximum(MaximumList(fixsetL,1),MaximumList(fixsetR,1));
+    fixlistL := ListWithIdenticalEntries(max, 0);
     for i in [1..Length(fixsetL)] do
         fixlistL[fixsetL[i]] := 1;
     od;
-    fixlistR := ListWithIdenticalEntries(n, 0);
+    fixlistR := ListWithIdenticalEntries(max, 0);
     for i in [1..Length(fixsetR)] do
         fixlistR[fixsetR[i]] := 1;
     od;
-    return BTKit_MakeFixlistTransporter("SetTransport", fixlistL, fixlistR, fixsetL, fixsetR, OnSets,
-                                        Maximum(MaximumList(fixsetL,1),MaximumList(fixsetR,1)));
+    return BTKit_MakeFixlistTransporter("SetTransport", fixlistL, fixlistR, fixsetL, fixsetR, OnSets, max);
 end;
 
 

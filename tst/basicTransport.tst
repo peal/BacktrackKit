@@ -14,17 +14,17 @@ gap> p in SymmetricGroup(3);
 true
 gap> p := BTKit_SimpleSinglePermSearch(ps3,
 >           [BTKit_Con.InGroup(SymmetricGroup(3)),
->            BTKit_Con.SetTransporter(3,[1,2],[2,3])]);;
+>            BTKit_Con.SetTransporter([1,2],[2,3])]);;
 gap> OnSets([1,2], p) = [2,3];
 true
 gap> p := BTKit_SimpleSinglePermSearch(ps6,
 >           [BTKit_Con.InGroup(AlternatingGroup(6)),
->            BTKit_Con.SetTransporter(6,[2,4,6],[1,2,3])]);;
+>            BTKit_Con.SetTransporter([2,4,6],[1,2,3])]);;
 gap> OnSets([2,4,6], p) = [1,2,3];
 true
 gap> p := BTKit_SimpleSinglePermSearch(ps6,
 >           [BTKit_Con.InGroup(AlternatingGroup(6)),
->            BTKit_Con.TupleTransporter(6,[2,4,6], [1,2,3]) ]);;
+>            BTKit_Con.TupleTransporter([2,4,6], [1,2,3]) ]);;
 gap> OnTuples([2,4,6], p) = [1,2,3];
 true
 gap> p := BTKit_SimpleSinglePermSearch(ps6,
