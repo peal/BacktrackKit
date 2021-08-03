@@ -112,37 +112,6 @@ BTKit_Con.SetTransporter := function(n, fixsetL, fixsetR)
                                         Maximum(MaximumList(fixsetL,1),MaximumList(fixsetR,1)));
 end;
 
-BTKit_Con.OrderedPartitionStab := function(n, fixpart)
-    local fixlist, i, j;
-    BTKit_CheckInScope(n, Concatenation(fixpart));
-    fixlist := ListWithIdenticalEntries(n, 0);
-    for i in [1..Length(fixpart)] do
-        for j in fixpart[i] do
-            fixlist[j] := i;
-        od;
-    od;
-    return BTKit_MakeFixlistStabilizer("OrderedPartitionStab", fixlist);
-end;
-
-BTKit_Con.OrderedPartitionTransporter := function(n, fixpartL, fixpartR)
-    local fixlistL, fixlistR, i, j;
-    BTKit_CheckInScope(n, Concatenation(fixpartL));
-    BTKit_CheckInScope(n, Concatenation(fixpartR));
-    fixlistL := ListWithIdenticalEntries(n, 0);
-    for i in [1..Length(fixpartL)] do
-        for j in fixpartL[i] do
-            fixlistL[j] := i;
-        od;
-    od;
-    fixlistR := ListWithIdenticalEntries(n, 0);
-    for i in [1..Length(fixpartR)] do
-        for j in fixpartR[i] do
-            fixlistR[j] := i;
-        od;
-    od;
-    return BTKit_MakeFixlistTransporter("OrdredPartitionTransport", fixlistL, fixlistR, fixpartL, fixpartR, OnTuplesSets);
-end;
-
 
 # The following refiner is probably the most complex. It implements
 # 'permutation is in group given by list of generators'.
