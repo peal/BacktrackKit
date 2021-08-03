@@ -14,8 +14,8 @@ H := Group((1,2,3,4,5,6),(2,3)(4,5));;
 ps := PartitionStack(6);;
 # We create a refiner for each group
 # We have to give this how many points we want the group to act on
-rg := BTKit_Con.InGroup(6, G);;
-rh := BTKit_Con.InGroup(6, H);;
+rg := BTKit_Con.InGroup(G);;
+rh := BTKit_Con.InGroup(H);;
 # Finally, intersect the groups
 BTKit_SimpleSearch(ps, [rg, rh]);
 Group([ (1,2,3)(4,6,5), (1,4)(2,5)(3,6) ])

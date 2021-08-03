@@ -12,7 +12,7 @@ gap> QC_Check([IsPermGroup, IsPermGroup, ],
 >   inter := Intersection(g1,g2);
 >   m := lmp(g1,g2);
 >   g := BTKit_SimpleSearch(PartitionStack(m),
->          [BTKit_Con.InGroupSimple(m, g1), BTKit_Con.InGroupSimple(m, g2)]);
+>          [BTKit_Con.InGroupSimple(g1), BTKit_Con.InGroupSimple(g2)]);
 >  if g <> inter then
 >    return StringFormatted("Expected {} intersection {} = {}, got {}",g1,g2,inter,g);
 >  fi;

@@ -14,7 +14,7 @@ gap> QC_Check([IsPermGroup, IsPerm, IsPermGroup, IsPerm],
 >   inter := Intersection(rc1,rc2);
 >   m := lmp(g1,g2,p1,p2);
 >   p := BTKit_SimpleSinglePermSearch(PartitionStack(m),
->          [BTKit_Con.InCoset(m, g1, p1), BTKit_Con.InCoset(m, g2, p2)]);
+>          [BTKit_Con.InCoset(g1, p1), BTKit_Con.InCoset(g2, p2)]);
 >  if inter = [] then
 >    if p <> fail then return StringFormatted("Expected nothing, got {}",p); fi;
 >  else

@@ -1,8 +1,8 @@
-BTKit_Con.InCosetSimple := function(n, group, perm)
+BTKit_Con.InCosetSimple := function(group, perm)
     local orbList,getOrbits, r, invperm,minperm;
     invperm := perm^-1;
 
-    getOrbits := function(pointlist)
+    getOrbits := function(pointlist, n)
         local orbs, array, i, j;
 
         orbs := StabTreeStabilizerOrbits(group, pointlist, [1..n]);
@@ -40,7 +40,7 @@ BTKit_Con.InCosetSimple := function(n, group, perm)
                 fi;
 
                 fixedpoints := OnTuples(fixedpoints, p);
-                points := getOrbits(fixedpoints);
+                points := getOrbits(fixedpoints, PS_Points(ps));
 
                 return {x} -> points[x^p];
             end)
@@ -48,4 +48,4 @@ BTKit_Con.InCosetSimple := function(n, group, perm)
         return Objectify(BTKitRefinerType, r);
     end;
 
-BTKit_Con.InGroupSimple := {n, group} -> BTKit_Con.InCosetSimple(n, group, ());
+BTKit_Con.InGroupSimple := {group} -> BTKit_Con.InCosetSimple(group, ());

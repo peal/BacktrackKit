@@ -122,7 +122,7 @@ end;
 BTKit_SimpleCanonicalSearchInGroup :=
     function(ps, conlist, group, conf...)
         local ret;
-        ret := _BTKit.SimpleCanonicalSearch(_BTKit.BuildProblem(ps, Concatenation(conlist, [BTKit_Con.InGroupSimple(PS_Points(ps),group)]), conf), group);
+        ret := _BTKit.SimpleCanonicalSearch(_BTKit.BuildProblem(ps, Concatenation(conlist, [BTKit_Con.InGroupSimple(group)]), conf), group);
         # Remove extra group we added
         Remove(ret.image);
         return ret;

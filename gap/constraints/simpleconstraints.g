@@ -15,12 +15,12 @@
 
 # Make a refiner which accepts permutations p
 # such that fixlist[i] = fixlist[i^p]
-BTKit_MakeFixlistStabilizer := function(name, fixlist, o, action)
+BTKit_MakeFixlistStabilizer := function(name, fixlist, o, action, lrp)
     local filters;
     filters := {i} -> fixlist[i];
     return Objectify(BTKitRefinerType, rec(
         name := name,
-        largest_required_point := Length(o),
+        largest_required_point := lrp,
         image := {p} -> action(o,p),
         result := {} -> o,
         refine := rec(
@@ -32,13 +32,13 @@ end;
 
 # Make a refiner which accepts permutations p
 # such that fixlistL[i] = fixlistR[i^p]
-BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR, oL, oR, action)
+BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR, oL, oR, action, lrp)
     local filtersL, filtersR;
     filtersL := {i} -> fixlistL[i];
     filtersR := {i} -> fixlistR[i];
     return Objectify(BTKitRefinerType, rec(
         name := name,
-        largest_required_point := Length(oL),
+        largest_required_point := lrp,
         image := {p} -> action(oL,p),
         result := {} -> oR,
         refine := rec(
@@ -67,7 +67,7 @@ BTKit_Con.TupleStab := function(n, fixpoints)
     for i in [1..Length(fixpoints)] do
         fixlist[fixpoints[i]] := i;
     od;
-    return BTKit_MakeFixlistStabilizer("TupleStab", fixlist, fixpoints, OnTuples);
+    return BTKit_MakeFixlistStabilizer("TupleStab", fixlist, fixpoints, OnTuples, MaximumList(fixpoints, 1));
 end;
 
 BTKit_Con.TupleTransporter := function(n, fixpointsL, fixpointsR)
@@ -82,7 +82,8 @@ BTKit_Con.TupleTransporter := function(n, fixpointsL, fixpointsR)
     for i in [1..Length(fixpointsR)] do
         fixlistR[fixpointsR[i]] := i;
     od;
-    return BTKit_MakeFixlistTransporter("TupleTransport", fixlistL, fixlistR, fixpointsL, fixpointsR, OnTuples);
+    return BTKit_MakeFixlistTransporter("TupleTransport", fixlistL, fixlistR, fixpointsL, fixpointsR, OnTuples,
+                                         Maximum(MaximumList(fixpointsL,1),MaximumList(fixpointsR,1)));
 end;
 
 BTKit_Con.SetStab := function(n, fixset)
@@ -92,7 +93,7 @@ BTKit_Con.SetStab := function(n, fixset)
     for i in [1..Length(fixset)] do
         fixlist[fixset[i]] := 1;
     od;
-    return BTKit_MakeFixlistStabilizer("SetStab", fixlist, fixset, OnSets);
+    return BTKit_MakeFixlistStabilizer("SetStab", fixlist, fixset, OnSets, MaximumList(fixset, 1));
 end;
 
 BTKit_Con.SetTransporter := function(n, fixsetL, fixsetR)
@@ -107,7 +108,8 @@ BTKit_Con.SetTransporter := function(n, fixsetL, fixsetR)
     for i in [1..Length(fixsetR)] do
         fixlistR[fixsetR[i]] := 1;
     od;
-    return BTKit_MakeFixlistTransporter("SetTransport", fixlistL, fixlistR, fixsetL, fixsetR, OnSets);
+    return BTKit_MakeFixlistTransporter("SetTransport", fixlistL, fixlistR, fixsetL, fixsetR, OnSets,
+                                        Maximum(MaximumList(fixsetL,1),MaximumList(fixsetR,1)));
 end;
 
 BTKit_Con.OrderedPartitionStab := function(n, fixpart)
@@ -150,10 +152,10 @@ end;
 # other refiner we have ever seen does not need to worry about the values
 # in the rBase, so don't use this as a model for another refiner, unless
 # that one is also based around a group given as a list of generators.
-BTKit_Con.InCoset := function(n, group, perm)
+BTKit_Con.InCoset := function(group, perm)
     local orbList,fillOrbits, orbMap, pointMap, r, invperm;
     invperm := perm^-1;
-    fillOrbits := function(pointlist)
+    fillOrbits := function(pointlist, n)
         local orbs, array, i, j;
         # caching
         if IsBound(pointMap[pointlist]) then
@@ -195,7 +197,7 @@ BTKit_Con.InCoset := function(n, group, perm)
                 local fixedpoints, points, fixedps, fixedrbase, p;
                 if buildingRBase then
                     fixedpoints := PS_FixedPoints(ps);
-                    points := fillOrbits(fixedpoints);
+                    points := fillOrbits(fixedpoints, PS_Points(ps));
                     return {x} -> points[x];
                 else
                     fixedps := PS_FixedPoints(ps);
@@ -230,7 +232,7 @@ BTKit_Con.InCoset := function(n, group, perm)
         return Objectify(BTKitRefinerType, r);
     end;
 
-BTKit_Con.InGroup := {n, group} -> BTKit_Con.InCoset(n, group, ());
+BTKit_Con.InGroup := {group} -> BTKit_Con.InCoset(group, ());
 
 #####
 #####
@@ -257,10 +259,10 @@ _BTKit.RefineGraphs := function(points, ps, graphlist)
         return ret;
 end;
 
-BTKit_Con.InCosetWithOrbitals := function(n, group, perm)
+BTKit_Con.InCosetWithOrbitals := function(group, perm)
     local orbList,fillOrbits, fillOrbitals, orbMap, orbitalMap, pointMap, r, invperm;
     invperm := perm^-1;
-    fillOrbits := function(pointlist)
+    fillOrbits := function(pointlist, n)
         local orbs, array, i, j;
         # caching
         if IsBound(pointMap[pointlist]) then
@@ -279,7 +281,7 @@ BTKit_Con.InCosetWithOrbitals := function(n, group, perm)
         return array;
     end;
 
-    fillOrbitals := function(pointlist)
+    fillOrbitals := function(pointlist, n)
         local orbs, array, i, j;
         if IsBound(orbitalMap[pointlist]) then
             return orbitalMap[pointlist];
@@ -314,10 +316,10 @@ BTKit_Con.InCosetWithOrbitals := function(n, group, perm)
                 local fixedpoints, points, fixedps, fixedrbase, p, graphs, refinedgraphs;
                 if buildingRBase then
                     fixedpoints := PS_FixedPoints(ps);
-                    points := fillOrbits(fixedpoints);
-                    graphs := fillOrbitals(fixedpoints);
+                    points := fillOrbits(fixedpoints, PS_Points(ps));
+                    graphs := fillOrbitals(fixedpoints, PS_Points(ps));
                     Info(InfoBTKit, 5, "Building RBase:", points);
-                    refinedgraphs := _BTKit.RefineGraphs(n, ps, graphs);
+                    refinedgraphs := _BTKit.RefineGraphs(PS_Points(ps), ps, graphs);
                     return {x} -> [points[x], refinedgraphs[x]];
                 else
                     fixedps := PS_FixedPoints(ps);
@@ -344,11 +346,11 @@ BTKit_Con.InCosetWithOrbitals := function(n, group, perm)
                     points := pointMap[fixedrbase];
                     graphs := orbitalMap[fixedrbase];
                     if perm = () then
-                        refinedgraphs := _BTKit.RefineGraphs(n, ps, List(graphs, {g} -> OnDigraphs(g, p^-1)));
+                        refinedgraphs := _BTKit.RefineGraphs(PS_Points(ps), ps, List(graphs, {g} -> OnDigraphs(g, p^-1)));
                         return {x} -> [points[x^p], refinedgraphs[x]];
                     else
-                        Info(InfoBTKit, 5, fixedps, fixedrbase, List([1..n], i -> points[i^(p*invperm)]));
-                        refinedgraphs := _BTKit.RefineGraphs(n, ps, List(graphs, {g} -> OnDigraphs(g, (invperm*p)^-1)));
+                        Info(InfoBTKit, 5, fixedps, fixedrbase, List([1..PS_Points(ps)], i -> points[i^(p*invperm)]));
+                        refinedgraphs := _BTKit.RefineGraphs(PS_Points(ps), ps, List(graphs, {g} -> OnDigraphs(g, (invperm*p)^-1)));
                         return {x} -> [points[x^(invperm*p)], refinedgraphs[x]];
                     fi;
                 fi;
@@ -357,7 +359,7 @@ BTKit_Con.InCosetWithOrbitals := function(n, group, perm)
         return Objectify(BTKitRefinerType, r);
     end;
 
-BTKit_Con.InGroupWithOrbitals := {n, group} -> BTKit_Con.InCosetWithOrbitals(n, group, ());
+BTKit_Con.InGroupWithOrbitals := {group} -> BTKit_Con.InCosetWithOrbitals(group, ());
 
 
 BTKit_Con.Nothing := {} -> Objectify(BTKitRefinerType, rec(

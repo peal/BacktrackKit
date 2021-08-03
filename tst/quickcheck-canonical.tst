@@ -11,7 +11,7 @@ gap> QC_Check([IsPerm, QC_SetOf(IsPosInt)],
 > function(perm,s)
 >   local m,s2,can1,can2,p1;
 >   s2 := OnSets(s,perm);
->   m := Maximum(LargestMovedPoint(perm), Maximum(1,Maximum(s)));
+>   m := Maximum(LargestMovedPoint(perm), Maximum(2,Maximum(s)));
 >   can1 :=  BTKit_SimpleCanonicalSearch(PartitionStack(m), [BTKit_Con.SetStab(m, s)]);
 >   can2 :=  BTKit_SimpleCanonicalSearch(PartitionStack(m), [BTKit_Con.SetStab(m, s2)]);
 >   if can1.image <> can2.image then
@@ -30,7 +30,7 @@ gap> QC_Check([IsPermGroup, QC_SetOf(IsPosInt)],
 >   local perm,m,s2,can1,can2,p1;
 >   perm := Random(g);
 >   s2 := OnSets(s,perm);
->   m := Maximum(LargestMovedPoint(perm), LargestMovedPoint(g), Maximum(1,Maximum(s)));
+>   m := Maximum(LargestMovedPoint(perm), LargestMovedPoint(g), Maximum(2,Maximum(s)));
 >   can1 :=  BTKit_SimpleCanonicalSearchInGroup(PartitionStack(m), [BTKit_Con.SetStab(m, s)], g);
 >   can2 :=  BTKit_SimpleCanonicalSearchInGroup(PartitionStack(m), [BTKit_Con.SetStab(m, s2)], g);
 >   if can1.image <> can2.image then
@@ -48,7 +48,7 @@ gap> QC_Check([IsPerm, QC_ListOf(IsPosInt)],
 > function(perm,s)
 >   local m,s2,can1,can2,p1;
 >   s2 := OnTuples(s,perm);
->   m := Maximum(LargestMovedPoint(perm), Maximum(1,Maximum(s)));
+>   m := Maximum(LargestMovedPoint(perm), Maximum(2,Maximum(s)));
 >   can1 :=  BTKit_SimpleCanonicalSearch(PartitionStack(m), [BTKit_Con.TupleStab(m, s)]);
 >   can2 :=  BTKit_SimpleCanonicalSearch(PartitionStack(m), [BTKit_Con.TupleStab(m, s2)]);
 >   if can1.image <> can2.image then
