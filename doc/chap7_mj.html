@@ -137,8 +137,8 @@
 <span class="GAPprompt">&gt;</span> <span class="GAPinput">ps := PartitionStack(6);;</span>
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># We create a refiner for each group</span>
 <span class="GAPprompt">&gt;</span> <span class="GAPinput"># We have to give this how many points we want the group to act on</span>
-<span class="GAPprompt">&gt;</span> <span class="GAPinput">rg := BTKit_Con.InGroup(6, G);;</span>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">rh := BTKit_Con.InGroup(6, H);;</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">rg := BTKit_Con.InGroup(G);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">rh := BTKit_Con.InGroup(H);;</span>
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># Finally, intersect the groups</span>
 <span class="GAPprompt">&gt;</span> <span class="GAPinput">BTKit_SimpleSearch(ps, [rg, rh]);</span>
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Group([ (1,2,3)(4,6,5), (1,4)(2,5)(3,6) ])</span>
@@ -149,7 +149,7 @@
 
 <div class="example"><pre>
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># This represents the group which stabilizes the set [3,4,5,6]</span>
-<span class="GAPprompt">&gt;</span> <span class="GAPinput">ss := BTKit_Con.SetStab(6, [3,4,5,6]);;</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">ss := BTKit_Con.SetStab([3,4,5,6]);;</span>
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># We can prove this by just "searching" on this group</span>
 <span class="GAPprompt">&gt;</span> <span class="GAPinput">BTKit_SimpleSearch(ps, [ss]);</span>
 Group([ (5,6), (4,5), (3,4), (1,2) ])

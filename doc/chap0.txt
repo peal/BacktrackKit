@@ -6,10 +6,10 @@
            [1X An Extensible, easy to understand backtracking framework [101X
   
   
-                                     0.4.2
+                                     0.5.0
   
   
-                                 2 August 2021
+                                 3 August 2021
   
   
                              Christopher Jefferson
