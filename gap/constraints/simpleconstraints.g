@@ -318,6 +318,29 @@ BTKit_Con.InCosetWithOrbitals := function(group, perm)
 
 BTKit_Con.InGroupWithOrbitals := {group} -> BTKit_Con.InCosetWithOrbitals(group, ());
 
+# Check if permutations are even (i.e. a subgroup of the natural alternating group)
+BTKit_Con.IsEven := {} -> Objectify(BTKitRefinerType, rec(
+        name := "IsEven",
+        largest_required_point := 1,
+        image := {p} -> SignPerm(p),
+        result := {} -> 1,
+        refine := rec(
+            initialise := function(ps, buildingRBase)
+                return {x} -> 1;
+            end)
+    ));
+
+# Check if the permutations are odd (i.e. the single coset of the natural symmetric group)
+BTKit_Con.IsOdd := {} -> Objectify(BTKitRefinerType, rec(
+        name := "IsOdd",
+        largest_required_point := 1,
+        image := {p} -> SignPerm(p),
+        result := {} -> -1,
+        refine := rec(
+            initialise := function(ps, buildingRBase)
+                return {x} -> 0;
+            end)
+    ));
 
 BTKit_Con.Nothing := {} -> Objectify(BTKitRefinerType, rec(
         name := "Nothing",

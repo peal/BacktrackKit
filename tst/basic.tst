@@ -1,4 +1,4 @@
-#@local ps3, ps6, G, graph, g1, g2
+#@local ps3, ps6, G, p, graph, g1, g2
 gap> START_TEST("basic.tst");
 gap> LoadPackage("backtrackkit", false);
 true
@@ -20,6 +20,16 @@ gap> G = Intersection(AlternatingGroup(6),
 >                     Stabilizer(AlternatingGroup(6), [2,4,6], OnSets),
 >                     Stabilizer(AlternatingGroup(6), [1,2], OnTuples));
 true
+gap> G := BTKit_SimpleSearch(ps6, [BTKit_Con.IsEven()]);;
+gap> G = AlternatingGroup(6);
+true
+gap> p := BTKit_SimpleSinglePermSearch(ps6, [BTKit_Con.IsOdd()]);;
+gap> SignPerm(p);
+-1
+gap> BTKit_SimpleSinglePermSearch(ps6, [BTKit_Con.IsEven(), BTKit_Con.IsOdd()]);
+fail
+
+#
 gap> graph := Digraph([ [2], [3], [1] ]);;
 gap> BTKit_SimpleSearch(ps3, [BTKit_Con.GraphTrans(graph, graph)]) = Group( (1,2,3) );
 true
