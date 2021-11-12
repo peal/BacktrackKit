@@ -27,6 +27,11 @@ at https://github.com/peal/BacktrackKit/issues
 
 ## History
 
+0.5.1
+-----
+
+Add IsEven and IsOdd refiners, to more efficiently handle alternating groups
+
 0.5.0
 -----
 
