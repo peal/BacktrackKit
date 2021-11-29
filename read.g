@@ -1,5 +1,5 @@
 #
-# BacktrackKit: An Extensible, easy to understand backtracking framework
+# BacktrackKit: An extensible, easy to understand backtracking framework
 #
 # Reading the implementation part of the package.
 #

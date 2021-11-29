@@ -1,5 +1,5 @@
-# This function is copied from Ferret.
-# We don't use OrbitalGraphs, as it doesn't let us specify a 'maxval'.
+# These functions are copied from Ferret.
+# We don't use the OrbitalGraphs package, as it doesn't let us specify a 'maxval'.
 
 _BTKit.fillRepElements := function(G, orb)
   local val, g, reps, buildorb, gens;
