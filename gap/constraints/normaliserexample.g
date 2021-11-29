@@ -11,7 +11,7 @@ BTKit_Con.MostBasicGroupConjugacy := function(grpL, grpR)
         image := {p} -> grpL^p,
         result := {} -> grpR,
         refine := rec(
-                initialise := function(ps, buildingRbase)
+                initialise := function(ps, buildingRBase)
                     return ReturnTrue;
                 end)
 
@@ -41,8 +41,8 @@ BTKit_Con.BasicGroupConjugacy := function(grpL, grpR)
         image := {p} -> grpL^p,
         result := {} -> grpR,
         refine := rec(
-            initialise := function(ps, buildingRbase)
-                if buildingRbase then
+            initialise := function(ps, buildingRBase)
+                if buildingRBase then
                     return mapToOrbitSize(grpL, PS_Points(ps));
                 else
                     return mapToOrbitSize(grpR, PS_Points(ps));
@@ -73,17 +73,17 @@ BTKit_Con.SimpleGroupConjugacy := function(grpL, grpR)
         image := {p} -> grpL^p,
         result := {} -> grpR,
         refine := rec(
-            initialise := function(ps, buildingRbase)
-                if buildingRbase then
+            initialise := function(ps, buildingRBase)
+                if buildingRBase then
                     return mapToOrbitSize(grpL, PS_Points(ps));
                 else
                     return mapToOrbitSize(grpR, PS_Points(ps));
                 fi;
             end,
-            changed := function(ps, buildingRbase)
+            changed := function(ps, buildingRBase)
                 local fixed, grp, ret;
                 fixed := PS_FixedPoints(ps);
-                if buildingRbase then
+                if buildingRBase then
                     grp := grpL;
                 else
                     grp := grpR;

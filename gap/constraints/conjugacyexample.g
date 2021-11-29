@@ -7,7 +7,7 @@ BTKit_Con.MostBasicPermConjugacy := function(permL, permR)
         image := {p} -> permL^p,
         result := {} -> permR,
         refine := rec(
-                initialise := function(ps, buildingRbase)
+                initialise := function(ps, buildingRBase)
                     return ReturnTrue;
                 end)
         )
@@ -37,8 +37,8 @@ BTKit_Con.BasicPermConjugacy := function(permL, permR)
         image := {p} -> permL^p,
         result := {} -> permR,
         refine := rec(
-            initialise := function(ps, buildingRbase)
-                if buildingRbase then
+            initialise := function(ps, buildingRBase)
+                if buildingRBase then
                     return mapToOrbitSize(permL, PS_Points(ps));
                 else
                     return mapToOrbitSize(permR, PS_Points(ps));
