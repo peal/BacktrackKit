@@ -91,18 +91,17 @@ _BTKit.getOrbitalList := function(sc, maxval)
 end;
 
 _BTKit.InNeighboursSafe := function(graph, v)
-
-    if v > DigraphNrVertices(graph) then
-        return [];
-    else
+    if v in DigraphVertices(graph) then
         return InNeighbours(graph)[v];
+    else
+        return [];
     fi;
 end;
 
 _BTKit.OutNeighboursSafe := function(graph, v)
-    if v > DigraphNrVertices(graph) then
-        return [];
-    else
+    if v in DigraphVertices(graph) then
         return OutNeighbours(graph)[v];
+    else
+        return [];
     fi;
 end;
