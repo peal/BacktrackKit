@@ -56,7 +56,7 @@ DeclareOperation("ApplyFilters", [IsBTKitState, IsTracer, IsObject]);
 #! Takes a partition stack and a list of constraints and builds a 'Problem',
 #! Which can then be solved by passing the 'Problem' to BTKit_SimpleSearch or
 #! BT_SimpleSinglePermSearch.
-DeclareGlobalFunction("BTKit_BuildProblem");
+DeclareGlobalFunction( "BTKit_BuildProblem" );
 
 DeclareGlobalFunction( "FirstFixedPoint" );
 
