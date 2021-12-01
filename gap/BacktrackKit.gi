@@ -304,16 +304,7 @@ BTKit_GetCandidateSolution := function(ps, rbase)
 end;
 
 
-BTKit_CheckPermutation := function(perm, con)
-    local check;
-    if IsBound(con!.check) then
-        check := con!.check(perm);
-        Assert(2, check = (con!.result() = con!.image(perm)));
-    else
-        return con!.result() = con!.image(perm);
-    fi;
-    return check;
-end;
+BTKit_CheckPermutation := {perm, con} -> Check(con!.constraint)(perm);
 
 BTKit_CheckSolution := function(perm, conlist)
     local check;
