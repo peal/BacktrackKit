@@ -4,7 +4,7 @@
 # Reading the implementation part of the package.
 #
 
-# A Store of the BTKit constraints
+# A store of the BTKit refiners
 BTKit_Con := AtomicRecord(rec());
 
 # Private members
