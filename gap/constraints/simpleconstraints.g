@@ -48,7 +48,8 @@ BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR, oL, oR, actio
                 else
                     return filtersR;
                 fi;
-            end)
+            end
+        ),
     ));
 end;
 
@@ -333,6 +334,7 @@ BTKit_Con.IsEven := {} -> Objectify(BTKitRefinerType, rec(
 # Check if the permutations are odd (i.e. the single coset of the natural symmetric group)
 BTKit_Con.IsOdd := {} -> Objectify(BTKitRefinerType, rec(
         name := "IsOdd",
+        # Somehow needs to store that it needs two or more points...
         largest_required_point := 1,
         image := {p} -> SignPerm(p),
         result := {} -> -1,
@@ -343,20 +345,18 @@ BTKit_Con.IsOdd := {} -> Objectify(BTKitRefinerType, rec(
     ));
 
 BTKit_Con.Nothing := {} -> Objectify(BTKitRefinerType, rec(
-        name := "Nothing",
+        name := "RefinerForNothing",
         largest_required_point := 1,
         largest_moved_point := 1,
         image := {p} -> true,
         result := {} -> false,
         refine := rec(
-            initialise := function(ps, buildingRBase)
-                return fail;
-            end)
+            initialise := ReturnFail
+        )
     ));
 
-
 BTKit_Con.Nothing2 := {} -> Objectify(BTKitRefinerType, rec(
-        name := "Nothing2",
+        name := "RefinerForNothing2",
         largest_required_point := 1,
         largest_moved_point := 1,
         image := {p} -> true,
@@ -365,7 +365,6 @@ BTKit_Con.Nothing2 := {} -> Objectify(BTKitRefinerType, rec(
             initialise := function(ps, buildingRBase)
                 return {x} -> 1;
             end,
-            fixed := function(ps, buildingRBase)
-                return fail;
-            end)
+            fixed := ReturnFail
+        )
     ));

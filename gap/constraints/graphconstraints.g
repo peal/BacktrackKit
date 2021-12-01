@@ -24,28 +24,27 @@ end;
 # Make a refiner which accepts permutations p
 # such that graphL = OnDigraphs(graphR, p)
 BTKit_Con.GraphTrans := function(graphL, graphR)
-    local filtersL, filtersR, check;
+    local filter;
     # Give an initial sort
-    check := function(ps, buildingRBase)
-                local filt;
-                if buildingRBase then
-                    filt := BTKit_FilterGraph(ps, graphL);
-                else
-                    filt := BTKit_FilterGraph(ps, graphR);
-                fi;
-                return {x} -> filt[x];
-            end;
+    filter := function(ps, buildingRBase)
+        local filt;
+        if buildingRBase then
+            filt := BTKit_FilterGraph(ps, graphL);
+        else
+            filt := BTKit_FilterGraph(ps, graphR);
+        fi;
+        return {x} -> filt[x];
+    end;
     return Objectify(BTKitRefinerType, rec(
         name := "GraphTrans",
         largest_required_point := Maximum(Maximum(DigraphVertices(graphL), Maximum(DigraphVertices(graphR)))),
         image := {p} -> OnDigraphs(graphL, p),
         result := {} -> graphR,
         refine := rec(
-            initialise := check, 
-            changed := check
+            initialise := filter, 
+            changed := filter
         )
     ));
 end;
-
 
 BTKit_Con.GraphStab := {graph} -> BTKit_Con.GraphTrans(graph, graph);

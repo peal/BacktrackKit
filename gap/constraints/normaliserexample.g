@@ -1,11 +1,11 @@
-# The following series of refiners are based on Jeon's normaliser refiners,
+# The following series of refiners are based on Leon's normaliser refiners,
 # but they do not implement all features (in particular, any parts which look
 # at the base points of the group).
 
 # The minimal requirements of a refiner -- give a 
 # name, a 'check' function, and an empty record called 'refine'
 BTKit_Con.MostBasicGroupConjugacy := function(grpL, grpR)
-    return Objectify(BTKitRefinerType,rec(
+    return Objectify(BTKitRefinerType, rec(
         name := "MostBasicGroupPermConjugacy",
         largest_required_point := Maximum(LargestMovedPoint(grpL), LargestMovedPoint(grpR)),
         image := {p} -> grpL^p,
@@ -14,7 +14,6 @@ BTKit_Con.MostBasicGroupConjugacy := function(grpL, grpR)
                 initialise := function(ps, buildingRBase)
                     return ReturnTrue;
                 end)
-
     ));
 end;
 

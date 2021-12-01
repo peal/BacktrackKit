@@ -1,9 +1,9 @@
 #
 # BacktrackKit: An extensible, easy to understand backtracking framework
 #
-#! @Chapter Ordered tracer
+#! @Chapter Ordered tracers
 #!
-#! An <E>ordered tracer</E> is...
+#! An __ordered tracer__ is...
 # TODO complete the description of an ordered tracer.
 
 

@@ -42,7 +42,6 @@ DeclareOperation("RestoreState", [IsBacktrackableState, IsObject]);
 #! This function gives a well-defined point for such operations to be
 #! performed. It can be ignored by implementations without such simplifications.
 DeclareOperation("ConsolidateState", [IsBacktrackableState, IsTracer]);
-InstallMethod(ConsolidateState, [IsBacktrackableState, IsTracer], ReturnTrue);
 
 
 DeclareRepresentation("IsBTKitState", IsBacktrackableState, []);

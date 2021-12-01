@@ -22,6 +22,7 @@ BTKit_GetCandidateCanonicalSolution := function(state, group)
 
     Info(InfoBTKit, 2, "Considering mapping: ", preimage, postimage, perm);
     return rec(perm := perm, image := List(state!.conlist, {x} -> x!.image(perm)));
+    # TODO: Huh? I don't get why we are taking the image w.r.t. the GROUP!
 end;
 
 InstallGlobalFunction( CanonicalBacktrack,

@@ -43,6 +43,8 @@ InstallMethod(RestoreState, [IsBTKitState, IsObject],
         od;
 end);
 
+InstallMethod(ConsolidateState, [IsBacktrackableState, IsTracer], ReturnTrue);
+
 #! @Chapter Implementation
 #! @Section Filters
 

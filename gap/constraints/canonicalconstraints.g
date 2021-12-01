@@ -44,8 +44,7 @@ BTKit_Con.InCosetSimple := function(group, perm)
 
                 return {x} -> points[x^p];
             end)
-        );
-        
+    );
     return Objectify(BTKitRefinerType, r);
 end;
 

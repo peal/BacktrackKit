@@ -2,14 +2,16 @@
 ##  This file defines tracers.
 ##
 
+# Recording tracers
+
 InstallGlobalFunction(RecordingTracer,
 {} -> Objectify(RecordingTracerTypeMutable, rec(trace := []) ));
 
 InstallMethod(AddEvent, [IsRecordingTracerRep and IsMutable, IsObject],
-    function(tracer, o)
-        Add(tracer!.trace, o);
-        return true;
-    end);
+function(tracer, o)
+    Add(tracer!.trace, o);
+    return true;
+end);
 
 InstallMethod(TraceLength, [IsRecordingTracerRep],
 {x} -> Length(x!.trace));
@@ -22,6 +24,8 @@ function(t)
 end);
 
 
+# Following tracers
+
 InstallGlobalFunction(FollowingTracer,
 function(trace)
     if IsFollowingTracerRep(trace) then
@@ -32,19 +36,19 @@ function(trace)
 end);
 
 InstallMethod(AddEvent, [IsFollowingTracerRep and IsMutable, IsObject],
-    function(tracer, o)
-        if tracer!.pos > TraceLength(tracer!.existingTrace) then
-            Info(InfoTrace, 1, "Too long!");
-            return false;
-        elif TraceEvent(tracer!.existingTrace, tracer!.pos) <> o then
-            Info(InfoTrace, 1, StringFormatted("Trace violation {}:{}",
-                               TraceEvent(tracer!.existingTrace, tracer!.pos), o));
-            tracer!.pos := infinity;
-            return false;
-        fi;
-        tracer!.pos := tracer!.pos + 1;
-        return true;
-    end);
+function(tracer, o)
+    if tracer!.pos > TraceLength(tracer!.existingTrace) then
+        Info(InfoTrace, 1, "Too long!");
+        return false;
+    elif TraceEvent(tracer!.existingTrace, tracer!.pos) <> o then
+        Info(InfoTrace, 1, StringFormatted("Trace violation {}:{}",
+                            TraceEvent(tracer!.existingTrace, tracer!.pos), o));
+        tracer!.pos := infinity;
+        return false;
+    fi;
+    tracer!.pos := tracer!.pos + 1;
+    return true;
+end);
 
 InstallMethod(TraceLength, [IsFollowingTracerRep],
 {x} -> TraceLength(x!.existingTrace));
@@ -57,13 +61,15 @@ function(t)
 end);
 
 
+# Canonicalising tracers
+
 InstallGlobalFunction(CanonicalisingTracerFromTracer,
 function(trace)
     if not IsCanonicalisingTracerRep(trace) then
         ErrorNoReturn("a canonicalising tracer must be based on another canonicalising tracer,");
     fi;
     return Objectify(CanonicalisingTracerTypeMutable,
-        rec(trace := List(trace!.trace), pos := 1, improvedTrace := false) );
+        rec(trace := List(trace!.trace), pos := 1, improvedTrace := false));
 end);
 
 InstallGlobalFunction(EmptyCanonicalisingTracer,
@@ -71,8 +77,6 @@ function()
     return Objectify(CanonicalisingTracerTypeMutable,
         rec(trace := [], pos := 1, improvedTrace := false) );
 end);
-
-
 
 InstallMethod(AddEvent, [IsCanonicalisingTracerRep and IsMutable, IsObject],
     function(tracer, o)
@@ -119,8 +123,6 @@ InstallMethod(TraceEvent, [IsCanonicalisingTracerRep, IsPosInt],
 
 InstallMethod(GetEvents, [IsCanonicalisingTracerRep],
 {x} -> x!.trace);
-
-
 
 InstallMethod(ViewObj, [IsCanonicalisingTracerRep],
 function(t)

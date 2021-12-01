@@ -7,11 +7,11 @@ BTKit_Con.MostBasicPermConjugacy := function(permL, permR)
         image := {p} -> permL^p,
         result := {} -> permR,
         refine := rec(
-                initialise := function(ps, buildingRBase)
-                    return ReturnTrue;
-                end)
+            initialise := function(ps, buildingRBase)
+                return ReturnTrue;
+            end
         )
-    );
+    ));
 end;
 
 # Slightly cleverer refiner -- the function 'initialise' is called
@@ -88,31 +88,35 @@ BTKit_Con.PermTransporter := function(fixedeltL, fixedeltR)
     end;
 
 
-    r := rec( name := "PermTransporter",
-              largest_required_point := Maximum(LargestMovedPoint(fixedeltL),LargestMovedPoint(fixedeltR)),
-              image := {p} -> fixedeltL^p,
-              result := {} -> fixedeltR,
-              refine := rec( initialise := function(ps, buildingRBase)
-                               local points;
-                               setupCycleparts(PS_Points(ps));
-                               # Pass cyclepart just on the first call, for efficency
-                               if buildingRBase then
-                                   points := fixByFixed(PS_FixedPoints(ps), fixedeltL, PS_Points(ps));
-                                   return {x} -> [points[x], cyclepartL[x]];
-                               else
-                                   points := fixByFixed(PS_FixedPoints(ps), fixedeltR, PS_Points(ps));
-                                   return {x} -> [points[x], cyclepartR[x]];
-                               fi;
-                             end,
-                             changed := function(ps, buildingRBase)
-                               local points;
-                               if buildingRBase then
-                                    points := fixByFixed(PS_FixedPoints(ps), fixedeltL, PS_Points(ps));
-                                else
-                                    points := fixByFixed(PS_FixedPoints(ps), fixedeltR, PS_Points(ps));
-                                fi;
-                               return {x} -> points[x];
-                             end) );
+    r := rec(
+        name := "PermTransporter",
+        largest_required_point := Maximum(LargestMovedPoint(fixedeltL),LargestMovedPoint(fixedeltR)),
+        image := {p} -> fixedeltL^p,
+        result := {} -> fixedeltR,
+        refine := rec(
+            initialise := function(ps, buildingRBase)
+                local points;
+                setupCycleparts(PS_Points(ps));
+                # Pass cyclepart just on the first call, for efficency
+                if buildingRBase then
+                    points := fixByFixed(PS_FixedPoints(ps), fixedeltL, PS_Points(ps));
+                    return {x} -> [points[x], cyclepartL[x]];
+                else
+                    points := fixByFixed(PS_FixedPoints(ps), fixedeltR, PS_Points(ps));
+                    return {x} -> [points[x], cyclepartR[x]];
+                fi;
+            end,
+            changed := function(ps, buildingRBase)
+                local points;
+                if buildingRBase then
+                     points := fixByFixed(PS_FixedPoints(ps), fixedeltL, PS_Points(ps));
+                 else
+                     points := fixByFixed(PS_FixedPoints(ps), fixedeltR, PS_Points(ps));
+                 fi;
+                return {x} -> points[x];
+            end,
+        )
+    );
     return Objectify(BTKitRefinerType,r);
 end;
 
