@@ -40,6 +40,7 @@ BTKit_Con.GraphTrans := function(graphL, graphR)
         largest_required_point := Maximum(Maximum(DigraphVertices(graphL), Maximum(DigraphVertices(graphR)))),
         image := {p} -> OnDigraphs(graphL, p),
         result := {} -> graphR,
+        constraint := Constraint.Transport(graphL, graphR, OnDigraphs),
         refine := rec(
             initialise := filter, 
             changed := filter

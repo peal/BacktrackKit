@@ -23,6 +23,7 @@ BTKit_MakeFixlistStabilizer := function(name, fixlist, o, action, lrp)
         largest_required_point := lrp,
         image := {p} -> action(o,p),
         result := {} -> o,
+        constraint := Constraint.Stabilise(o, action),
         refine := rec(
             initialise := function(ps, buildingRBase)
                 return filters;
@@ -41,6 +42,7 @@ BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR, oL, oR, actio
         largest_required_point := lrp,
         image := {p} -> action(oL,p),
         result := {} -> oR,
+        constraint := Constraint.Transport(oL, oR, action),
         refine := rec(
             initialise := function(ps, buildingRBase)
                 if buildingRBase then
@@ -143,6 +145,7 @@ BTKit_Con.InCoset := function(group, perm)
         image := {p} -> RightCoset(group, p),
         result := {} -> RightCoset(group, perm),
         check := {p} -> p in RightCoset(group, perm),
+        constraint := Constraint.InCoset(group, perm),
         refine := rec(
             rBaseFinished := function(getRBase)
                 r!.RBase := getRBase;
@@ -261,6 +264,7 @@ BTKit_Con.InCosetWithOrbitals := function(group, perm)
         image := {p} -> RightCoset(group, p),
         result := {} -> RightCoset(group, perm),
         check := {p} -> p in RightCoset(group, perm),
+        constraint := Constraint.InCoset(group, perm),
         refine := rec(
             rBaseFinished := function(getRBase)
                 r!.RBase := getRBase;
@@ -325,6 +329,7 @@ BTKit_Con.IsEven := {} -> Objectify(BTKitRefinerType, rec(
         largest_required_point := 1,
         image := {p} -> SignPerm(p),
         result := {} -> 1,
+        constraint := Constraint.IsEven,
         refine := rec(
             initialise := function(ps, buildingRBase)
                 return {x} -> 1;
@@ -338,6 +343,7 @@ BTKit_Con.IsOdd := {} -> Objectify(BTKitRefinerType, rec(
         largest_required_point := 1,
         image := {p} -> SignPerm(p),
         result := {} -> -1,
+        constraint := Constraint.IsOdd,
         refine := rec(
             initialise := function(ps, buildingRBase)
                 return {x} -> 0;
@@ -350,6 +356,7 @@ BTKit_Con.Nothing := {} -> Objectify(BTKitRefinerType, rec(
         largest_moved_point := 1,
         image := {p} -> true,
         result := {} -> false,
+        constraint := Constraint.Nothing,
         refine := rec(
             initialise := ReturnFail
         )
@@ -361,6 +368,7 @@ BTKit_Con.Nothing2 := {} -> Objectify(BTKitRefinerType, rec(
         largest_moved_point := 1,
         image := {p} -> true,
         result := {} -> false,
+        constraint := Constraint.Nothing,
         refine := rec(
             initialise := function(ps, buildingRBase)
                 return {x} -> 1;
