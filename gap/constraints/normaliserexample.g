@@ -10,6 +10,7 @@ BTKit_Con.MostBasicGroupConjugacy := function(grpL, grpR)
         largest_required_point := Maximum(LargestMovedPoint(grpL), LargestMovedPoint(grpR)),
         image := {p} -> grpL^p,
         result := {} -> grpR,
+        constraint := Constraint.Conjugate(grpL, grpR),
         refine := rec(
                 initialise := function(ps, buildingRBase)
                     return ReturnTrue;
@@ -39,6 +40,7 @@ BTKit_Con.BasicGroupConjugacy := function(grpL, grpR)
         largest_required_point := Maximum(LargestMovedPoint(grpL), LargestMovedPoint(grpR)),
         image := {p} -> grpL^p,
         result := {} -> grpR,
+        constraint := Constraint.Conjugate(grpL, grpR),
         refine := rec(
             initialise := function(ps, buildingRBase)
                 if buildingRBase then
@@ -71,6 +73,7 @@ BTKit_Con.SimpleGroupConjugacy := function(grpL, grpR)
         largest_required_point := Maximum(LargestMovedPoint(grpL), LargestMovedPoint(grpR)),
         image := {p} -> grpL^p,
         result := {} -> grpR,
+        constraint := Constraint.Conjugate(grpL, grpR),
         refine := rec(
             initialise := function(ps, buildingRBase)
                 if buildingRBase then

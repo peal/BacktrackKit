@@ -25,6 +25,7 @@ BTKit_Con.InCosetSimple := function(group, perm)
         image := {p} -> RightCoset(group, p),
         result := {} -> RightCoset(group, perm),
         check := {p} -> p in RightCoset(group, perm),
+        constraint := Constraint.InCoset(group, perm),
         refine := rec(
             initialise := function(ps, buildingRBase)
                 return r!.refine.fixed(ps, buildingRBase);
