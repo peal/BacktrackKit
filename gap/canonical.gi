@@ -21,7 +21,7 @@ BTKit_GetCandidateCanonicalSolution := function(state, group)
     Assert(2, group = false or perm in group);
 
     Info(InfoBTKit, 2, "Considering mapping: ", preimage, postimage, perm);
-    return rec(perm := perm, image := List(state!.conlist, {x} -> x!.image(perm)));
+    return rec(perm := perm, image := List(state!.conlist, {x} -> ImageFunc(x!.constraint)(perm)));
     # TODO: Huh? I don't get why we are taking the image w.r.t. the GROUP!
 end;
 

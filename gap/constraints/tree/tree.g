@@ -8,7 +8,7 @@
 #     name := Concatenation("List(", List(conlist, {c} -> c.name), ")");
 #     r := rec(
 #         name := name,
-#         check := {p} -> ForAll(conlist, {c} -> c!.check(p)),
+#         check := {p} -> ForAll(conlist, {c} -> Check(c!.constraint)(p)),
 #         refine := rec(
 #             initialise := function(ps, rbase)
 #                 local refines, gather;
@@ -33,7 +33,7 @@
 #     name := Concatenation("Set(", List(conlist, {c} -> c.name), ")");
 #     r := rec(
 #         name := name,
-#         check := {p} -> ForAll(conlist, {c} -> c!.check(p)),
+#         check := {p} -> ForAll(conlist, {c} -> Check(c!.constraint)(p)),
 #         refine := rec(
 #             initialise := function(ps, rbase)
 #                 local refines, gather;
