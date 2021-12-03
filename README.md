@@ -27,10 +27,17 @@ at https://github.com/peal/BacktrackKit/issues
 
 ## History
 
+0.6.0
+-----
+
+Refiners now have a “constraint” member, which is a new type of GAP object, and
+which stores information about the constraint that the refiner refiners with
+respect to.  Constraints are available via the `Constraint` record.
+
 0.5.1
 -----
 
-Add IsEven and IsOdd refiners, to more efficiently handle alternating groups
+Add `IsEven` and `IsOdd` refiners, to more efficiently handle alternating groups
 
 0.5.0
 -----
