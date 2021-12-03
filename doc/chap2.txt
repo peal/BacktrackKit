@@ -29,13 +29,9 @@
   
   [33X[0;0YSome implementations of BacktrackableState can perform simplifications. This
   function  gives a well-defined point for such operations to be performed. It
-  can be ignored by implemtnations without such simplifications.[133X
+  can be ignored by implementations without such simplifications.[133X
   
-  [1X2.1-4 ConsolidateState[101X
-  
-  [33X[1;0Y[29X[2XConsolidateState[102X( [3Xarg1[103X, [3Xarg2[103X ) [32X operation[133X
-  
-  [1X2.1-5 BTKit_BuildProblem[101X
+  [1X2.1-4 BTKit_BuildProblem[101X
   
   [33X[1;0Y[29X[2XBTKit_BuildProblem[102X( [3Xarg[103X ) [32X function[133X
   
@@ -43,7 +39,7 @@
   Which  can  then be solved by passing the 'Problem' to BTKit_SimpleSearch or
   BT_SimpleSinglePermSearch.[133X
   
-  [1X2.1-6 InfoBTKit[101X
+  [1X2.1-5 InfoBTKit[101X
   
   [33X[1;0Y[29X[2XInfoBTKit[102X [32X info class[133X
   

@@ -1,5 +1,5 @@
 #
-# BacktrackKit: An Extensible, easy to understand backtracking framework
+# BacktrackKit: An extensible, easy to understand backtracking framework
 #
 # This file contains package meta data. For additional information on
 # the meaning and correct usage of these fields, please consult the
@@ -14,9 +14,9 @@ _STANDREWSCS := Concatenation(["Jack Cole Building, North Haugh, ",
 SetPackageInfo( rec(
 
 PackageName := "BacktrackKit",
-Subtitle := "An Extensible, easy to understand backtracking framework",
-Version := "0.5.1",
-Date := "12/11/2021", # dd/mm/yyyy format
+Subtitle := "An extensible, easy to understand backtracking framework",
+Version := "0.6.0",
+Date := "03/12/2021", # dd/mm/yyyy format
 
 
 Persons := [
@@ -89,7 +89,7 @@ PackageDoc := rec(
   HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
-  LongTitle := "An Extensible, easy to understand backtracking framework",
+  LongTitle := "An extensible, easy to understand backtracking framework",
 ),
 
 Dependencies := rec(

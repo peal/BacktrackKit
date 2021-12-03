@@ -28,9 +28,8 @@
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7DE94FB47EE37BBE">2.1-1 SaveState</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7D014EF28041BE26">2.1-2 RestoreState</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7C4A9E91849CB9B3">2.1-3 ConsolidateState</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7C4A9E91849CB9B3">2.1-4 ConsolidateState</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X84708DA6801CA1BF">2.1-5 BTKit_BuildProblem</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X84E1FAA97B2142CE">2.1-6 InfoBTKit</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X84708DA6801CA1BF">2.1-4 BTKit_BuildProblem</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X84E1FAA97B2142CE">2.1-5 InfoBTKit</a></span>
 </div></div>
 </div>
 
@@ -65,23 +64,18 @@
 <h5>2.1-3 ConsolidateState</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ConsolidateState</code>( <var class="Arg">arg1</var>, <var class="Arg">arg2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Some implementations of BacktrackableState can perform simplifications. This function gives a well-defined point for such operations to be performed. It can be ignored by implemtnations without such simplifications.</p>
+<p>Some implementations of BacktrackableState can perform simplifications. This function gives a well-defined point for such operations to be performed. It can be ignored by implementations without such simplifications.</p>
 
-<p><a id="X7C4A9E91849CB9B3" name="X7C4A9E91849CB9B3"></a></p>
-
-<h5>2.1-4 ConsolidateState</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ConsolidateState</code>( <var class="Arg">arg1</var>, <var class="Arg">arg2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p><a id="X84708DA6801CA1BF" name="X84708DA6801CA1BF"></a></p>
 
-<h5>2.1-5 BTKit_BuildProblem</h5>
+<h5>2.1-4 BTKit_BuildProblem</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; BTKit_BuildProblem</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Takes a partition stack and a list of constraints and builds a 'Problem', Which can then be solved by passing the 'Problem' to BTKit_SimpleSearch or BT_SimpleSinglePermSearch.</p>
 
 <p><a id="X84E1FAA97B2142CE" name="X84E1FAA97B2142CE"></a></p>
 
-<h5>2.1-6 InfoBTKit</h5>
+<h5>2.1-5 InfoBTKit</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; InfoBTKit</code></td><td class="tdright">(&nbsp;info class&nbsp;)</td></tr></table></div>
 <p>Information about backtrack search.</p>

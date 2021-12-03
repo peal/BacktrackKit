@@ -32,9 +32,9 @@
 
 <h3>4 <span class="Heading">Constraints</span></h3>
 
-<p>Informally, a <em>constraint</em> is a <code class="keyw">true</code>/<code class="keyw">false</code> mathematical property of permutations that is used to define a search problem in the symmetric group. For example, the property could be "belongs to the permutation group G", or "commutes with the permutation x", or "maps set A to set B", or "is an automorphism of the digraph D".</p>
+<p>Informally, a <em>constraint</em> is a <code class="keyw">true</code>/<code class="keyw">false</code> mathematical property of permutations that is used to define a search problem in the symmetric group. For example, the property could be “belongs to the permutation group G”, or “commutes with the permutation x”, or “maps the set A to the set B”, or “is an automorphism of the digraph D”.</p>
 
-<p>In backtrackKit, a constraint is implemented as a record that must contain:</p>
+<p>In BacktrackKit, a constraint is implemented as a record that must contain:</p>
 
 
 <ul>
@@ -95,10 +95,10 @@
 
 
 <ul>
-<li><p><code class="code">changed</code> - One or splits occurred.</p>
+<li><p><code class="code">changed</code> - Will be called after one or more splits in the partition occur.</p>
 
 </li>
-<li><p><code class="code">fixed</code> - One or more points in the partition became fixed</p>
+<li><p><code class="code">fixed</code> - Will be called after one or more points in the partition became fixed.</p>
 
 </li>
 </ul>

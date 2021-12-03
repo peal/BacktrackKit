@@ -4,13 +4,13 @@
   
   [2XAddEvent[102X, for IsTracer, IsObject 6.1-6 
   [2XApplyFilters[102X, for IsBTKitState, IsTracer, IsObject 3.1-1 
-  [2XBTKit_BuildProblem[102X 2.1-5 
+  [2XBTKit_BuildProblem[102X 2.1-4 
   [2XCanonicalisingTracerFromTracer[102X 6.1-3 
-  [2XConsolidateState[102X, for IsBacktrackableState, IsTracer 2.1-3  2.1-4 
+  [2XConsolidateState[102X, for IsBacktrackableState, IsTracer 2.1-3 
   [2XEmptyCanonicalisingTracer[102X 6.1-4 
   [2XFollowingTracer[102X 6.1-2 
   [2XGetEvents[102X, for IsTracer 6.1-9 
-  [2XInfoBTKit[102X 2.1-6 
+  [2XInfoBTKit[102X 2.1-5 
   [2XIsPartitionStack[102X, for IsObject 5.1-2 
   [2XIsTracer[102X, for IsObject 6.1-5 
   [2XPartitionStack[102X 5.1-1 

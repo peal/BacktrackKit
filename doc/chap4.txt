@@ -3,11 +3,11 @@
   
   [33X[0;0YInformally,   a   [13Xconstraint[113X   is  a  [9Xtrue[109X/[9Xfalse[109X  mathematical  property  of
   permutations that is used to define a search problem in the symmetric group.
-  For  example, the property could be "belongs to the permutation group G", or
-  "commutes  with  the  permutation  x",  or  "maps set A to set B", or "is an
-  automorphism of the digraph D".[133X
+  For  example, the property could be “belongs to the permutation group G”, or
+  “commutes  with the permutation x”, or “maps the set A to the set B”, or “is
+  an automorphism of the digraph D”.[133X
   
-  [33X[0;0YIn backtrackKit, a constraint is implemented as a record that must contain:[133X
+  [33X[0;0YIn BacktrackKit, a constraint is implemented as a record that must contain:[133X
   
   [30X    [33X[0;6YA  member  called  [10Xname[110X,  which  is  a  string  giving the name of the
         constraint;[133X
@@ -65,9 +65,11 @@
   
   [33X[0;0YAt most one of the following two functions will generally be implemented.[133X
   
-  [30X    [33X[0;6Y[10Xchanged[110X - One or splits occurred.[133X
+  [30X    [33X[0;6Y[10Xchanged[110X  -  Will  be  called after one or more splits in the partition
+        occur.[133X
   
-  [30X    [33X[0;6Y[10Xfixed[110X - One or more points in the partition became fixed[133X
+  [30X    [33X[0;6Y[10Xfixed[110X  -  Will  be  called  after  one or more points in the partition
+        became fixed.[133X
   
   [30X    [33X[0;6Y[10XrBaseFinished[110X  -  The  rBase  has  been created (is passed the rbase).
         Constraints  which  care about this can use this to remember the rBase
