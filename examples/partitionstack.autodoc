@@ -52,8 +52,10 @@ PS_FixedCells(p);
 PS_FixedPoints(p);
 #! [ 6, 3, 5, 4 ]
 # The contents of a cell, as a slice (a type of list)
-PS_CellSlice(p, 2)
-[ 2, 8 ]
+PS_CellSlice(p, 2);
+#! <slice size=2>
+AsList(last);
+#! [ 2, 8 ]
 @EndExample
 
 Note that PS_CellSlice does not make a copy of the list, but gives a "view" inside the partition stack. This means it is fast, but the value will become invalid if another split is made in the Partition Stack. Also, in general the list returned by PS_CellSlice is *NOT* sorted.
@@ -67,7 +69,7 @@ p;
 PS_RevertToCellCount(p, 2);
 p;
 #! [ [ 1, 3, 4, 6, 7 ], [ 2, 5, 8 ] ]
-PS_CellSlice(p, 1);
+AsList(PS_CellSlice(p, 1));
 #! [ 6, 3, 4, 1, 7 ]
 @EndExample
 
