@@ -321,3 +321,46 @@ Constraint.LargestMovedPoint := function(point)
     con!.Name := StringFormatted("<constraint: largest moved point: {}>", point);
     return con;
 end;
+
+
+# Special one-off constraints
+
+Constraint.IsEven := ObjectifyWithAttributes(
+    rec(Result := 1), ConstraintType,
+    ImageFunc, SignPerm,
+    IsGroupConstraint, true,
+    LargestRelevantPoint, 1,
+    Size, infinity,
+    Name, "<constraint: is even permutation>"
+);
+
+Constraint.IsOdd := ObjectifyWithAttributes(
+    rec(Result := -1), ConstraintType,
+    ImageFunc, SignPerm,
+    IsCosetConstraint, true,
+    IsGroupConstraint, false,
+    LargestRelevantPoint, 2,
+    Representative, (1,2),
+    Size, infinity,
+    Name, "<constraint: is odd permutation>"
+);
+
+Constraint.Nothing := ObjectifyWithAttributes(
+    rec(), ConstraintType,
+    IsEmptyConstraint, true,
+    Check, ReturnFalse,
+    LargestMovedPoint, 1,
+    Representative, fail,
+    Size, 0,
+    Name, "<empty constraint: satisfied by no permutations>"
+);
+Constraint.None := Constraint.Nothing;
+
+Constraint.IsTrivial := ObjectifyWithAttributes(
+    rec(Result := ()), ConstraintType,
+    ImageFunc, IdFunc,
+    IsGroupConstraint, true,
+    LargestMovedPoint, 1,
+    Size, 1,
+    Name, "<trivial constraint: is identity permutation>"
+);
