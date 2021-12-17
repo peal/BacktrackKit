@@ -154,6 +154,16 @@ DeclareOperation("PS_SplitCellByFunction",
 DeclareOperation("PS_SplitCellsByFunction",
                  [IsPartitionStack, IsTracer, IsFunction]);
 
+
+#! @Description
+#! Apply <C>PS_SplitCellByFunction</C> to every active cell in the partition
+#! stack <A>PS</A> (including points added after search starts).
+#!
+#! @Arguments PS, t, f
+#! @Returns <K>true</K> or <K>false</K>.
+DeclareOperation("PS_ExtendedSplitCellsByFunction",
+                 [IsPartitionStack, IsTracer, IsFunction]);
+
 #! @Description
 #! Split cell <A>i</A> of the current partition state of the partition stack
 #! <A>PS</A> according to the function <A>f</A>. The values in the cell are

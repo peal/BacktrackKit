@@ -228,6 +228,17 @@ BindGlobal("_PSR_SplitCell",
                                     reason  := reason));
     end);
 
+InstallMethod(PS_ExtendedSplitCellsByFunction, [IsPartitionStack, IsTracer, IsFunction],
+    function(ps, t, f)
+        local i;
+        for i in [1..PS_Cells(ps)] do
+            if not PS_SplitCellByFunction(ps, t, i, f) then
+                return false;
+            fi;
+        od;
+        return true;
+    end);
+
 InstallMethod(PS_SplitCellsByFunction, [IsPartitionStack, IsTracer, IsFunction],
     function(ps, t, f)
         local i;
