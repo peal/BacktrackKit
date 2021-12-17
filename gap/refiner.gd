@@ -5,7 +5,7 @@
 #
 #! @Chapter Refiners
 #!
-#! In BacktrackKit, a refiner is implemented as a record that must contain:
+#! In &BacktrackKit;, a refiner is implemented as a record that must contain:
 #!
 #! * A member called `name`, which is a string giving the name of the
 #!   constraint;
@@ -13,28 +13,10 @@
 #!   which gives the smallest size partition this refiner will work on.
 #!   For example, given a set we would expect this to be the largest element
 #!   of the set.
-#! * An optional member called `largest_moved_point`, which is an integer
-#!   giving an upper bound on the largest point this refiner could ever move.
-#!   For many refiners this will not exist -- for example a 'set stabilizer'
-#!   refiner will always permute values outside the set.
+#! * A member called `constraint`, which is a constraint object, such that the
+#!   refiner is refining for the permutations that satisfy the constraint.
 #! * A member called `refine`, which is a record; more information is
 #!   given below.
-#!
-#! and a method of check permutations, either:
-#!
-#! * Two members, called `image` and `result`, where `image`
-#!   takes a permutation and `result` which is a function which takes
-#!   no arguments, where `image(perm)=result` if the permutation satisfies
-#!   the constraint
-#!
-#! Or:
-#!
-#! * A member called `check`, which is a function taking two arguments,
-#!   the constraint and a permutation, and which checks whether the permutation
-#!   satisfies the constraint; and
-#!
-#! `image` and `result` must be implemented for finding canonical
-#! images. All 3 functions can be implemented, as long as they are consistent.
 #!
 #! A constraint may also optionally contain any of the following members:
 #!
