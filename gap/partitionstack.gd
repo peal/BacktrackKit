@@ -1,9 +1,9 @@
 #
 # BacktrackKit: An extensible, easy to understand backtracking framework
 #
-#! @Chapter Ordered partition stack
+#! @Chapter Ordered partition stacks
 #!
-#! An <E>ordered partition stack</E> is an ordered partition which supports
+#! An __ordered partition stack__ is an ordered partition which supports
 #! splitting a cell, and then later undoing a change, reverting the
 #! partition back to an earlier state.
 

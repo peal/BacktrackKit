@@ -4,12 +4,7 @@
 # Declarations for constraint objects
 #
 #! @Chapter Constraints
-#!
-#! Informally, a __constraint__ is a <K>true</K>/<K>false</K> mathematical
-#! property of permutations that is used to define a search problem in the
-#! symmetric group. For example, the property could be “belongs to the
-#! permutation group G”, or “commutes with the permutation x”, or “maps the set
-#! A to the set B”, or “is an automorphism of the digraph D”.
+
 
 ################################################################################
 ## Chunks
@@ -22,30 +17,36 @@
 #! Note that the set of such permutations is infinite.
 #! @EndChunk
 
+#! @BeginChunk nonuser
+#! This constraint will typically not be required by the user.
+#! @EndChunk
+
 ## End chunks
 ################################################################################
 
 
-#! @Chapter Constraints
-
 #! @Section The concept of constraints in &BacktrackKit;
 #! @SectionLabel concept
 
-#! At its core, &BacktrackKit; searches for permutations that satisfy a collection
-#! of constraints.
-#! A **constraint** is a property such that for any given permutation,
-#! it is easy to check whether that permutation has the property or not.
-#! In addition, if the set of permutations that satisfy a property is nonempty,
-#! then that set must be a (possibly infinite) permutation group,
-#! or a coset thereof.
+
+#! Fundamentally, the partition backtrack algorithm (and its generalisations)
+#! performs a search for permutations that satisfy a collection of constraints.
+#!
+#! A **constraint** is a <K>true</K>/<K>false</K> mathematical
+#! property of permutations, such that if the set of permutations
+#! satisfying the property is nonempty, then that set must be a
+#! (possibly infinite) permutation group, or a coset thereof.
+#! Furthermore, it must be ‘easy’ to test whether any given permutation
+#! satisfies the property.
 #!
 #! For example:
-#! * “is even”,
+#! * “is a member of the group $G = \langle X \rangle$”,
+#! * “transports the set A to the set B”,
 #! * “commutes with the permutation $x$”,
 #! * “conjugates the group $G = \langle X \rangle$ to the group
 #!   $H = \langle Y \rangle$”,
 #! * “is an automorphism of the graph $\Gamma$”, and
-#! * “is a member of the group $G = \langle X \rangle$”
+#! * “is even”
 #! 
 #! are all examples of constraints.
 #! On the other hand:
@@ -62,31 +63,22 @@
 #! satisfaction problems, constraint programming, and constraint solvers,
 #! with which backtrack search algorithms are very closely linked.
 #!
-#! To use &BacktrackKit; via its native interface,
-#! it is necessary to choose a selection of constraints that, in conjunction,
-#! define the permutation(s) that you wish to find.
-#! &BacktrackKit; provides a number of built-in constraints. These can be created with
-#! the functions contained in the <Ref Var="Constraint"/> record,
-#! which are documented individually in
-#! Section&nbsp;<Ref Sect="Section_providedcons"/>.
-#! While the included constraints are not exhaustive,
-#! they do cover a wide range of problems in computational group theory,
-#! and we welcome suggestions of additional constraints that we could implement.
+#! &BacktrackKit; provides a number of built-in constraints.
+#! Constraints, and the functions to create them, are contained in the
+#! <Ref Var="Constraint"/> record. The members of this record are documented
+#! individually in Section&nbsp;<Ref Sect="Section_providedcons"/>.
 #!
-#! Internally, a constraint is eventually converted into one or more refiners
-#! by that the time that the search takes place. Refiners are introduced in
-#! Chapter&nbsp;<Ref Chap="Chapter_Refiners"/>, and can be given in place
-#! of constraints.
-#! We do not explicitly document the conversion of &BacktrackKit;
+#! To use &BacktrackKit;, it is necessary to
+#! (at least implicitly) specify constraints that, in conjunction,
+#! define the permutation(s) that you wish to find.
+#! This is documented in Chapter&nbsp;<Ref Chap="Chapter_Executing_a_search"/>.
+#! A constraint will typically be converted into one or more
+#! **refiners** by that the time that a search takes place.
+#! Refiners are introduced in
+#! Chapter&nbsp;<Ref Chap="Chapter_Refiners"/>.
+#! We do not yet explicitly document the conversion of &BacktrackKit;
 #! constraints into refiners;
-#! the conversion may change in future versions of &BacktrackKit;
-#! as we introduce improve our refiners and introduce new ones.
-#! In addition, we do not explicitly document the kind of object that a
-#! &BacktrackKit; constraint is. Currently, constraints may be
-#! &BacktrackKit; refiners,
-#! <Package>GraphBacktracking</Package> refiners,
-#! &BacktrackKit; refiners,
-#! records, lists, or the value <K>fail</K>.
+#! the conversion may change in future versions of &BacktrackKit;.
 
 
 #! @Section The <C>Constraints</C> record
@@ -103,12 +95,12 @@
 #! The members whose names differ only by their “-ise” and “-ize” endings
 #! are synonyms, included to accommodate different spellings in English.
 #! @BeginExampleSession
-#! gap> LoadPackage("vole", false);;
+#! gap> LoadPackage("BacktrackKit", false);;
 #! gap> Set(RecNames(Constraint));
 #! [ "Centralise", "Centralize", "Conjugate", "InCoset", "InGroup", 
-#!   "InLeftCoset", "InRightCoset", "IsEven", "IsOdd", "LargestMovedPoint", 
-#!   "MovedPoints", "None", "Normalise", "Normalize", "Stabilise", "Stabilize", 
-#!   "Transport" ]
+#!   "InLeftCoset", "InRightCoset", "IsEven", "IsOdd", "IsTrivial", 
+#!   "LargestMovedPoint", "MovedPoints", "None", "Normalise", "Normalize", 
+#!   "Nothing", "Stabilise", "Stabilize", "Transport" ]
 #!  @EndExampleSession
 DeclareGlobalVariable("Constraint");
 # TODO When we require GAP >= 4.12, use GlobalName rather than GlobalVariable
@@ -234,6 +226,10 @@ DeclareAttribute("UnderlyingGroup", IsConstraint);
 #!   <Item><Ref Var="Constraint.IsOdd"/></Item>
 #! </Row>
 #! <Row>
+#!   <Item><Ref Var="Constraint.IsTrivial"/></Item>
+#!   <Item>N/A</Item>
+#! </Row>
+#! <Row>
 #!   <Item>N/A</Item>
 #!   <Item><Ref Var="Constraint.None"/></Item>
 #! </Row>
@@ -247,10 +243,10 @@ DeclareAttribute("UnderlyingGroup", IsConstraint);
 #! This constraint is satisfied by precisely those permutations in the
 #! permutation group <A>G</A>.
 #! @BeginExampleSession
-#! gap> con1 := Constraint.InGroup(DihedralGroup(IsPermGroup, 8));;
-#! gap> con2 := Constraint.InGroup(AlternatingGroup(4));;
-#! gap> VoleFind.Group(con1, con2) = Group([(1,3)(2,4), (1,4)(2,3)]);
-#! true
+#! gap> con1 := Constraint.InGroup(DihedralGroup(IsPermGroup, 8));
+#! <constraint: in group: Group( [ (1,2,3,4), (2,4) ] )>
+#! gap> con2 := Constraint.InGroup(AlternatingGroup(4));
+#! <constraint: in group: AlternatingGroup( [ 1 .. 4 ] )>
 #! @EndExampleSession
 DeclareGlobalFunction("Constraint.InGroup");
 
@@ -266,10 +262,8 @@ DeclareGlobalFunction("Constraint.InGroup");
 #! @BeginExampleSession
 #! gap> U := PSL(2,5) * (3,4,6);
 #! RightCoset(Group([ (3,5)(4,6), (1,2,5)(3,4,6) ]),(3,4,6))
-#! gap> x := VoleFind.Coset(Constraint.InCoset(U), AlternatingGroup(6));
-#! RightCoset(Group([ (3,5)(4,6), (2,4)(5,6), (1,2,6,5,4) ]),(1,5)(2,3,4,6))
-#! gap> x = Intersection(U, AlternatingGroup(6));
-#! true
+#! gap> Constraint.InCoset(U);
+#! <constraint: in coset: Group( [ (3,5)(4,6), (1,2,5)(3,4,6) ] ) * (3,4,6)
 #! @EndExampleSession
 DeclareGlobalFunction("Constraint.InCoset");
 
@@ -282,11 +276,8 @@ DeclareGlobalFunction("Constraint.InCoset");
 #! See also <Ref Func="Constraint.InLeftCoset"/> for the left-hand version,
 #! and <Ref Func="Constraint.InCoset"/> for a &GAP; right coset object.
 #! @BeginExampleSession
-#! gap> x := VoleFind.Coset(Constraint.InRightCoset(PSL(2,5), (3,4,6)),
-#! >                        Constraint.InGroup(AlternatingGroup(6)));
-#! RightCoset(Group([ (3,5)(4,6), (2,4)(5,6), (1,2,6,5,4) ]),(1,5)(2,3,4,6))
-#! gap> x = Intersection(PSL(2,5) * (3,4,6), AlternatingGroup(6));
-#! true
+#! gap> Constraint.InRightCoset(PSL(2,5), (3,4,6));
+#! <constraint: in coset: Group( [ (3,5)(4,6), (1,2,5)(3,4,6) ] ) * (3,4,6)
 #! @EndExampleSession
 DeclareGlobalFunction("Constraint.InRightCoset");
 
@@ -299,11 +290,8 @@ DeclareGlobalFunction("Constraint.InRightCoset");
 #! See also <Ref Func="Constraint.InRightCoset"/> for the right-hand version,
 #! and <Ref Func="Constraint.InCoset"/> for a &GAP; right coset object.
 #! @BeginExampleSession
-#! gap> x := VoleFind.Rep(Constraint.InLeftCoset(PSL(2,5), (3,4,6)),
-#! >                      Constraint.InGroup(AlternatingGroup(6)));
-#! (1,6,2,3,4)
-#! gap> SignPerm(x) = 1 and ForAny(PSL(2,5), g -> x = (3,4,6) * g);
-#! true
+#! gap> Constraint.InLeftCoset(PSL(2,5), (3,4,6));
+#! <constraint: in coset: Group( [ (3,6)(4,5), (1,2,5)(3,4,6) ] ) * (3,4,6)
 #! @EndExampleSession
 DeclareGlobalFunction("Constraint.InLeftCoset");
 
@@ -324,15 +312,11 @@ DeclareGlobalFunction("Constraint.InLeftCoset");
 #!
 #! @InsertChunk ActionsTable
 #! @BeginExampleSession
-#! gap> setofsets1 := [[1, 3, 6], [2, 3, 6], [2, 4, 7], [4, 5, 7]];;
-#! gap> setofsets2 := [[1, 2, 5], [1, 5, 7], [3, 4, 6], [4, 6, 7]];;
-#! gap> con := Constraint.Transport(setofsets1, setofsets2, OnSetsSets);;
-#! gap> VoleFind.Rep(con);
-#! (1,2,7,6)(3,5)
-#! gap> VoleFind.Rep(con, AlternatingGroup(7) * (1,2));
-#! (1,2,7,6,5,3)
-#! gap> VoleFind.Rep(con, DihedralGroup(IsPermGroup, 14));
-#! fail
+#! gap> setofsets1 := [[1, 3, 6], [2, 3, 6]];;
+#! gap> setofsets2 := [[1, 2, 5], [1, 5, 7]];;
+#! gap> con := Constraint.Transport(setofsets1, setofsets2, OnSetsSets);
+#! <constraint: transporter of [ [ 1, 3, 6 ], [ 2, 3, 6 ] ] to [ [ 1, 2, 5 ], [ 1\
+#! , 5, 7 ] ] under OnSetsSets>
 #! @EndExampleSession
 DeclareGlobalFunction("Constraint.Transport");
 
@@ -358,14 +342,10 @@ DeclareGlobalFunction("Constraint.Stabilise");
 #! @Arguments object[, action]
 #! @Group StabiliseDoc
 #! @BeginExampleSession
-#! gap> con1 := Constraint.Stabilise(CycleDigraph(6), OnDigraphs);;
-#! gap> con2 := Constraint.Stabilise([2,4,6], OnSets);;
-#! gap> VoleFind.Group(con1, 6);
-#! Group([ (1,2,3,4,5,6) ])
-#! gap> VoleFind.Group(con2, 6);
-#! Group([ (4,6), (2,4,6), (3,5)(4,6), (1,3,5)(2,4,6) ])
-#! gap> VoleFind.Group(con1, con2, 6);
-#! Group([ (1,3,5)(2,4,6) ])
+#! gap> con1 := Constraint.Stabilise(CycleDigraph(6), OnDigraphs);
+#! <constraint: stabiliser of CycleDigraph(6) under OnDigraphs>
+#! gap> con2 := Constraint.Stabilise([2,4,6], OnSets);
+#! <constraint: stabiliser of [ 2, 4, 6 ] under OnSets>
 #! @EndExampleSession
 DeclareGlobalFunction("Constraint.Stabilize");
 
@@ -383,15 +363,8 @@ DeclareGlobalFunction("Constraint.Normalise");
 #! @Arguments G
 #! @Group NormaliseDoc
 #! @BeginExampleSession
-#! gap> con := Constraint.Normalise(PSL(2,5));;
-#! gap> N := VoleFind.Group(con, SymmetricGroup(6));
-#! Group([ (3,4,5,6), (2,3,5,6), (1,2,4,3,6) ])
-#! gap> (3,4,5,6) in N and not (3,4,5,6) in PSL(2,5);
-#! true
-#! gap> Index(N, PSL(2,5));
-#! 2
-#! gap> PSL(2,5) = VoleFind.Group(con, AlternatingGroup(6));
-#! true
+#! gap> Constraint.Normalise(PSL(2,5));
+#! <constraint: normalise Group( [ (3,5)(4,6), (1,2,5)(3,4,6) ] )>
 #! @EndExampleSession
 DeclareGlobalFunction("Constraint.Normalize");
 
@@ -411,13 +384,11 @@ DeclareGlobalFunction("Constraint.Centralise");
 #! @Group CentraliseDoc
 #! @BeginExampleSession
 #! gap> D12 := DihedralGroup(IsPermGroup, 12);;
-#! gap> VoleFind.Group(6, Constraint.Centralise(D12));
-#! Group([ (1,4)(2,5)(3,6) ])
+#! gap> Constraint.Centralise(D12);
+#! <constraint: centralise group Group( [ (1,2,3,4,5,6), (2,6)(3,5) ] )>
 #! gap> x := (1,6)(2,5)(3,4);;
-#! gap> G := VoleFind.Group(AlternatingGroup(6), Constraint.Centralise(x));
-#! Group([ (2,3)(4,5), (2,4)(3,5), (1,2,3)(4,6,5) ])
-#! gap> ForAll(G, g -> SignPerm(g) = 1 and g * x = x * g);
-#! true
+#! gap> Constraint.Centralise(x);
+#! <constraint: centralise perm (1,6)(2,5)(3,4)>
 #! @EndExampleSession
 DeclareGlobalFunction("Constraint.Centralize");
 
@@ -435,12 +406,8 @@ DeclareGlobalFunction("Constraint.Centralize");
 #! `Constraint.Transport(<A>x</A>,<A>y</A>,OnPoints)`.
 #!
 #! @BeginExampleSession
-#! gap> con := Constraint.Conjugate((3,4)(2,5,1), (1,2,3)(4,5));
+#! gap> Constraint.Conjugate((3,4)(2,5,1), (1,2,3)(4,5));
 #! <constraint: conjugate perm (1,2,5)(3,4) to (1,2,3)(4,5)>
-#! gap> VoleFind.Rep(con);
-#! (1,2,3,5)
-#! gap> VoleFind.Rep(con, PSL(2,5));
-#! (1,3,4,5,2)
 #! @EndExampleSession
 DeclareGlobalFunction("Constraint.Conjugate");
 
@@ -456,8 +423,6 @@ DeclareGlobalFunction("Constraint.Conjugate");
 #! <constraint: moved points: [ 1 .. 5 ]>
 #! gap> con2 := Constraint.MovedPoints([2,6,4,5]);
 #! <constraint: moved points: [ 2, 6, 4, 5 ]>
-#! gap> VoleFind.Group(con1, con2) = SymmetricGroup([2,4,5]);
-#! true
 #! @EndExampleSession
 DeclareGlobalFunction("Constraint.MovedPoints");
 
@@ -471,8 +436,6 @@ DeclareGlobalFunction("Constraint.MovedPoints");
 #! @BeginExampleSession
 #! gap> con := Constraint.LargestMovedPoint(5);
 #! <constraint: largest moved point: 5>
-#! gap> VoleFind.Group(con) = SymmetricGroup(5);
-#! true
 #! @EndExampleSession
 DeclareGlobalFunction("Constraint.LargestMovedPoint");
 
@@ -509,12 +472,12 @@ DeclareGlobalVariable("Constraint.IsOdd");
 
 #! @Description
 #! This constraint is satisfied by the identity permutation and no others.
+#!
+#! @InsertChunk nonuser
 #! @BeginExampleSession
 #! gap> Constraint.IsTrivial;
-#! <empty constraint: satisfied by no permutations>
-#! gap> con := Constraint.IsTrivial;
 #! <trivial constraint: is identity permutation>
-#! gap> Representative(con);
+#! gap> Representative(Constraint.IsTrivial);
 #! ()
 #! @EndExampleSession
 DeclareGlobalVariable("Constraint.IsTrivial");
@@ -522,7 +485,7 @@ DeclareGlobalVariable("Constraint.IsTrivial");
 #! @Description
 #! This constraint is satisfied by no permutations.
 #!
-#! This constraint will typically not be required by the user.
+#! @InsertChunk nonuser
 #! @BeginExampleSession
 #! gap> Constraint.None;
 #! <empty constraint: satisfied by no permutations>
