@@ -14,7 +14,7 @@
 #! Constructor for partition stacks.
 #!
 #! @Arguments
-#! @Returns a partition stack.
+#! @Returns A partition stack
 DeclareGlobalFunction("PartitionStack");
 
 #! @Description
@@ -35,7 +35,7 @@ BindGlobal( "PartitionStackTypeMutable",
 #! originally defined.
 #!
 #! @Arguments PS
-#! @Returns a positive integer.
+#! @Returns A positive integer
 DeclareOperation("PS_Points", [IsPartitionStack]);
 
 #! @Description
@@ -43,7 +43,7 @@ DeclareOperation("PS_Points", [IsPartitionStack]);
 #! currently defined on (which includes extra points added during refinement)
 #!
 #! @Arguments PS
-#! @Returns a positive integer.
+#! @Returns A positive integer
 DeclareOperation("PS_ExtendedPoints", [IsPartitionStack]);
 
 #! @Description
@@ -51,7 +51,7 @@ DeclareOperation("PS_ExtendedPoints", [IsPartitionStack]);
 #! on backtracking.
 #!
 #! @Arguments PS, NewPoints
-#! @Returns the label of the new cell
+#! @Returns The label of the new cell
 DeclareOperation("PS_Extend", [IsPartitionStack, IsPosInt]);
 
 #! @Description
@@ -59,7 +59,7 @@ DeclareOperation("PS_Extend", [IsPartitionStack, IsPosInt]);
 #! <A>PS</A>.
 #!
 #! @Arguments PS
-#! @Returns a positive integer.
+#! @Returns A positive integer
 DeclareOperation("PS_Cells", [IsPartitionStack]);
 
 #! @Description
@@ -67,7 +67,7 @@ DeclareOperation("PS_Cells", [IsPartitionStack]);
 #! partition stack <A>PS</A> have size 1 and were in the 'original partition'.
 #!
 #! @Arguments PS
-#! @Returns <K>true</K> or <K>false</K>.
+#! @Returns <K>true</K> or <K>false</K>
 DeclareOperation("PS_Fixed", [IsPartitionStack]);
 
 #! @Description
@@ -75,7 +75,7 @@ DeclareOperation("PS_Fixed", [IsPartitionStack]);
 #! list of sets, in the correct order.
 #!
 #! @Arguments PS
-#! @Returns a list of lists of positive integers.
+#! @Returns A list of lists of positive integers
 DeclareOperation("PS_AsPartition", [IsPartitionStack]);
 
 #! @Description
@@ -84,7 +84,7 @@ DeclareOperation("PS_AsPartition", [IsPartitionStack]);
 #! This requires that <A>i</A> is contained in <C>[1..PS_Cells(<A>PS</A>)]</C>.
 #!
 #! @Arguments PS, i
-#! @Returns a positive integer.
+#! @Returns A positive integer
 DeclareOperation("PS_CellLen", [IsPartitionStack, IsPosInt]);
 
 #! @Description
@@ -93,7 +93,7 @@ DeclareOperation("PS_CellLen", [IsPartitionStack, IsPosInt]);
 #! This requires that <A>i</A> is contained in <C>[1..PS_Cells(<A>PS</A>)]</C>.
 #!
 #! @Arguments PS, i
-#! @Returns an immutable list of positive integers.
+#! @Returns An immutable list of positive integers
 DeclareOperation("PS_CellSlice", [IsPartitionStack, IsPosInt]);
 
 #! @Description
@@ -102,7 +102,7 @@ DeclareOperation("PS_CellSlice", [IsPartitionStack, IsPosInt]);
 #! in the order in which the cells came to have size 1.
 #!
 #! @Arguments PS
-#! @Returns a list of 1-element lists of positive integers.
+#! @Returns A list of 1-element lists of positive integers
 DeclareOperation("PS_FixedCells", [IsPartitionStack]);
 
 #! @Description
@@ -111,7 +111,7 @@ DeclareOperation("PS_FixedCells", [IsPartitionStack]);
 #! <C>Concatenation(PS_FixedCells(<A>PS</A>))</C>.
 #!
 #! @Arguments PS
-#! @Returns a list of positive integers.
+#! @Returns A list of positive integers
 DeclareOperation("PS_FixedPoints", [IsPartitionStack]);
 
 #! @Description
@@ -120,7 +120,7 @@ DeclareOperation("PS_FixedPoints", [IsPartitionStack]);
 #! This requires that <A>i</A> is contained in <C>[1..PS_ExtededPoints(<A>PS</A>)]</C>.
 #!
 #! @Arguments PS, i
-#! @Returns a positive integer.
+#! @Returns A positive integer
 DeclareOperation("PS_CellOfPoint", [IsPartitionStack, IsPosInt]);
 
 #! @Description
@@ -129,7 +129,7 @@ DeclareOperation("PS_CellOfPoint", [IsPartitionStack, IsPosInt]);
 #! This requires that <A>i</A> is contained in <C>[1..PS_Cells(<A>PS</A>)]</C>.
 #!
 #! @Arguments PS, i
-#! @Returns nothing.
+#! @Returns Nothing
 DeclareOperation("PS_RevertToCellCount", [IsPartitionStack, IsPosInt]);
 
 #TODO: what is the different between ByFunction and ByUnorderedFunction?
@@ -141,7 +141,7 @@ DeclareOperation("PS_RevertToCellCount", [IsPartitionStack, IsPosInt]);
 #! The second argument <A>t</A> should be a tracer.
 #!
 #! @Arguments PS, t, i, f
-#! @Returns <K>true</K> or <K>false</K>.
+#! @Returns <K>true</K> or <K>false</K>
 DeclareOperation("PS_SplitCellByFunction",
                  [IsPartitionStack, IsTracer, IsPosInt, IsFunction]);
 
@@ -150,7 +150,7 @@ DeclareOperation("PS_SplitCellByFunction",
 #! stack <A>PS</A> (ignoring points added after search starts).
 #!
 #! @Arguments PS, t, f
-#! @Returns <K>true</K> or <K>false</K>.
+#! @Returns <K>true</K> or <K>false</K>
 DeclareOperation("PS_SplitCellsByFunction",
                  [IsPartitionStack, IsTracer, IsFunction]);
 
@@ -160,7 +160,7 @@ DeclareOperation("PS_SplitCellsByFunction",
 #! stack <A>PS</A> (including points added after search starts).
 #!
 #! @Arguments PS, t, f
-#! @Returns <K>true</K> or <K>false</K>.
+#! @Returns <K>true</K> or <K>false</K>
 DeclareOperation("PS_ExtendedSplitCellsByFunction",
                  [IsPartitionStack, IsTracer, IsFunction]);
 

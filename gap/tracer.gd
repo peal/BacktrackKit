@@ -12,20 +12,20 @@
 #! @Description
 #! Constructor for recording tracers.
 #! @Arguments
-#! @Returns a recording tracer.
+#! @Returns A recording tracer
 DeclareGlobalFunction("RecordingTracer");
 
 #! @Description
 #! If the argument <A>t</A> is a tracer, then this constructs a tracer that
 #! follows <A>t</A>.
 #! @Arguments t
-#! @Returns a following tracer.
+#! @Returns A following tracer
 DeclareGlobalFunction("FollowingTracer");
 
 #! @Description
 #! Constructor for canonicalising tracers.
 #! @Arguments
-#! @Returns a canonicalising tracer.
+#! @Returns A canonicalising tracer
 DeclareGlobalFunction("CanonicalisingTracerFromTracer");
 DeclareGlobalFunction("EmptyCanonicalisingTracer");
 
@@ -34,7 +34,7 @@ DeclareGlobalFunction("EmptyCanonicalisingTracer");
 #! The category of tracers.
 #!
 #! @Arguments t
-#! @Returns <K>true</K> or <K>false</K>.
+#! @Returns <K>true</K> or <K>false</K>
 DeclareCategory("IsTracer", IsObject);
 BindGlobal( "TracerFamily", NewFamily("TracerFamily") );
 
@@ -63,14 +63,14 @@ BindGlobal( "CanonicalisingTracerTypeMutable",
 #! This returns <K>true</K> if the event is accepted by the tracer, and
 #! <K>false</K> if not. Events are always accepted by recording tracers.
 #!
-#! @Returns <K>true</K> or <K>false</K>.
+#! @Returns <K>true</K> or <K>false</K>
 #! @Arguments t, o
 DeclareOperation("AddEvent", [IsTracer, IsObject]);
 
 #! @Description
 #! Get the number of events in the tracer <A>t</A>.
 #!
-#! @Returns an integer.
+#! @Returns An integer
 #! @Arguments t
 DeclareOperation("TraceLength", [IsTracer]);
 
@@ -79,14 +79,14 @@ DeclareOperation("TraceLength", [IsTracer]);
 #! The argument <A>i</A> must lie in the range
 #! <C>[1..TraceLength(<A>t</A>)]</C>.
 #!
-#! @Returns a GAP object.
+#! @Returns A GAP object
 #! @Arguments t, i
 DeclareOperation("TraceEvent", [IsTracer, IsPosInt]);
 
 #! @Description
 #! Get a list of all events in the tracer.
 #!
-#! @Returns a GAP list
+#! @Returns A GAP list
 #! @Arguments t
 DeclareOperation("GetEvents", [IsTracer]);
 
