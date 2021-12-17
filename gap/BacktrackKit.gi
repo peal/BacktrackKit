@@ -9,17 +9,19 @@
 # _BTKit.Stats.nodes is incremented via BTKit_Stats_AddNode each time the main
 # recursive search function Backtrack is entered, and so it counts the
 # size of the search. This counter is reset manually, with BTKit_ResetStats.
-BTKit_ResetStats := function()
+InstallGlobalFunction( BTKit_ResetStats,
+  function()
     _BTKit.Stats := rec( nodes := 0, badSolutions := 0 );
-end;
+end);
 
 BTKit_ResetStats();
 
 BTKit_NodeLimit := infinity;
-BTKit_Stats_AddNode := function()
+InstallGlobalFunction( BTKit_Stats_AddNode,
+  function()
     _BTKit.Stats.nodes := _BTKit.Stats.nodes + 1;
     return _BTKit.Stats.nodes < BTKit_NodeLimit;
-end;
+end);
 
 
 InstallMethod(SaveState, [IsBTKitState],
@@ -45,18 +47,6 @@ end);
 
 InstallMethod(ConsolidateState, [IsBacktrackableState, IsTracer], ReturnTrue);
 
-#! @Chapter Implementation
-#! @Section Filters
-
-#! @Description
-#! Split the cells of the partition stack <A>ps</A>, if possible, according
-#! to a given <A>filter</A>. If the filter is <K>fail</K>, or if the split is
-#! rejected by the <A>tracer</A>, then this function returns <K>false</K>.
-#! Otherwise, the split is applied and is consistent with the <A>tracer</A>,
-#! and this function returns <K>true</K>.
-#!
-#! @Arguments ps, tracer, filter
-#! @Returns <K>true</K> or <K>false</K>.
 InstallMethod(ApplyFilters, [IsBTKitState, IsTracer, IsObject],
   function(state, tracer, filter)
     if filter = fail then
@@ -73,23 +63,8 @@ InstallMethod(ApplyFilters, [IsBTKitState, IsTracer, IsObject],
     return true;
 end);
 
-#! @Description
-#! Refine the partition stack <C><A>state</A>.ps</C> according to the list of
-#! constraints in <C><A>state</a>.conlist</C>, until it is not possible to use
-#! them to refine the current partition stack any further, or until the branch
-#! of search becomes inconsistent with the RBase. In the former case, this
-#! function returns <K>true</K>, and in the latter case, this function returns
-#! <K>false</K>.
-#!
-#! During RBase creation, the second argument <A>tracer</A> must be
-#! a recording tracer, and the third argument <A>rbase</A> must be <K>true</K>.
-#! During search, the second argument should be a tracer following the
-#! corresponding RBase tracer, and the third argument <A>rbase</A> should be
-#! <K>false</K>.
-#!
-#! @Arguments state, tracer, rbase
-#! @Returns <K>true</K> or <K>false</K>.
-RefineConstraints := function(state, tracer, rbase)
+InstallGlobalFunction(RefineConstraints,
+  function(state, tracer, rbase)
     local c, filters, cellCount;
     cellCount := -1;
     Info(InfoBTKit, 3, "Refining Constraints");
@@ -114,21 +89,10 @@ RefineConstraints := function(state, tracer, rbase)
         fi;
     od;
     return true;
-end;
+end);
 
-#! @Description
-#! Set up the list of constraints in <C><A>state</A>.conlist</C>, using their
-#! <C>refine.initialise</C> members. This should be called once at the start of
-#! RBase creation, and once at the start of search. During search, if the branch
-#! of search becomes inconsistent with the RBase, then this function returns
-#! <K>false</K>. Otherwise, this function returns <K>true</K>.
-#!
-#! The second and third arguments <A>tracer</A> and <A>rbase</A> should be as in
-#! <C>RefineConstraints</C>.
-#!
-#! @Arguments state, tracer, rbase
-#! @Returns <K>true</K> or <K>false</K>.
-InitialiseConstraints := function(state, tracer, rbase)
+InstallGlobalFunction(InitialiseConstraints,
+  function(state, tracer, rbase)
     local c, filters;
     for c in state!.conlist do
         if c!.largest_required_point > PS_Points(state!.ps) then
@@ -148,19 +112,17 @@ InitialiseConstraints := function(state, tracer, rbase)
         return false;
     fi;
     return true;
-end;
+end);
 
-#! @Description
-#! Set up a list of constraints. This should be called once, at
-#! the start of search after all constraints have been created.
-FinaliseRBaseForConstraints := function(state, rbase)
+InstallGlobalFunction(FinaliseRBaseForConstraints,
+  function(state, rbase)
     local c;
     for c in state!.conlist do
         if IsBound(c!.refine.rBaseFinished) then
             c!.refine.rBaseFinished(rbase.ps);
         fi;
     od;
-end;
+end);
 
 #! @Description
 #! Set up the list of constraints using <C>InitialiseConstraints</C>, and
