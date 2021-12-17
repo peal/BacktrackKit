@@ -10,19 +10,20 @@ BTKit_Con := AtomicRecord(rec());
 # Private members
 _BTKit := AtomicRecord(rec());
 
+ReadPackage( "BacktrackKit", "gap/internal/util.g");
+
 ReadPackage( "BacktrackKit", "gap/stabtree.g");
 
-ReadPackage( "BacktrackKit", "gap/tracer.gi");
-ReadPackage( "BacktrackKit", "gap/partitionstack.gi");
-
 ReadPackage( "BacktrackKit", "gap/BacktrackKit.gi");
-ReadPackage( "BacktrackKit", "gap/constraints/util.g");
-ReadPackage( "BacktrackKit", "gap/constraint.gi");
-ReadPackage( "BacktrackKit", "gap/constraints/simpleconstraints.g");
-ReadPackage( "BacktrackKit", "gap/constraints/conjugacyexample.g");
-ReadPackage( "BacktrackKit", "gap/constraints/normaliserexample.g");
-ReadPackage( "BacktrackKit", "gap/constraints/graphconstraints.g");
-ReadPackage( "BacktrackKit", "gap/constraints/canonicalconstraints.g");
-ReadPackage( "BacktrackKit", "gap/constraints/tree/tree.g");
-
 ReadPackage( "BacktrackKit", "gap/canonical.gi");
+ReadPackage( "BacktrackKit", "gap/constraint.gi");
+ReadPackage( "BacktrackKit", "gap/partitionstack.gi");
+ReadPackage( "BacktrackKit", "gap/refiner.gi");
+ReadPackage( "BacktrackKit", "gap/tracer.gi");
+
+ReadPackage( "BacktrackKit", "gap/refiners/simple.g");
+ReadPackage( "BacktrackKit", "gap/refiners/conjugacyexample.g");
+ReadPackage( "BacktrackKit", "gap/refiners/normaliserexample.g");
+ReadPackage( "BacktrackKit", "gap/refiners/graphs.g");
+ReadPackage( "BacktrackKit", "gap/refiners/canonicalrefiners.g");
+ReadPackage( "BacktrackKit", "gap/refiners/tree/tree.g");
