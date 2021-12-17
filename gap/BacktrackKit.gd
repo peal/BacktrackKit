@@ -15,10 +15,6 @@
 DeclareCategory("IsBacktrackableState", IsObject);
 BindGlobal("BacktrackableStateFamily", NewFamily("BacktrackableStateFamily", IsBacktrackableState));
 
-DeclareCategory("IsRefiner", IsBacktrackableState);
-BindGlobal("RefinerFamily", NewFamily("RefinerFamily", IsRefiner));
-
-
 #! @Description
 #! Return a small object which allows one to revert to this state from later
 #! the search. 
