@@ -124,12 +124,7 @@ Constraint.Transport := function(x, y, action...)
         ErrorNoReturn("Constraint.Transport: args: x, y[, action]");
     fi;
 
-    if FamilyObj(x) <> FamilyObj(y) then
-        ErrorNoReturn(
-            "Constraint.Transport: ",
-            "the first and second arguments <x> and <y> must have the same family"
-        );
-    elif (action = OnTuples or StartsWith(NameFunction(action), "OnTuples"))
+    if (action = OnTuples or StartsWith(NameFunction(action), "OnTuples"))
       and not (IsList(x) and IsList(y)) then
         ErrorNoReturn(
             "Constraint.Transport: ",
@@ -158,6 +153,13 @@ Constraint.Transport := function(x, y, action...)
         ResultObject, y
     );
     SetFilterObj(con, IsTransporterConstraint);
+
+    if FamilyObj(x) <> FamilyObj(y) then
+        SetIsEmptyConstraint(con, true);
+        SetCheck(con, ReturnFalse);
+        SetRepresentative(con, fail);
+        SetSize(con, 0);
+    fi;
 
     lrp := _BTKit.LargestRelevantPoint(x);
     if not isgroup then
