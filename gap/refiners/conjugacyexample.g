@@ -1,6 +1,6 @@
 # The minimal requirements of a refiner -- give a 
 # name, a 'check' function, and an empty record called 'refine'
-BTKit_Con.MostBasicPermConjugacy := function(permL, permR)
+BTKit_Refiner.MostBasicPermConjugacy := function(permL, permR)
     return Objectify(BTKitRefinerType,rec(
         name := "MostBasicPermConjugacy",
         largest_required_point := Maximum(LargestMovedPoint(permL),LargestMovedPoint(permR)),
@@ -15,7 +15,7 @@ end;
 
 # Slightly cleverer refiner -- the function 'initialise' is called
 # once at the start of search. It should return a function
-BTKit_Con.BasicPermConjugacy := function(permL, permR)
+BTKit_Refiner.BasicPermConjugacy := function(permL, permR)
     local mapToOrbitSize;
 
     mapToOrbitSize := function(p,n)
@@ -46,7 +46,7 @@ BTKit_Con.BasicPermConjugacy := function(permL, permR)
 end;
 
 # Find the transporter of a permutation under conjugation
-BTKit_Con.PermTransporter := function(fixedeltL, fixedeltR)
+BTKit_Refiner.PermTransporter := function(fixedeltL, fixedeltR)
     local cyclepartL, cyclepartR,
           i, c, s, r,
           fixByFixed, pointMap, setupCycleparts;
@@ -117,6 +117,6 @@ BTKit_Con.PermTransporter := function(fixedeltL, fixedeltR)
     return Objectify(BTKitRefinerType,r);
 end;
 
-BTKit_Con.PermCentralizer := function(fixedelt)
-    return BTKit_Con.PermTransporter(fixedelt, fixedelt);
+BTKit_Refiner.PermCentralizer := function(fixedelt)
+    return BTKit_Refiner.PermTransporter(fixedelt, fixedelt);
 end;

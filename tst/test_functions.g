@@ -63,7 +63,7 @@ PermCentralizerTests := function(k)
 
         g := Group(GeneratorsOfGroup(g));
         t := NanosecondsSinceEpoch();
-        btkit := BTKit_SimpleSearch(ps, [ BTKit_Con.InGroup(g), BTKit_Con.PermCentralizer(e) ] );
+        btkit := BTKit_SimpleSearch(ps, [ BTKit_Refiner.InGroup(g), BTKit_Refiner.PermCentralizer(e) ] );
         t := NanosecondsSinceEpoch() - t;
         Info(InfoBTKitTest, 5, "BTKit:  ", t / 1000000000., " size: ", Size(btkit));
 
@@ -102,8 +102,8 @@ CentralizerTest := function()
 
     g := Group(GeneratorsOfGroup(g));
 
-    l := List(GeneratorsOfGroup(h), x -> BTKit_Con.PermCentralizer(x));
-    Add(l, BTKit_Con.InGroup(g));
+    l := List(GeneratorsOfGroup(h), x -> BTKit_Refiner.PermCentralizer(x));
+    Add(l, BTKit_Refiner.InGroup(g));
 
     t := NanosecondsSinceEpoch();
     btkit := BTKit_SimpleSearch(ps, l);
@@ -146,11 +146,11 @@ IntersectionTests := function(k)
         g := Group(GeneratorsOfGroup(g));
         h := Group(GeneratorsOfGroup(h));
         t := NanosecondsSinceEpoch();
-        btkit := BTKit_SimpleSearch(ps, [ BTKit_Con.InGroup(g), BTKit_Con.InGroup(h) ] );
+        btkit := BTKit_SimpleSearch(ps, [ BTKit_Refiner.InGroup(g), BTKit_Refiner.InGroup(h) ] );
         t := NanosecondsSinceEpoch() - t;
         Info(InfoBTKitTest, 5, "BTKit:  ", t / 1000000000., " size: ", Size(btkit));
 
-        btkitorb := BTKit_SimpleSearch(ps, [ BTKit_Con.InGroupWithOrbitals(g), BTKit_Con.InGroupWithOrbitals(h) ] );
+        btkitorb := BTKit_SimpleSearch(ps, [ BTKit_Refiner.InGroupWithOrbitals(g), BTKit_Refiner.InGroupWithOrbitals(h) ] );
 
         if gap <> btkit then
             Error("ERROR: GAP and BTKit disagree!\n");

@@ -5,7 +5,10 @@
 #
 
 # A store of the BTKit refiners
-BTKit_Con := AtomicRecord(rec());
+BTKit_Refiner := AtomicRecord(rec());
+# For backwards compatibility
+BTKit_Con := BTKit_Refiner;
+BTKit_Ref := BTKit_Refiner;
 
 # Private members
 _BTKit := AtomicRecord(rec());

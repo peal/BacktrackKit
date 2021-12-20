@@ -12,7 +12,7 @@ gap> QC_Check([IsPermGroup, IsPerm],
 >   m := lmp(g1,p1);
 >   norm1 := Centraliser(g1, p1);
 >   norm2 := BTKit_SimpleSearch(PartitionStack(m),
->          [BTKit_Con.InGroup(g1), BTKit_Con.PermCentralizer(p1)]);
+>          [BTKit_Refiner.InGroup(g1), BTKit_Refiner.PermCentralizer(p1)]);
 >  if norm1 <> norm2 then
 >    return StringFormatted("Expected {}, got {}, from {},{}",norm1,norm2,g1,p1);
 >  fi;
@@ -25,7 +25,7 @@ gap> QC_Check([IsPermGroup, IsPerm, IsPerm],
 >   m := lmp(g1,p1,p2);
 >   conj := IsConjugate(g1, p1, p2);
 >   p := BTKit_SimpleSinglePermSearch(PartitionStack(m),
->       [BTKit_Con.InGroup(g1), BTKit_Con.PermTransporter(p1, p2)]);
+>       [BTKit_Refiner.InGroup(g1), BTKit_Refiner.PermTransporter(p1, p2)]);
 >  if conj then
 >    if p = fail then return StringFormatted("Expected coset, got nothing"); fi;
 >  else

@@ -62,15 +62,15 @@ gap> # Need to make a partition stack to search over
 > ps := PartitionStack(6);;
 gap> # We create a refiner for each group
 > # We have to give this how many points we want the group to act on
-> rg := BTKit_Con.InGroup(G);;
-gap> rh := BTKit_Con.InGroup(H);;
+> rg := BTKit_Refiner.InGroup(G);;
+gap> rh := BTKit_Refiner.InGroup(H);;
 gap> # Finally, intersect the groups
 > BTKit_SimpleSearch(ps, [rg, rh]);
 Group([ (1,2,3)(4,6,5), (1,4)(2,5)(3,6) ])
 
 # doc/_Chapter_Tutorial.xml:132-144
 gap> # This represents the group which stabilizes the set [3,4,5,6]
-> ss := BTKit_Con.SetStab([3,4,5,6]);;
+> ss := BTKit_Refiner.SetStab([3,4,5,6]);;
 gap> # We can prove this by just "searching" on this group
 > BTKit_SimpleSearch(ps, [ss]);
 Group([ (5,6), (4,5), (3,4), (1,2) ])
