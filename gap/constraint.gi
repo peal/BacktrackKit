@@ -154,7 +154,10 @@ Constraint.Transport := function(x, y, action...)
     );
     SetFilterObj(con, IsTransporterConstraint);
 
-    if FamilyObj(x) <> FamilyObj(y) then
+    if FamilyObj(x) <> FamilyObj(y) or
+          ((action = OnTuples or StartsWith(NameFunction(action), "OnTuples") or
+            action = OnSets or StartsWith(NameFunction(action), "OnSets"))
+           and Length(x) <> Length(y)) then
         SetIsEmptyConstraint(con, true);
         SetCheck(con, ReturnFalse);
         SetRepresentative(con, fail);
@@ -371,6 +374,9 @@ ProcessConstraints := function(args...)
         elif IsRefiner(x) then
             Add(refiners, x);
             Add(extra, x!.constraint);
+        elif IsRecord(x) and IsBound(x.con) then
+            # TODO Make Vole refiners into proper refiner objects
+            Add(refiners, x);
         elif IsInt(x) then
             Add(constraints, Constraint.LargestMovedPoint(x));
         elif IsPermGroup(x) then
