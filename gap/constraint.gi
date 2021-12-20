@@ -351,3 +351,106 @@ Constraint.IsTrivial := ObjectifyWithAttributes(
     Size, 1,
     Name, "<trivial constraint: is identity permutation>"
 );
+
+
+ProcessConstraints := function(args...)
+    local constraints, refiners, extra, x, i, G, movedG, movedx, differ, points, sizes, all, con, bound;
+    args := Flat(args);
+
+    constraints := [];
+    refiners := [];
+    extra := [];
+
+    # Replace:
+    #   Integer i -> LargestMovedPoint i
+    #   Group G   -> InGroup G
+    #   Coset U   -> InCoset U
+    for x in args do
+        if IsConstraint(x) then
+            Add(constraints, x);
+        elif IsRefiner(x) then
+            Add(refiners, x);
+            Add(extra, x!.constraint);
+        elif IsInt(x) then
+            Add(constraints, Constraint.LargestMovedPoint(x));
+        elif IsPermGroup(x) then
+            Add(constraints, Constraint.InGroup(x));
+        elif IsRightCoset(x) and IsPermCollection(x) then
+            Add(constraints, Constraint.InRightCoset(x));
+        else
+            ErrorNoReturn("Unrecognised");
+        fi;
+    od;
+
+    # Remove duplicates
+    extra := Unique(extra);
+
+    # Perform further smart replacements
+    for i in [1 .. Length(constraints)] do
+        con := constraints[i];
+
+        # In Alt(x) -> IsEven and MovedPoints(x)
+        if IsGroupConstraint(con) and HasUnderlyingGroup(con) and IsNaturalAlternatingGroup(UnderlyingGroup(con)) then
+            Add(constraints, Constraint.IsEven);
+            constraints[i] := Constraint.MovedPoints(MovedPoints(UnderlyingGroup(con)));
+        
+        # In coset of Sym(x) -> combination
+        elif IsInCosetByGensConstraint(con) and not IsGroupConstraint(con) and IsNaturalSymmetricGroup(UnderlyingGroup(con)) then
+            G := UnderlyingGroup(con);
+            x := Representative(con);
+            movedG := MovedPoints(G);  # is a GAP set
+            movedx := MovedPoints(x);
+            differ := Difference(movedx, movedG);
+            constraints[i] := Constraint.MovedPoints(Union(movedG, movedx));
+            Add(constraints, Constraint.Transport(movedG, OnSets(movedG, x), OnSets));
+            Add(constraints, Constraint.Transport(differ, OnTuples(differ, x), OnTuples));
+        fi;
+    od;
+
+    # Make a consolidated "Constraint.MovedPoints" constraint
+    points := Integers;
+    for i in [Length(constraints), Length(constraints) - 1 .. 1] do
+        x := constraints[i];
+        if IsGroupConstraint(x) and HasUnderlyingGroup(x) then
+            G := UnderlyingGroup(x);
+            points := Intersection(points, MovedPoints(G));
+            if IsNaturalSymmetricGroup(G) then
+                Remove(constraints, i);
+            fi;
+        fi;
+    od;
+    for x in extra do
+        if IsGroupConstraint(x) and HasUnderlyingGroup(x) then
+            points := Intersection(points, MovedPoints(UnderlyingGroup(x)));
+        fi;
+    od;
+    # TODO: Only really need to add this constraint if it is not implied by any of the remaining ones
+    if IsFinite(points) then
+        Add(constraints, Constraint.MovedPoints(points));
+    fi;
+
+    all := Concatenation(constraints, extra);
+    if (Constraint.IsEven in constraints or Constraint.IsEven in extra) and (Constraint.IsOdd in constraints or Constraint.IsOdd in extra) then
+        Add(constraints, Constraint.Nothing);
+    fi;
+
+    # Remove duplicates
+    constraints := Unique(Filtered(constraints, x -> not x in extra));
+    all := Concatenation(constraints, extra);
+
+    sizes := List(Filtered(all, con -> IsGroupConstraint(con) and HasSize(con) and IsPosInt(Size(con))), Size);
+    if IsEmpty(sizes) then
+        bound := infinity;
+    else
+        bound := Gcd(sizes);
+    fi;
+
+    return rec(
+        refiners := refiners,
+        constraints_without_refiners := constraints,
+        constraints_of_refiners := extra,
+        is_known_empty := ForAny(all, con -> HasIsEmptyConstraint(con) and IsEmptyConstraint(con)),
+        is_group := ForAll(all, IsGroupConstraint),
+        group_size_bound := bound,
+    );
+end;
