@@ -106,7 +106,10 @@ _BTKit.OutNeighboursSafe := function(graph, v)
     fi;
 end;
 
-_BTKit.LargestRelevantPoint := function(obj)
+_BTKit.LargestRelevantPoint := function(obj...)
+    if Length(obj) = 1 then
+        obj := obj[1];
+    fi;
     if IsList(obj) then
         if IsEmpty(obj) then
             return 0;
@@ -117,7 +120,7 @@ _BTKit.LargestRelevantPoint := function(obj)
         return obj;
     elif IsInt(obj) then
         ErrorNoReturn("unexpected negative integer...");
-    elif IsGroup(obj) or IsPerm(obj) or IsRightCoset(obj) then
+    elif IsPermGroup(obj) or IsPerm(obj) or IsRightCoset(obj) then
         return LargestMovedPoint(obj);
     elif IsTransformation(obj) then
         return DegreeOfTransformation(obj);
@@ -126,7 +129,7 @@ _BTKit.LargestRelevantPoint := function(obj)
     elif IsDigraph(obj) then
         return Maximum(DigraphVertices(obj));
     else
-        # Do not recognise the type of object
+        # Do not recognise the type of object. Or error?
         return infinity;
     fi;
 end;

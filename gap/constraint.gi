@@ -315,6 +315,7 @@ Constraint.IsEven := ObjectifyWithAttributes(
     ImageFunc, SignPerm,
     IsGroupConstraint, true,
     LargestRelevantPoint, 1,
+    #UnderlyingGroup, fail,
     Size, infinity,
     Name, "<constraint: is even permutation>"
 );
@@ -346,6 +347,7 @@ Constraint.IsTrivial := ObjectifyWithAttributes(
     ImageFunc, IdFunc,
     IsGroupConstraint, true,
     LargestMovedPoint, 1,
+    UnderlyingGroup, TrivialGroup(IsPermGroup),
     Size, 1,
     Name, "<trivial constraint: is identity permutation>"
 );
