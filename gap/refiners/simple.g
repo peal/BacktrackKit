@@ -135,7 +135,7 @@ BTKit_Con.InCoset := function(group, perm)
     pointMap := HashMap();
 
     r := rec(
-        name := "InCoset",
+        name := "InCoset-BTKit",
         largest_required_point := Maximum(LargestMovedPoint(group), LargestMovedPoint(perm)),
         constraint := Constraint.InCoset(group, perm),
         refine := rec(
@@ -250,7 +250,7 @@ BTKit_Con.InCosetWithOrbitals := function(group, perm)
     orbitalMap := HashMap();
 
     r := rec(
-        name := "InGroupWithCoset-BTKit",
+        name := "InCosetWithOrbitals-BTKit",
         largest_required_point := Maximum(LargestMovedPoint(group), LargestMovedPoint(perm)),
         constraint := Constraint.InCoset(group, perm),
         refine := rec(
