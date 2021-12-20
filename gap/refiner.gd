@@ -5,6 +5,8 @@
 #
 #! @Chapter Refiners
 #!
+#! @Section Introduction to refiners
+#!
 #! In &BacktrackKit;, a refiner is implemented as a record that must contain:
 #!
 #! * A member called `name`, which is a string giving the name of the

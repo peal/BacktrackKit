@@ -2,18 +2,6 @@
 # BacktrackKit: An extensible, easy to understand backtracking framework
 #
 
-#! @Chapter Introduction
-#!
-#! &BacktrackKit; is a package which does some interesting and cool things.
-
-
-#! @Section Info
-
-#! @Description
-#! Information about backtrack search.
-DeclareInfoClass( "InfoBTKit" );
-SetInfoLevel(InfoBTKit, 0);
-
 
 #! @Chapter Executing a search
 
@@ -30,7 +18,13 @@ DeclareGlobalFunction( "BTKit_SimpleSinglePermSearch" );
 DeclareGlobalFunction( "BTKit_SimpleAllPermSearch" );
 
 
-#! @Section Stats
+#! @Section Extra information and stats
+
+
+#! @Description
+#! Information about backtrack search.
+DeclareInfoClass( "InfoBTKit" );
+SetInfoLevel(InfoBTKit, 0);
 
 #! @Arguments
 DeclareGlobalFunction( "BTKit_ResetStats" );

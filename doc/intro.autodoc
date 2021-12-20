@@ -1,0 +1,6 @@
+@Chapter Introduction
+
+&BacktrackKit; is a package which does some interesting and cool things.
+
+This implements the algorithm described in <Cite Key="Leon1991"/> and
+<Cite Key="Leon1997"/>.
