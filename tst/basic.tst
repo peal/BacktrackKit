@@ -12,7 +12,7 @@ gap> G := BTKit_SimpleSearch(ps3, [BTKit_Con.InGroup(SymmetricGroup(3))]);;
 gap> G = SymmetricGroup(3);
 true
 gap> G := BTKit_SimpleSearch(ps3, [BTKit_Con.InGroup(Group((1,2)(3,4)))]);
-Error, Refiner InCoset requires 4 points, but the partition only has 3
+Error, Refiner InCoset-BTKit requires 4 points, but the partition only has 3
 gap> G := BTKit_SimpleSearch(ps6, [BTKit_Con.InGroup(AlternatingGroup(6)),
 >                                  BTKit_Con.SetStab([2,4,6]),
 >                                  BTKit_Con.TupleStab([1,2])]);;
