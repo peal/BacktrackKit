@@ -1,4 +1,4 @@
-BTKit_Con.InCosetSimple := function(group, perm)
+BTKit_Refiner.InCosetSimple := function(group, perm)
     local orbList,getOrbits, r, invperm,minperm;
     invperm := perm^-1;
 
@@ -45,4 +45,4 @@ BTKit_Con.InCosetSimple := function(group, perm)
     return Objectify(BTKitRefinerType, r);
 end;
 
-BTKit_Con.InGroupSimple := {group} -> BTKit_Con.InCosetSimple(group, ());
+BTKit_Refiner.InGroupSimple := {group} -> BTKit_Refiner.InCosetSimple(group, ());

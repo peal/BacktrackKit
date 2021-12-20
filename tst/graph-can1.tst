@@ -8,7 +8,7 @@ gap> LoadPackage("QuickCheck", false);;
 gap> testGraph := function(graph,verts)
 > local g1, g2, ps;
 > ps := PartitionStack(verts);
-> g1 := BTKit_SimpleSearch(ps, [BTKit_Con.GraphTrans(graph, graph)]);
+> g1 := BTKit_SimpleSearch(ps, [BTKit_Refiner.GraphTrans(graph, graph)]);
 > g2 := AutomorphismGroup(graph);
 > if g1 <> g2 then PrintFormatted("failure: {} {} {}", graph, g1, g2); fi;
 > end;;
@@ -25,8 +25,8 @@ gap> for g in graphs do
 >   fi;
 >   g2 := OnDigraphs(g,perm);
 >   m := Maximum(1, Maximum(DigraphVertices(g)), LargestMovedPoint(perm));
->   can1 :=  BTKit_SimpleCanonicalSearch(PartitionStack(m), [BTKit_Con.GraphStab(g)]);
->   can2 :=  BTKit_SimpleCanonicalSearch(PartitionStack(m), [BTKit_Con.GraphStab(g2)]);
+>   can1 :=  BTKit_SimpleCanonicalSearch(PartitionStack(m), [BTKit_Refiner.GraphStab(g)]);
+>   can2 :=  BTKit_SimpleCanonicalSearch(PartitionStack(m), [BTKit_Refiner.GraphStab(g2)]);
 >   if can1.image <> can2.image then
 >     return StringFormatted("Images Different: {},{},{},{}",g,g2,can1,can2);
 >   fi;

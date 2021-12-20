@@ -23,7 +23,7 @@ end;
 
 # Make a refiner which accepts permutations p
 # such that graphL = OnDigraphs(graphR, p)
-BTKit_Con.GraphTrans := function(graphL, graphR)
+BTKit_Refiner.GraphTrans := function(graphL, graphR)
     local filter;
     # Give an initial sort
     filter := function(ps, buildingRBase)
@@ -46,4 +46,4 @@ BTKit_Con.GraphTrans := function(graphL, graphR)
     ));
 end;
 
-BTKit_Con.GraphStab := {graph} -> BTKit_Con.GraphTrans(graph, graph);
+BTKit_Refiner.GraphStab := {graph} -> BTKit_Refiner.GraphTrans(graph, graph);

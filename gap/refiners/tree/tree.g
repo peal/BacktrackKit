@@ -1,7 +1,7 @@
 
 # TODO: FIX
 
-# BTKit_Con.List := function(n, l)
+# BTKit_Refiner.List := function(n, l)
 #     local conlist, name, r;
 #     conlist := l;
 
@@ -26,7 +26,7 @@
 #     return r;
 # end;
 
-# BTKit_Con.Set := function(n, l)
+# BTKit_Refiner.Set := function(n, l)
 #     local conlist, name, r;
 #     conlist := l;
 

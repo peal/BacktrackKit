@@ -5,4 +5,4 @@ gap> LoadPackage("quickcheck", false);;
 gap> lmp := {l...} -> Maximum(1,Maximum(List(l, LargestMovedPoint)));;
 gap> QC_CheckEqual([IsPermGroup, IsPermGroup], Intersection, 
 > {g,h} -> BTKit_SimpleSearch(PartitionStack(lmp(g,h)), 
->           [BTKit_Con.InGroup(g), BTKit_Con.InGroup(h)]));;
+>           [BTKit_Refiner.InGroup(g), BTKit_Refiner.InGroup(h)]));;

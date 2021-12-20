@@ -4,7 +4,7 @@
 
 # The minimal requirements of a refiner -- give a 
 # name, a 'check' function, and an empty record called 'refine'
-BTKit_Con.MostBasicGroupConjugacy := function(grpL, grpR)
+BTKit_Refiner.MostBasicGroupConjugacy := function(grpL, grpR)
     return Objectify(BTKitRefinerType, rec(
         name := "MostBasicGroupPermConjugacy",
         largest_required_point := Maximum(LargestMovedPoint(grpL), LargestMovedPoint(grpR)),
@@ -18,7 +18,7 @@ end;
 
 # Slightly cleverer refiner -- the function 'initialise' is called
 # once at the start of search. It should return a function
-BTKit_Con.BasicGroupConjugacy := function(grpL, grpR)
+BTKit_Refiner.BasicGroupConjugacy := function(grpL, grpR)
     local mapToOrbitSize;
 
     mapToOrbitSize := function(g,n)
@@ -49,7 +49,7 @@ BTKit_Con.BasicGroupConjugacy := function(grpL, grpR)
 end;
 
 # Even more slightly clever refiner -- now refine at every depth.
-BTKit_Con.SimpleGroupConjugacy := function(grpL, grpR)
+BTKit_Refiner.SimpleGroupConjugacy := function(grpL, grpR)
     local mapToOrbitSize;
 
     mapToOrbitSize := function(g,n)
@@ -92,6 +92,6 @@ BTKit_Con.SimpleGroupConjugacy := function(grpL, grpR)
 end;
 
 
-BTKit_Con.GroupNormaliser := function(grp)
-    return BTKit_Con.SimpleGroupConjugacy(grp, grp);
+BTKit_Refiner.GroupNormaliser := function(grp)
+    return BTKit_Refiner.SimpleGroupConjugacy(grp, grp);
 end;

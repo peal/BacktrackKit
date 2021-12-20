@@ -8,7 +8,7 @@ gap> LoadPackage("QuickCheck", false);;
 gap> testGraph := function(graph,verts)
 > local g1, g2, ps;
 > ps := PartitionStack(verts);
-> g1 := BTKit_SimpleSearch(ps, [BTKit_Con.GraphTrans(graph, graph)]);
+> g1 := BTKit_SimpleSearch(ps, [BTKit_Refiner.GraphTrans(graph, graph)]);
 > g2 := AutomorphismGroup(graph);
 > if g1 <> g2 then PrintFormatted("failure: {} {} {}", graph, g1, g2); fi;
 > end;;

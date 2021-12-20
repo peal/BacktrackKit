@@ -51,7 +51,7 @@ BTKit_MakeFixlistTransporter := function(name, fixlistL, fixlistR, oL, oR, actio
     ));
 end;
 
-BTKit_Con.TupleStab := function(fixpoints)
+BTKit_Refiner.TupleStab := function(fixpoints)
     local fixlist, i, max;
     max := MaximumList(fixpoints, 1);
     fixlist := ListWithIdenticalEntries(max, 0);
@@ -61,7 +61,7 @@ BTKit_Con.TupleStab := function(fixpoints)
     return BTKit_MakeFixlistStabilizer("TupleStab", fixlist, fixpoints, OnTuples, max);
 end;
 
-BTKit_Con.TupleTransporter := function(fixpointsL, fixpointsR)
+BTKit_Refiner.TupleTransporter := function(fixpointsL, fixpointsR)
     local fixlistL, fixlistR, i, max;
     max := Maximum(MaximumList(fixpointsL,1),MaximumList(fixpointsR,1));
     fixlistL := ListWithIdenticalEntries(max, 0);
@@ -75,7 +75,7 @@ BTKit_Con.TupleTransporter := function(fixpointsL, fixpointsR)
     return BTKit_MakeFixlistTransporter("TupleTransport", fixlistL, fixlistR, fixpointsL, fixpointsR, OnTuples, max);
 end;
 
-BTKit_Con.SetStab := function(fixset)
+BTKit_Refiner.SetStab := function(fixset)
     local fixlist, i, max;
     max := MaximumList(fixset, 1);
     fixlist := ListWithIdenticalEntries(max, 0);
@@ -85,7 +85,7 @@ BTKit_Con.SetStab := function(fixset)
     return BTKit_MakeFixlistStabilizer("SetStab", fixlist, fixset, OnSets, max);
 end;
 
-BTKit_Con.SetTransporter := function(fixsetL, fixsetR)
+BTKit_Refiner.SetTransporter := function(fixsetL, fixsetR)
     local fixlistL, fixlistR, i, max;
     max := Maximum(MaximumList(fixsetL,1),MaximumList(fixsetR,1));
     fixlistL := ListWithIdenticalEntries(max, 0);
@@ -108,7 +108,7 @@ end;
 # other refiner we have ever seen does not need to worry about the values
 # in the rBase, so don't use this as a model for another refiner, unless
 # that one is also based around a group given as a list of generators.
-BTKit_Con.InCoset := function(group, perm)
+BTKit_Refiner.InCoset := function(group, perm)
     local orbList,fillOrbits, orbMap, pointMap, r, invperm;
     invperm := perm^-1;
     fillOrbits := function(pointlist, n)
@@ -185,7 +185,7 @@ BTKit_Con.InCoset := function(group, perm)
         return Objectify(BTKitRefinerType, r);
     end;
 
-BTKit_Con.InGroup := {group} -> BTKit_Con.InCoset(group, ());
+BTKit_Refiner.InGroup := {group} -> BTKit_Refiner.InCoset(group, ());
 
 #####
 #####
@@ -212,7 +212,7 @@ _BTKit.RefineGraphs := function(points, ps, graphlist)
         return ret;
 end;
 
-BTKit_Con.InCosetWithOrbitals := function(group, perm)
+BTKit_Refiner.InCosetWithOrbitals := function(group, perm)
     local orbList,fillOrbits, fillOrbitals, orbMap, orbitalMap, pointMap, r, invperm;
     invperm := perm^-1;
     fillOrbits := function(pointlist, n)
@@ -309,10 +309,10 @@ BTKit_Con.InCosetWithOrbitals := function(group, perm)
         return Objectify(BTKitRefinerType, r);
     end;
 
-BTKit_Con.InGroupWithOrbitals := {group} -> BTKit_Con.InCosetWithOrbitals(group, ());
+BTKit_Refiner.InGroupWithOrbitals := {group} -> BTKit_Refiner.InCosetWithOrbitals(group, ());
 
 # Check if permutations are even (i.e. a subgroup of the natural alternating group)
-BTKit_Con.IsEven := {} -> Objectify(BTKitRefinerType, rec(
+BTKit_Refiner.IsEven := {} -> Objectify(BTKitRefinerType, rec(
         name := "IsEven",
         largest_required_point := 1,
         constraint := Constraint.IsEven,
@@ -323,7 +323,7 @@ BTKit_Con.IsEven := {} -> Objectify(BTKitRefinerType, rec(
     ));
 
 # Check if the permutations are odd (i.e. the single coset of the natural symmetric group)
-BTKit_Con.IsOdd := {} -> Objectify(BTKitRefinerType, rec(
+BTKit_Refiner.IsOdd := {} -> Objectify(BTKitRefinerType, rec(
         name := "IsOdd",
         # Somehow needs to store that it needs two or more points...
         largest_required_point := 1,
@@ -334,7 +334,7 @@ BTKit_Con.IsOdd := {} -> Objectify(BTKitRefinerType, rec(
             end)
     ));
 
-BTKit_Con.Nothing := {} -> Objectify(BTKitRefinerType, rec(
+BTKit_Refiner.Nothing := {} -> Objectify(BTKitRefinerType, rec(
         name := "RefinerForNothing",
         largest_required_point := 1,
         constraint := Constraint.Nothing,
@@ -343,7 +343,7 @@ BTKit_Con.Nothing := {} -> Objectify(BTKitRefinerType, rec(
         )
     ));
 
-BTKit_Con.Nothing2 := {} -> Objectify(BTKitRefinerType, rec(
+BTKit_Refiner.Nothing2 := {} -> Objectify(BTKitRefinerType, rec(
         name := "RefinerForNothing2",
         largest_required_point := 1,
         constraint := Constraint.Nothing,
