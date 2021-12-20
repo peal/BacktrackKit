@@ -169,7 +169,7 @@ DeclareAttribute("UnderlyingGroup", IsConstraint);
 
 #! In this section, we individually document the functions of the
 #! <Ref Var="Constraint"/> record, which can be used to create the
-#! built-in constraints provided by &BacktrackKit;
+#! built-in constraints provided by &BacktrackKit;.
 #!
 #! Many of these constraints come in pairs, with a “group” version,
 #! and a corresponding “coset” version.
