@@ -59,3 +59,12 @@ BindGlobal("RefinerFamily", NewFamily("RefinerFamily", IsRefiner));
 DeclareRepresentation("IsBTKitRefiner", IsRefiner, ["name", "check", "refine"]);
 BindGlobal("BTKitRefinerType", NewType(BacktrackableStateFamily,
                                        IsBTKitRefiner));
+
+
+#! @Section Constructing refiners
+
+
+#! @Arguments constraint
+#! @Description
+#! This wraps a constraint in a refiner that doesn't do any refining.
+DeclareAttribute("DummyRefiner", IsConstraint);

@@ -19,3 +19,19 @@ InstallMethod(RestoreState, [IsBTKitRefiner, IsObject],
             con!.btdata := StructuralCopy(state);
         fi;
     end);
+
+InstallMethod(DummyRefiner,
+    "for a constraint object", [IsConstraint],
+    {con} -> Objectify(
+        BTKitRefinerType,
+        rec(
+            name := Concatenation("Dummy refiner for ", Name(con)),
+            largest_required_point := LargestRelevantPoint(con),
+            constraint := con,
+            refine := rec(
+                initialise := function(ps, buildingRBase)
+                    return {x} -> 1;
+                end)
+        )
+    )
+);
