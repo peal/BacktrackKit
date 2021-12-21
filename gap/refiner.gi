@@ -36,7 +36,7 @@ InstallMethod(DummyRefiner,
     )
 );
 
-BTKit_ConstraintToRefiner := function(con)
+BTKit_RefinerFromConstraint := function(con)
     local action, source, result;
 
     if HasIsEmptyConstraint(con) and IsEmptyConstraint(con) then
