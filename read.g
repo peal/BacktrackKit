@@ -30,3 +30,6 @@ ReadPackage( "BacktrackKit", "gap/refiners/normaliserexample.g");
 ReadPackage( "BacktrackKit", "gap/refiners/graphs.g");
 ReadPackage( "BacktrackKit", "gap/refiners/canonicalrefiners.g");
 ReadPackage( "BacktrackKit", "gap/refiners/tree/tree.g");
+
+Perform(["BTKit_Refiner", "_BTKit", "Constraint"],
+        SetNamesForFunctionsInRecord);
