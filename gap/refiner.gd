@@ -59,8 +59,7 @@ DeclareCategory("IsRefiner", IsBacktrackableState);
 BindGlobal("RefinerFamily", NewFamily("RefinerFamily", IsRefiner));
 
 DeclareRepresentation("IsBTKitRefiner", IsRefiner, ["name", "check", "refine"]);
-BindGlobal("BTKitRefinerType", NewType(BacktrackableStateFamily,
-                                       IsBTKitRefiner));
+BindGlobal("BTKitRefinerType", NewType(RefinerFamily, IsBTKitRefiner));
 
 
 #! @Section Constructing refiners
