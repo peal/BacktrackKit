@@ -15,7 +15,7 @@
 <body class="chap0"  onload="jscontent()">
 
 
-<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chapInd.html">Ind</a>  </div>
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chap8.html">8</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
 
 <div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1.html">[Next Chapter]</a>&nbsp;  </div>
 
@@ -29,10 +29,10 @@
 <h2>An extensible, easy to understand backtracking framework</h2>
 
 <p>
-    0.6.0</p>
+    0.6.1</p>
 
 <p>
-    3 December 2021
+    21 December 2021
   </p>
 
 </div>
@@ -63,76 +63,141 @@
 
 <div class="ContChap"><a href="chap1.html#X7DFB63A97E67C0A1">1 <span class="Heading">Introduction</span></a>
 </div>
-<div class="ContChap"><a href="chap2.html#X87F1120883F5B4D0">2 <span class="Heading">Functionality</span></a>
-<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X7ED1D62579C10890">2.1 <span class="Heading">Example methods</span></a>
+<div class="ContChap"><a href="chap2.html#X7AFC55FA7BF3A14B">2 <span class="Heading">Executing a search</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X824CFF9980E7047C">2.1 <span class="Heading">The main search interface</span></a>
 </span>
 <div class="ContSSBlock">
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7DE94FB47EE37BBE">2.1-1 SaveState</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7D014EF28041BE26">2.1-2 RestoreState</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7C4A9E91849CB9B3">2.1-3 ConsolidateState</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X84708DA6801CA1BF">2.1-4 BTKit_BuildProblem</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X84E1FAA97B2142CE">2.1-5 InfoBTKit</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X872942DA83EC6949">2.1-1 BTKit_SimpleSearch</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7ECFC9E08380AE26">2.1-2 BTKit_SimpleSinglePermSearch</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X879178A1787B1C42">2.1-3 BTKit_SimpleAllPermSearch</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X878776F47DE765A2">2.2 <span class="Heading">Extra information and stats</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X84E1FAA97B2142CE">2.2-1 InfoBTKit</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7CCB09F886CDCF5A">2.2-2 BTKit_ResetStats</a></span>
 </div></div>
 </div>
 <div class="ContChap"><a href="chap3.html#X78289A737AF28B39">3 <span class="Heading">Implementation</span></a>
-<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap3.html#X84EFA4C07D4277BB">3.1 <span class="Heading">Filters</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap3.html#X819E3E3080297347">3.1 <span class="Heading">State</span></a>
 </span>
 <div class="ContSSBlock">
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8170C6EA85B072C5">3.1-1 ApplyFilters</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X814E8F697AE9D4F5">3.1-1 IsBacktrackableState</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7C7D9033781D77AC">3.1-2 IsBTKitState</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7D7DBACA829515F8">3.1-3 BacktrackableStateFamily</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7ABE73598213E222">3.1-4 BTKitStateType</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7DE94FB47EE37BBE">3.1-5 SaveState</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7D014EF28041BE26">3.1-6 RestoreState</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7C4A9E91849CB9B3">3.1-7 ConsolidateState</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap3.html#X8545C495874AE809">3.2 <span class="Heading">Applying refiners</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X807FF70880EE34CF">3.2-1 InitialiseConstraints</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X80E5399E7D4BF31A">3.2-2 RefineConstraints</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7BF188D085316F4E">3.2-3 FinaliseRBaseForConstraints</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8170C6EA85B072C5">3.2-4 ApplyFilters</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap3.html#X7BFE8AF77D5711DB">3.3 <span class="Heading">Currently unorganised stuff</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X84708DA6801CA1BF">3.3-1 BTKit_BuildProblem</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7DCD7DBC7949698F">3.3-2 FirstFixedPoint</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X808033DB806C2A8A">3.3-3 BuildRBase</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X86C78160854C7F30">3.3-4 Backtrack</a></span>
 </div></div>
 </div>
 <div class="ContChap"><a href="chap4.html#X79EAB456814AB11C">4 <span class="Heading">Constraints</span></a>
-<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X87747BA382104C75">4.1 <span class="Heading">The record <code class="code">refine</code></span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X797E854C79F0D54B">4.1 <span class="Heading">The concept of constraints in <strong class="pkg">BacktrackKit</strong></span></a>
 </span>
 </div>
-</div>
-<div class="ContChap"><a href="chap5.html#X7B61AC9A85828989">5 <span class="Heading">Ordered partition stack</span></a>
-<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap5.html#X7C5F33687C53BEF0">5.1 <span class="Heading">API</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X7B9120587846382A">4.2 <span class="Heading">The <code class="code">Constraints</code> record</span></a>
 </span>
 <div class="ContSSBlock">
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7A9FF6388195C13A">5.1-1 PartitionStack</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7A8003F07AC3A97E">5.1-2 IsPartitionStack</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X85AF4CC17DAB8EAC">5.1-3 PS_Points</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X82867B8E8152373E">5.1-4 PS_ExtendedPoints</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7CC503FC8527CB18">5.1-5 PS_Extend</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X82856A777DDA406C">5.1-6 PS_Cells</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X873E072E8542B269">5.1-7 PS_Fixed</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7E015C9387A1EF06">5.1-8 PS_AsPartition</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X783238627BBF34BF">5.1-9 PS_CellLen</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X87F7B8967C13DB93">5.1-10 PS_CellSlice</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7F3E5B177A2EB704">5.1-11 PS_FixedCells</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7C44BEAA7ACDFCD6">5.1-12 PS_FixedPoints</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X87AD8675864328E9">5.1-13 PS_CellOfPoint</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7E0173CA8335F7A0">5.1-14 PS_RevertToCellCount</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X78E2F8E9851E0437">5.1-15 PS_SplitCellByFunction</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X86FB7D27850BB487">5.1-16 PS_SplitCellsByFunction</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X80A706117ED1ED9A">5.1-17 PS_SplitCellByUnorderedFunction</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7EC64E7D7F6B90DA">5.1-18 PS_SplitCellsByUnorderedFunction</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7CFD0CB77DBD3EAF">4.2-1 Constraint</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X87477C9F83C21275">4.3 <span class="Heading">Constraints via the <code class="code">Constraint</code> record</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7F4B593980803A70">4.3-1 Constraint.InGroup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7FBD53647F43F667">4.3-2 Constraint.InCoset</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X8776BEBD7C3BDF53">4.3-3 Constraint.InRightCoset</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X876173A9825FE297">4.3-4 Constraint.InLeftCoset</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X8284E27E87D06FA7">4.3-5 Constraint.Transport</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7BA3B89D8206CBCE">4.3-6 Constraint.Stabilise</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X851757EC7DC5D0CE">4.3-7 Constraint.Normalise</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7B129ACB85ABD064">4.3-8 Constraint.Centralise</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X81E722EA84F47EC1">4.3-9 Constraint.Conjugate</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X825348DB7DD165F7">4.3-10 Constraint.MovedPoints</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X85EC63B08043C2BC">4.3-11 Constraint.LargestMovedPoint</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X824DCDD682D86290">4.3-12 Constraint.IsEven</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X86A1A070831A03BF">4.3-13 Constraint.IsOdd</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X781AC8657A774E44">4.3-14 Constraint.IsTrivial</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X84CD09F07F5C990B">4.3-15 Constraint.None</a></span>
 </div></div>
 </div>
-<div class="ContChap"><a href="chap6.html#X8729FC2B871E0D84">6 <span class="Heading">Ordered tracers</span></a>
+<div class="ContChap"><a href="chap5.html#X786EF6928319D57A">5 <span class="Heading">Refiners</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap5.html#X85191AFE78787117">5.1 <span class="Heading">Introduction to refiners</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap5.html#X87747BA382104C75">5.2 <span class="Heading">The record <code class="code">refine</code></span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap5.html#X7F61F52979EC5E32">5.3 <span class="Heading">Constructing refiners</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7EB9D3387F93831C">5.3-1 DummyRefiner</a></span>
+</div></div>
+</div>
+<div class="ContChap"><a href="chap6.html#X7F162F8881AD1B5F">6 <span class="Heading">Ordered partition stacks</span></a>
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap6.html#X7C5F33687C53BEF0">6.1 <span class="Heading">API</span></a>
 </span>
 <div class="ContSSBlock">
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X8077D83F7B216046">6.1-1 RecordingTracer</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7E24117A856F8F34">6.1-2 FollowingTracer</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X86E206497A80D4DE">6.1-3 CanonicalisingTracerFromTracer</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7E3E796E8059BEE8">6.1-4 EmptyCanonicalisingTracer</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X81DC25027CDA2EB0">6.1-5 IsTracer</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X79B4735E7C125A9F">6.1-6 AddEvent</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7C6CD4FF86E300D4">6.1-7 TraceLength</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X8051C986836DB892">6.1-8 TraceEvent</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X83F9A7CD7FC5DFE5">6.1-9 GetEvents</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7A9FF6388195C13A">6.1-1 PartitionStack</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7A8003F07AC3A97E">6.1-2 IsPartitionStack</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X85AF4CC17DAB8EAC">6.1-3 PS_Points</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X82867B8E8152373E">6.1-4 PS_ExtendedPoints</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7CC503FC8527CB18">6.1-5 PS_Extend</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X82856A777DDA406C">6.1-6 PS_Cells</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X873E072E8542B269">6.1-7 PS_Fixed</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7E015C9387A1EF06">6.1-8 PS_AsPartition</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X783238627BBF34BF">6.1-9 PS_CellLen</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X87F7B8967C13DB93">6.1-10 PS_CellSlice</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7F3E5B177A2EB704">6.1-11 PS_FixedCells</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7C44BEAA7ACDFCD6">6.1-12 PS_FixedPoints</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X87AD8675864328E9">6.1-13 PS_CellOfPoint</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7E0173CA8335F7A0">6.1-14 PS_RevertToCellCount</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X78E2F8E9851E0437">6.1-15 PS_SplitCellByFunction</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X86FB7D27850BB487">6.1-16 PS_SplitCellsByFunction</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7C415A198398CA8D">6.1-17 PS_ExtendedSplitCellsByFunction</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X80A706117ED1ED9A">6.1-18 PS_SplitCellByUnorderedFunction</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6.html#X7EC64E7D7F6B90DA">6.1-19 PS_SplitCellsByUnorderedFunction</a></span>
 </div></div>
 </div>
-<div class="ContChap"><a href="chap7.html#X81932F777898AD72">7 <span class="Heading">Tutorial</span></a>
-<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap7.html#X86BC65BE838451F0">7.1 <span class="Heading">Partition Stacks</span></a>
+<div class="ContChap"><a href="chap7.html#X8729FC2B871E0D84">7 <span class="Heading">Ordered tracers</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap7.html#X7C5F33687C53BEF0">7.1 <span class="Heading">API</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7.html#X8077D83F7B216046">7.1-1 RecordingTracer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7.html#X7E24117A856F8F34">7.1-2 FollowingTracer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7.html#X86E206497A80D4DE">7.1-3 CanonicalisingTracerFromTracer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7.html#X7E3E796E8059BEE8">7.1-4 EmptyCanonicalisingTracer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7.html#X81DC25027CDA2EB0">7.1-5 IsTracer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7.html#X79B4735E7C125A9F">7.1-6 AddEvent</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7.html#X7C6CD4FF86E300D4">7.1-7 TraceLength</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7.html#X8051C986836DB892">7.1-8 TraceEvent</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7.html#X83F9A7CD7FC5DFE5">7.1-9 GetEvents</a></span>
+</div></div>
+</div>
+<div class="ContChap"><a href="chap8.html#X81932F777898AD72">8 <span class="Heading">Tutorial</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap8.html#X86BC65BE838451F0">8.1 <span class="Heading">Partition Stacks</span></a>
 </span>
 </div>
-<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap7.html#X786EF6928319D57A">7.2 <span class="Heading">Refiners</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap8.html#X786EF6928319D57A">8.2 <span class="Heading">Refiners</span></a>
 </span>
 </div>
 </div>
+<div class="ContChap"><a href="chapBib.html"><span class="Heading">References</span></a></div>
 <div class="ContChap"><a href="chapInd.html"><span class="Heading">Index</span></a></div>
 <br />
 </div>
@@ -140,7 +205,7 @@
 <div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1.html">[Next Chapter]</a>&nbsp;  </div>
 
 
-<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chapInd.html">Ind</a>  </div>
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chap8.html">8</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
 
 <hr />
 <p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>

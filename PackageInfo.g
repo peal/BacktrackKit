@@ -1,22 +1,16 @@
 #
 # BacktrackKit: An extensible, easy to understand backtracking framework
 #
-# This file contains package meta data. For additional information on
-# the meaning and correct usage of these fields, please consult the
-# manual of the "Example" package as well as the comments in its
-# PackageInfo.g file.
-#
 
 _STANDREWSCS := Concatenation(["Jack Cole Building, North Haugh, ",
                                "St Andrews, Fife, KY16 9SX, Scotland"]);
-
 
 SetPackageInfo( rec(
 
 PackageName := "BacktrackKit",
 Subtitle := "An extensible, easy to understand backtracking framework",
-Version := "0.6.0",
-Date := "03/12/2021", # dd/mm/yyyy format
+Version := "0.6.1",
+Date := "21/12/2021", # dd/mm/yyyy format
 
 
 Persons := [
@@ -50,10 +44,7 @@ Persons := [
     IsAuthor      := false,
     IsMaintainer  := false,
     Email         := "markus.pfeiffer@morphism.de",
-    WWWHome       := "https://www.morphism.de/~markusp",
-    PostalAddress := _STANDREWSCS,
-    Place         := "St Andrews",
-    Institution   := "University of St Andrews"
+    WWWHome       := "https://markusp.morphism.de",
   ),
 ],
 
@@ -62,9 +53,9 @@ SourceRepository := rec(
     URL := "https://github.com/peal/BacktrackKit",
 ),
 IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
-PackageWWWHome  := "https://peal.github.io/BacktrackKit/",
-PackageInfoURL  := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
-README_URL      := Concatenation( ~.PackageWWWHome, "README.md" ),
+PackageWWWHome  := "https://peal.github.io/BacktrackKit",
+PackageInfoURL  := Concatenation( ~.PackageWWWHome, "/PackageInfo.g" ),
+README_URL      := Concatenation( ~.PackageWWWHome, "/README.md" ),
 ArchiveURL      := Concatenation( ~.SourceRepository.URL,
                                  "/releases/download/v", ~.Version,
                                  "/", ~.PackageName, "-", ~.Version ),
@@ -81,7 +72,7 @@ ArchiveFormats := ".tar.gz",
 ##
 Status := "dev",
 
-AbstractHTML   :=  "",
+AbstractHTML :=  "",
 
 PackageDoc := rec(
   BookName  := "BacktrackKit",

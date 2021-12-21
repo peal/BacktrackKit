@@ -1,6 +1,6 @@
 name: BacktrackKit
-version: 0.6.0
-date: 2021-12-03
+version: 0.6.1
+date: 2021-12-21
 description: |
     An extensible, easy to understand backtracking framework
 
@@ -18,7 +18,7 @@ maintainers:
 
 contributors:
     - name: Markus Pfeiffer
-      url: https://www.morphism.de/~markusp
+      url: https://markusp.morphism.de
 
 GAP: ">= 4.11"
 
@@ -36,13 +36,13 @@ needed-pkgs:
       version: ">=3.4.0"
       url: "https://gap-packages.github.io/primgrp/"
 
-www: https://peal.github.io/BacktrackKit/
+www: https://peal.github.io/BacktrackKit
 readme: README.md
 packageinfo: https://peal.github.io/BacktrackKit/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/peal/BacktrackKit/releases/download/v0.6.0/BacktrackKit-0.6.0.tar.gz
+      url: https://github.com/peal/BacktrackKit/releases/download/v0.6.1/BacktrackKit-0.6.1.tar.gz
 
 abstract: |
 
@@ -53,23 +53,24 @@ citeas: |
     <p class='BibEntry'>
     [<span class='BibKey'>JW21</span>]   <b class='BibAuthor'>Jefferson, C. and Wilson, W. A.</b>,
      <i class='BibTitle'>BacktrackKit, An extensible, easy to understand backtracking framework,
-             Version 0.6.0</i>
+             Version 0.6.1</i>
      (<span class='BibYear'>2021</span>)<br />
     (<span class='BibNote'>GAP package</span>),
-    <span class='BibHowpublished'><a href="https://peal.github.io/BacktrackKit/">https://peal.github.io/BacktrackKit/</a></span>.
+    <span class='BibHowpublished'><a href="https://peal.github.io/BacktrackKit">https://peal.github.io/BacktrackKit</a></span>.
     </p>
     
 
 bibtex: |
-    @misc{ BacktrackKit0.6.0,
+    @misc{ BacktrackKit0.6.1,
       author =           {Jefferson, C. and Wilson, W. A.},
-      title =            {{BacktrackKit},  An  extensible,  easy to understand backtracking framework, {V}ersion
-                          0.6.0},
+      title =            {{BacktrackKit},  An  extensible,  easy  to  understand
+                          backtracking framework, {V}ersion 0.6.1},
       month =            {Dec},
       year =             {2021},
       note =             {GAP package},
-      howpublished =     {\href                                           {https://peal.github.io/BacktrackKit/}
-                          {\texttt{https://peal.github.io/}\discretionary {}{}{}\texttt{BacktrackKit/}}},
+      howpublished =     {\href            {https://peal.github.io/BacktrackKit}
+                          {\texttt{https://peal.github.io/}\discretionary
+                          {}{}{}\texttt{BacktrackKit}}},
       printedkey =       {JW21}
     }
 

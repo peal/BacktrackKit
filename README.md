@@ -27,6 +27,14 @@ at https://github.com/peal/BacktrackKit/issues
 
 ## History
 
+
+0.6.1
+-----
+
+* Rename `BTKit_Con` to `BTKit_Refiner`.
+* Add constraints documentation from Vole
+* Add `ProcessConstraints` and `BTKit_RefinerFromConstraint`
+
 0.6.0
 -----
 

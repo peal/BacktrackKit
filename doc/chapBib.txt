@@ -1,0 +1,15 @@
+  
+  
+  [1XReferences[101X
+  
+  [[20XLeo91[120X]  [16XLeon,  J.  S.[116X, [17XPermutation group algorithms based on partitions. I.
+  Theory and algorithms[117X, [18XJ. Symbolic Comput.[118X, [19X12[119X, 4-5 (1991), 533--583.
+  
+  [[20XLeo97[120X]   [16XLeon,  J.  S.[116X,  [17XPartitions,  refinements,  and  permutation  group
+  computation[117X,  in Groups and computation, II (New Brunswick, NJ, 1995), Amer.
+  Math.  Soc.,  Providence,  RI,  DIMACS  Ser. Discrete Math. Theoret. Comput.
+  Sci., [19X28[119X (1997), 123--158.
+  
+  
+  
+  [32X

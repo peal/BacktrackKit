@@ -1,5 +1,7 @@
   
   [1X1 [33X[0;0YIntroduction[133X[101X
   
-  [33X[0;0YBacktrackKit is a package which does some interesting and cool things.[133X
+  [33X[0;0Y[5XBacktrackKit[105X is a package which does some interesting and cool things.[133X
+  
+  [33X[0;0YThis implements the algorithm described in [Leo91] and [Leo97].[133X
   

@@ -2,39 +2,74 @@
   
   [1XIndex[101X
   
-  [2XAddEvent[102X, for IsTracer, IsObject 6.1-6 
-  [2XApplyFilters[102X, for IsBTKitState, IsTracer, IsObject 3.1-1 
-  [2XBTKit_BuildProblem[102X 2.1-4 
-  [2XCanonicalisingTracerFromTracer[102X 6.1-3 
-  [2XConsolidateState[102X, for IsBacktrackableState, IsTracer 2.1-3 
-  [2XEmptyCanonicalisingTracer[102X 6.1-4 
-  [2XFollowingTracer[102X 6.1-2 
-  [2XGetEvents[102X, for IsTracer 6.1-9 
-  [2XInfoBTKit[102X 2.1-5 
-  [2XIsPartitionStack[102X, for IsObject 5.1-2 
-  [2XIsTracer[102X, for IsObject 6.1-5 
-  [2XPartitionStack[102X 5.1-1 
-  [2XPS_AsPartition[102X, for IsPartitionStack 5.1-8 
-  [2XPS_CellLen[102X, for IsPartitionStack, IsPosInt 5.1-9 
-  [2XPS_CellOfPoint[102X, for IsPartitionStack, IsPosInt 5.1-13 
-  [2XPS_Cells[102X, for IsPartitionStack 5.1-6 
-  [2XPS_CellSlice[102X, for IsPartitionStack, IsPosInt 5.1-10 
-  [2XPS_Extend[102X, for IsPartitionStack, IsPosInt 5.1-5 
-  [2XPS_ExtendedPoints[102X, for IsPartitionStack 5.1-4 
-  [2XPS_Fixed[102X, for IsPartitionStack 5.1-7 
-  [2XPS_FixedCells[102X, for IsPartitionStack 5.1-11 
-  [2XPS_FixedPoints[102X, for IsPartitionStack 5.1-12 
-  [2XPS_Points[102X, for IsPartitionStack 5.1-3 
-  [2XPS_RevertToCellCount[102X, for IsPartitionStack, IsPosInt 5.1-14 
-  [2XPS_SplitCellByFunction[102X, for IsPartitionStack, IsTracer, IsPosInt, IsFunction 5.1-15 
-  [2XPS_SplitCellByUnorderedFunction[102X, for IsPartitionStack, IsTracer, IsPosInt, IsFunction 5.1-17 
-  [2XPS_SplitCellsByFunction[102X, for IsPartitionStack, IsTracer, IsFunction 5.1-16 
-  [2XPS_SplitCellsByUnorderedFunction[102X, for IsPartitionStack, IsTracer, IsFunction 5.1-18 
-  [2XRecordingTracer[102X 6.1-1 
-  [2XRestoreState[102X, for IsBacktrackableState, IsObject 2.1-2 
-  [2XSaveState[102X, for IsBacktrackableState 2.1-1 
-  [2XTraceEvent[102X, for IsTracer, IsPosInt 6.1-8 
-  [2XTraceLength[102X, for IsTracer 6.1-7 
+  [2XAddEvent[102X, for IsTracer, IsObject 7.1-6 
+  [2XApplyFilters[102X, for IsBTKitState, IsTracer, IsObject 3.2-4 
+  [2XBacktrack[102X 3.3-4 
+  [2XBacktrackableStateFamily[102X 3.1-3 
+  [2XBTKit_BuildProblem[102X 3.3-1 
+  [2XBTKit_ResetStats[102X 2.2-2 
+  [2XBTKit_SimpleAllPermSearch[102X 2.1-3 
+  [2XBTKit_SimpleSearch[102X 2.1-1 
+  [2XBTKit_SimpleSinglePermSearch[102X 2.1-2 
+  [2XBTKitStateType[102X 3.1-4 
+  [2XBuildRBase[102X 3.3-3 
+  [2XCanonicalisingTracerFromTracer[102X 7.1-3 
+  [2XConsolidateState[102X, for IsBacktrackableState, IsTracer 3.1-7 
+  [2XConstraint[102X 4.2-1 
+  [2XConstraint.Centralise[102X 4.3-8 
+  [2XConstraint.Centralize[102X 4.3-8 
+  [2XConstraint.Conjugate[102X 4.3-9 
+  [2XConstraint.InCoset[102X 4.3-2 
+  [2XConstraint.InGroup[102X 4.3-1 
+  [2XConstraint.InLeftCoset[102X 4.3-4 
+  [2XConstraint.InRightCoset[102X 4.3-3 
+  [2XConstraint.IsEven[102X 4.3-12 
+  [2XConstraint.IsOdd[102X 4.3-13 
+  [2XConstraint.IsTrivial[102X 4.3-14 
+  [2XConstraint.LargestMovedPoint[102X 4.3-11 
+  [2XConstraint.MovedPoints[102X 4.3-10 
+  [2XConstraint.None[102X 4.3-15 
+  [2XConstraint.Normalise[102X 4.3-7 
+  [2XConstraint.Normalize[102X 4.3-7 
+  [2XConstraint.Stabilise[102X 4.3-6 
+  [2XConstraint.Stabilize[102X 4.3-6 
+  [2XConstraint.Transport[102X 4.3-5 
+  [2XDummyRefiner[102X, for IsConstraint 5.3-1 
+  [2XEmptyCanonicalisingTracer[102X 7.1-4 
+  [2XFinaliseRBaseForConstraints[102X 3.2-3 
+  [2XFirstFixedPoint[102X 3.3-2 
+  [2XFollowingTracer[102X 7.1-2 
+  [2XGetEvents[102X, for IsTracer 7.1-9 
+  [2XInfoBTKit[102X 2.2-1 
+  [2XInitialiseConstraints[102X 3.2-1 
+  [2XIsBacktrackableState[102X, for IsObject 3.1-1 
+  [2XIsBTKitState[102X, for IsBacktrackableState 3.1-2 
+  [2XIsPartitionStack[102X, for IsObject 6.1-2 
+  [2XIsTracer[102X, for IsObject 7.1-5 
+  [2XPartitionStack[102X 6.1-1 
+  [2XPS_AsPartition[102X, for IsPartitionStack 6.1-8 
+  [2XPS_CellLen[102X, for IsPartitionStack, IsPosInt 6.1-9 
+  [2XPS_CellOfPoint[102X, for IsPartitionStack, IsPosInt 6.1-13 
+  [2XPS_Cells[102X, for IsPartitionStack 6.1-6 
+  [2XPS_CellSlice[102X, for IsPartitionStack, IsPosInt 6.1-10 
+  [2XPS_Extend[102X, for IsPartitionStack, IsPosInt 6.1-5 
+  [2XPS_ExtendedPoints[102X, for IsPartitionStack 6.1-4 
+  [2XPS_ExtendedSplitCellsByFunction[102X, for IsPartitionStack, IsTracer, IsFunction 6.1-17 
+  [2XPS_Fixed[102X, for IsPartitionStack 6.1-7 
+  [2XPS_FixedCells[102X, for IsPartitionStack 6.1-11 
+  [2XPS_FixedPoints[102X, for IsPartitionStack 6.1-12 
+  [2XPS_Points[102X, for IsPartitionStack 6.1-3 
+  [2XPS_RevertToCellCount[102X, for IsPartitionStack, IsPosInt 6.1-14 
+  [2XPS_SplitCellByFunction[102X, for IsPartitionStack, IsTracer, IsPosInt, IsFunction 6.1-15 
+  [2XPS_SplitCellByUnorderedFunction[102X, for IsPartitionStack, IsTracer, IsPosInt, IsFunction 6.1-18 
+  [2XPS_SplitCellsByFunction[102X, for IsPartitionStack, IsTracer, IsFunction 6.1-16 
+  [2XPS_SplitCellsByUnorderedFunction[102X, for IsPartitionStack, IsTracer, IsFunction 6.1-19 
+  [2XRecordingTracer[102X 7.1-1 
+  [2XRefineConstraints[102X 3.2-2 
+  [2XRestoreState[102X, for IsBacktrackableState, IsObject 3.1-6 
+  [2XSaveState[102X, for IsBacktrackableState 3.1-5 
+  [2XTraceEvent[102X, for IsTracer, IsPosInt 7.1-8 
+  [2XTraceLength[102X, for IsTracer 7.1-7 
   
   
   -------------------------------------------------------

@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>GAP (BacktrackKit) - Chapter 5: Ordered partition stack</title>
+<title>GAP (BacktrackKit) - Chapter 5: Refiners</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <meta name="generator" content="GAPDoc2HTML" />
 <link rel="stylesheet" type="text/css" href="manual.css" />
@@ -15,208 +15,104 @@
 <body class="chap5"  onload="jscontent()">
 
 
-<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chapInd.html">Ind</a>  </div>
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chap8.html">8</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
 
 <div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap4.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap6.html">[Next Chapter]</a>&nbsp;  </div>
 
 <p id="mathjaxlink" class="pcenter"><a href="chap5_mj.html">[MathJax on]</a></p>
-<p><a id="X7B61AC9A85828989" name="X7B61AC9A85828989"></a></p>
-<div class="ChapSects"><a href="chap5.html#X7B61AC9A85828989">5 <span class="Heading">Ordered partition stack</span></a>
-<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap5.html#X7C5F33687C53BEF0">5.1 <span class="Heading">API</span></a>
+<p><a id="X786EF6928319D57A" name="X786EF6928319D57A"></a></p>
+<div class="ChapSects"><a href="chap5.html#X786EF6928319D57A">5 <span class="Heading">Refiners</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap5.html#X85191AFE78787117">5.1 <span class="Heading">Introduction to refiners</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap5.html#X87747BA382104C75">5.2 <span class="Heading">The record <code class="code">refine</code></span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap5.html#X7F61F52979EC5E32">5.3 <span class="Heading">Constructing refiners</span></a>
 </span>
 <div class="ContSSBlock">
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7A9FF6388195C13A">5.1-1 PartitionStack</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7A8003F07AC3A97E">5.1-2 IsPartitionStack</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X85AF4CC17DAB8EAC">5.1-3 PS_Points</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X82867B8E8152373E">5.1-4 PS_ExtendedPoints</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7CC503FC8527CB18">5.1-5 PS_Extend</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X82856A777DDA406C">5.1-6 PS_Cells</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X873E072E8542B269">5.1-7 PS_Fixed</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7E015C9387A1EF06">5.1-8 PS_AsPartition</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X783238627BBF34BF">5.1-9 PS_CellLen</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X87F7B8967C13DB93">5.1-10 PS_CellSlice</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7F3E5B177A2EB704">5.1-11 PS_FixedCells</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7C44BEAA7ACDFCD6">5.1-12 PS_FixedPoints</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X87AD8675864328E9">5.1-13 PS_CellOfPoint</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7E0173CA8335F7A0">5.1-14 PS_RevertToCellCount</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X78E2F8E9851E0437">5.1-15 PS_SplitCellByFunction</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X86FB7D27850BB487">5.1-16 PS_SplitCellsByFunction</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X80A706117ED1ED9A">5.1-17 PS_SplitCellByUnorderedFunction</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7EC64E7D7F6B90DA">5.1-18 PS_SplitCellsByUnorderedFunction</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5.html#X7EB9D3387F93831C">5.3-1 DummyRefiner</a></span>
 </div></div>
 </div>
 
-<h3>5 <span class="Heading">Ordered partition stack</span></h3>
+<h3>5 <span class="Heading">Refiners</span></h3>
 
-<p>An <em>ordered partition stack</em> is an ordered partition which supports splitting a cell, and then later undoing a change, reverting the partition back to an earlier state.</p>
+<p><a id="X85191AFE78787117" name="X85191AFE78787117"></a></p>
 
-<p><a id="X7C5F33687C53BEF0" name="X7C5F33687C53BEF0"></a></p>
+<h4>5.1 <span class="Heading">Introduction to refiners</span></h4>
 
-<h4>5.1 <span class="Heading">API</span></h4>
+<p>In <strong class="pkg">BacktrackKit</strong>, a refiner is implemented as a record that must contain:</p>
 
-<p><a id="X7A9FF6388195C13A" name="X7A9FF6388195C13A"></a></p>
 
-<h5>5.1-1 PartitionStack</h5>
+<ul>
+<li><p>A member called <code class="code">name</code>, which is a string giving the name of the constraint;</p>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PartitionStack</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
-<p>Returns: a partition stack.</p>
+</li>
+<li><p>A member called <code class="code">largest_required_point</code>, which is an integer which gives the smallest size partition this refiner will work on. For example, given a set we would expect this to be the largest element of the set.</p>
 
-<p>Constructor for partition stacks.</p>
+</li>
+<li><p>A member called <code class="code">constraint</code>, which is a constraint object, such that the refiner is refining for the permutations that satisfy the constraint.</p>
 
-<p><a id="X7A8003F07AC3A97E" name="X7A8003F07AC3A97E"></a></p>
+</li>
+<li><p>A member called <code class="code">refine</code>, which is a record; more information is given below.</p>
 
-<h5>5.1-2 IsPartitionStack</h5>
+</li>
+</ul>
+<p>A constraint may also optionally contain any of the following members:</p>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsPartitionStack</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;filter&nbsp;)</td></tr></table></div>
-<p>Returns: <code class="code">true</code> or <code class="code">false</code></p>
 
-<p>Category of partition stacks.</p>
+<ul>
+<li><p>A member called <code class="code">btdata</code>. The data in this member will be automatically saved and restored on backtrack.</p>
 
-<p><a id="X85AF4CC17DAB8EAC" name="X85AF4CC17DAB8EAC"></a></p>
+</li>
+</ul>
+<p><a id="X87747BA382104C75" name="X87747BA382104C75"></a></p>
 
-<h5>5.1-3 PS_Points</h5>
+<h4>5.2 <span class="Heading">The record <code class="code">refine</code></span></h4>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PS_Points</code>( <var class="Arg">PS</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Returns: a positive integer.</p>
+<p>The <code class="code">refine</code> member of a constraint is a record that contains functions which, if present, will be called to inform the constraint of behaviour as search progresses, and to give the constraint the opportunity to influence the search. The permissible functions are given described below.</p>
 
-<p>Return the number of points on which the partition stack <var class="Arg">PS</var> was originally defined.</p>
+<p>These functions will always be passed at least two arguments: firstly the constraint itself, and then the partition stack. Details of any further arguments are described with the relevant function, below.</p>
 
-<p><a id="X82867B8E8152373E" name="X82867B8E8152373E"></a></p>
 
-<h5>5.1-4 PS_ExtendedPoints</h5>
+<ul>
+<li><p><code class="code">initialise</code> <em>(required)</em>. This is called when search begins. Note that, since the <code class="code">refine.initialise</code> function is called for all relevant constraints at the beginning of search, the partition may have already been split by some earlier constraint by the time that <code class="code">refine.initialise</code> is called for a later constraint.</p>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PS_ExtendedPoints</code>( <var class="Arg">PS</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Returns: a positive integer.</p>
+</li>
+</ul>
+<p>At most one of the following two functions will generally be implemented.</p>
 
-<p>Return the number of points on which the partition stack <var class="Arg">PS</var> is currently defined on (which includes extra points added during refinement)</p>
 
-<p><a id="X7CC503FC8527CB18" name="X7CC503FC8527CB18"></a></p>
+<ul>
+<li><p><code class="code">changed</code> - Will be called after one or more splits in the partition occur.</p>
 
-<h5>5.1-5 PS_Extend</h5>
+</li>
+<li><p><code class="code">fixed</code> - Will be called after one or more points in the partition became fixed.</p>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PS_Extend</code>( <var class="Arg">PS</var>, <var class="Arg">NewPoints</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Returns: the label of the new cell</p>
+</li>
+</ul>
 
-<p>Adds <var class="Arg">NewPoints</var> to PS, as a new cell at the end. Will be removed on backtracking.</p>
+<ul>
+<li><p><code class="code">rBaseFinished</code> - The rBase has been created (is passed the rbase). Constraints which care about this can use this to remember the rBase construction is finished.</p>
 
-<p><a id="X82856A777DDA406C" name="X82856A777DDA406C"></a></p>
+</li>
+</ul>
+<p><a id="X7F61F52979EC5E32" name="X7F61F52979EC5E32"></a></p>
 
-<h5>5.1-6 PS_Cells</h5>
+<h4>5.3 <span class="Heading">Constructing refiners</span></h4>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PS_Cells</code>( <var class="Arg">PS</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Returns: a positive integer.</p>
+<p><a id="X7EB9D3387F93831C" name="X7EB9D3387F93831C"></a></p>
 
-<p>The number of cells in the current partition state of the partition stack <var class="Arg">PS</var>.</p>
+<h5>5.3-1 DummyRefiner</h5>
 
-<p><a id="X873E072E8542B269" name="X873E072E8542B269"></a></p>
-
-<h5>5.1-7 PS_Fixed</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PS_Fixed</code>( <var class="Arg">PS</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code>.</p>
-
-<p>Return <code class="keyw">true</code> if all the cells of the current partition state of the partition stack <var class="Arg">PS</var> have size 1 and were in the 'original partition'.</p>
-
-<p><a id="X7E015C9387A1EF06" name="X7E015C9387A1EF06"></a></p>
-
-<h5>5.1-8 PS_AsPartition</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PS_AsPartition</code>( <var class="Arg">PS</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Returns: a list of lists of positive integers.</p>
-
-<p>Return the current partition state of the partition stack <var class="Arg">PS</var> as a list of sets, in the correct order.</p>
-
-<p><a id="X783238627BBF34BF" name="X783238627BBF34BF"></a></p>
-
-<h5>5.1-9 PS_CellLen</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PS_CellLen</code>( <var class="Arg">PS</var>, <var class="Arg">i</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Returns: a positive integer.</p>
-
-<p>The size of cell <var class="Arg">i</var> in the current partition state of the partition stack <var class="Arg">PS</var>. This requires that <var class="Arg">i</var> is contained in <code class="code">[1..PS_Cells(<var class="Arg">PS</var>)]</code>.</p>
-
-<p><a id="X87F7B8967C13DB93" name="X87F7B8967C13DB93"></a></p>
-
-<h5>5.1-10 PS_CellSlice</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PS_CellSlice</code>( <var class="Arg">PS</var>, <var class="Arg">i</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Returns: an immutable list of positive integers.</p>
-
-<p>Return an immutable list containing the elements of cell <var class="Arg">i</var> in the current partition state of the partition stack <var class="Arg">PS</var>. This requires that <var class="Arg">i</var> is contained in <code class="code">[1..PS_Cells(<var class="Arg">PS</var>)]</code>.</p>
-
-<p><a id="X7F3E5B177A2EB704" name="X7F3E5B177A2EB704"></a></p>
-
-<h5>5.1-11 PS_FixedCells</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PS_FixedCells</code>( <var class="Arg">PS</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Returns: a list of 1-element lists of positive integers.</p>
-
-<p>Return a list of the 1-element cells of the current state of the partition stack <var class="Arg">PS</var> which contain points from the original size of the partition, in the order in which the cells came to have size 1.</p>
-
-<p><a id="X7C44BEAA7ACDFCD6" name="X7C44BEAA7ACDFCD6"></a></p>
-
-<h5>5.1-12 PS_FixedPoints</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PS_FixedPoints</code>( <var class="Arg">PS</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Returns: a list of positive integers.</p>
-
-<p>Return a list of points in 1-element cells of the partition stack <var class="Arg">PS</var>, in the order in which the cells came to have size 1. In other words, return <code class="code">Concatenation(PS_FixedCells(<var class="Arg">PS</var>))</code>.</p>
-
-<p><a id="X87AD8675864328E9" name="X87AD8675864328E9"></a></p>
-
-<h5>5.1-13 PS_CellOfPoint</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PS_CellOfPoint</code>( <var class="Arg">PS</var>, <var class="Arg">i</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Returns: a positive integer.</p>
-
-<p>Return the index of the cell containing the value <var class="Arg">i</var> in the current partition state of the partition stack <var class="Arg">PS</var>. This requires that <var class="Arg">i</var> is contained in <code class="code">[1..PS_ExtededPoints(<var class="Arg">PS</var>)]</code>.</p>
-
-<p><a id="X7E0173CA8335F7A0" name="X7E0173CA8335F7A0"></a></p>
-
-<h5>5.1-14 PS_RevertToCellCount</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PS_RevertToCellCount</code>( <var class="Arg">PS</var>, <var class="Arg">i</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Returns: nothing.</p>
-
-<p>Revert the state of the partition stack <var class="Arg">PS</var> to when there were <var class="Arg">i</var> cells. This requires that <var class="Arg">i</var> is contained in <code class="code">[1..PS_Cells(<var class="Arg">PS</var>)]</code>.</p>
-
-<p><a id="X78E2F8E9851E0437" name="X78E2F8E9851E0437"></a></p>
-
-<h5>5.1-15 PS_SplitCellByFunction</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PS_SplitCellByFunction</code>( <var class="Arg">PS</var>, <var class="Arg">t</var>, <var class="Arg">i</var>, <var class="Arg">f</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code>.</p>
-
-<p>Split cell <var class="Arg">i</var> of the current partition state of the partition stack <var class="Arg">PS</var> according to the function <var class="Arg">f</var>. The values in the cell are split so that those with different images under <var class="Arg">f</var> are put into different cells. The second argument <var class="Arg">t</var> should be a tracer.</p>
-
-<p><a id="X86FB7D27850BB487" name="X86FB7D27850BB487"></a></p>
-
-<h5>5.1-16 PS_SplitCellsByFunction</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PS_SplitCellsByFunction</code>( <var class="Arg">PS</var>, <var class="Arg">t</var>, <var class="Arg">f</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code>.</p>
-
-<p>Apply <code class="code">PS_SplitCellByFunction</code> to every active cell in the partition stack <var class="Arg">PS</var> (ignoring points added after search starts).</p>
-
-<p><a id="X80A706117ED1ED9A" name="X80A706117ED1ED9A"></a></p>
-
-<h5>5.1-17 PS_SplitCellByUnorderedFunction</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PS_SplitCellByUnorderedFunction</code>( <var class="Arg">PS</var>, <var class="Arg">t</var>, <var class="Arg">i</var>, <var class="Arg">f</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Split cell <var class="Arg">i</var> of the current partition state of the partition stack <var class="Arg">PS</var> according to the function <var class="Arg">f</var>. The values in the cell are split so that those with different images under <var class="Arg">f</var> are put into different cells. The second argument <var class="Arg">t</var> should be a tracer.</p>
-
-<p><a id="X7EC64E7D7F6B90DA" name="X7EC64E7D7F6B90DA"></a></p>
-
-<h5>5.1-18 PS_SplitCellsByUnorderedFunction</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PS_SplitCellsByUnorderedFunction</code>( <var class="Arg">PS</var>, <var class="Arg">t</var>, <var class="Arg">f</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Apply <code class="code">PS_SplitCellByUnorderedFunction</code> to every active cell in the partition stack <var class="Arg">PS</var>. The second argument <var class="Arg">t</var> should be a tracer.</p>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; DummyRefiner</code>( <var class="Arg">constraint</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>This wraps a constraint in a refiner that doesn't do any refining.</p>
 
 
 <div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap4.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap6.html">[Next Chapter]</a>&nbsp;  </div>
 
 
-<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chapInd.html">Ind</a>  </div>
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chap8.html">8</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
 
 <hr />
 <p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>

@@ -1,154 +1,71 @@
   
-  [1X7 [33X[0;0YTutorial[133X[101X
+  [1X7 [33X[0;0YOrdered tracers[133X[101X
+  
+  [33X[0;0YAn [13Xordered tracer[113X is...[133X
   
   
-  [1X7.1 [33X[0;0YPartition Stacks[133X[101X
+  [1X7.1 [33X[0;0YAPI[133X[101X
   
-  [33X[0;0YA  Partition  Stack represents an ordered partition which can be modified in
-  two ways:[133X
+  [1X7.1-1 RecordingTracer[101X
   
-  [30X    [33X[0;6YA cell in the ordered partition can be split into two pieces[133X
+  [33X[1;0Y[29X[2XRecordingTracer[102X(  ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10YA recording tracer[133X
   
-  [30X    [33X[0;6YThe ordered partition can be reverted to an earlier state, when it had
-        fewer cells.[133X
+  [33X[0;0YConstructor for recording tracers.[133X
   
-  [33X[0;0YLet's  look  at  an example! Firstly, we will create a partition stack which
-  partitions  [1..8]  (Partition  Stacks  are  always  defined  on  a range of
-  integers  starting from 1). In the initial state, the partition has a single
-  cell of size 1.[133X
+  [1X7.1-2 FollowingTracer[101X
   
-  [4X[32X  Example  [32X[104X
-    [4X[25Xgap>[125X [27XLoadPackage("BacktrackKit", false);;[127X[104X
-    [4X[25Xgap>[125X [27Xp := PartitionStack(8);[127X[104X
-    [4X[28X[ [ 1, 2, 3, 4, 5, 6, 7, 8 ] ][128X[104X
-  [4X[32X[104X
+  [33X[1;0Y[29X[2XFollowingTracer[102X( [3Xt[103X ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10YA following tracer[133X
   
-  [33X[0;0YIn  most  applications  of  Partition  Stacks, we want to record the list of
-  changes  which are made. These are stored in an object known as a Tracer. We
-  will make one.[133X
+  [33X[0;0YIf the argument [3Xt[103X is a tracer, then this constructs a tracer that follows [3Xt[103X.[133X
   
-  [4X[32X  Example  [32X[104X
-    [4X[25Xgap>[125X [27Xt := RecordingTracer();;[127X[104X
-  [4X[32X[104X
+  [1X7.1-3 CanonicalisingTracerFromTracer[101X
   
-  [33X[0;0YThe  main  method  used for splitting partitions is PS_SplitCellsByFunction.
-  This  takes  a partition stack, a tracer and a function. It splits each cell
-  of the partition by introducing a cell for each different value the function
-  takes.[133X
+  [33X[1;0Y[29X[2XCanonicalisingTracerFromTracer[102X(  ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10YA canonicalising tracer[133X
   
-  [4X[32X  Example  [32X[104X
-    [4X[25Xgap>[125X [27XPS_SplitCellsByFunction(p, t, {x} -> x mod 3);;[127X[104X
-    [4X[25Xgap>[125X [27Xp;[127X[104X
-    [4X[28X[ [ 3, 6 ], [ 2, 5, 8 ], [ 1, 4, 7 ] ][128X[104X
-  [4X[32X[104X
+  [33X[0;0YConstructor for canonicalising tracers.[133X
   
-  [33X[0;0YWe can further divide the partition with another function[133X
+  [1X7.1-4 EmptyCanonicalisingTracer[101X
   
-  [4X[32X  Example  [32X[104X
-    [4X[25Xgap>[125X [27XPS_SplitCellsByFunction(p, t, {x} -> x mod 2);;[127X[104X
-    [4X[25Xgap>[125X [27Xp;[127X[104X
-    [4X[28X[ [ 6 ], [ 2, 8 ], [ 4 ], [ 3 ], [ 5 ], [ 1, 7 ] ][128X[104X
-  [4X[32X[104X
+  [33X[1;0Y[29X[2XEmptyCanonicalisingTracer[102X( [3Xarg[103X ) [32X function[133X
   
-  [33X[0;0YFrom  this  example  we can see that whenever an existing cell is split, the
-  new cell is always placed at the end.[133X
+  [1X7.1-5 IsTracer[101X
   
-  [33X[0;0YThere  are  a  range  of functions which can be used to find out information
-  about a partition stack,[133X
+  [33X[1;0Y[29X[2XIsTracer[102X( [3Xt[103X ) [32X filter[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
-  [4X[32X  Example  [32X[104X
-    [4X[25Xgap>[125X [27X# Number of cells[127X[104X
-    [4X[25X>[125X [27XPS_Cells(p);[127X[104X
-    [4X[28X6[128X[104X
-    [4X[25Xgap>[125X [27X# Cells of size 1, in the order they were created[127X[104X
-    [4X[25X>[125X [27XPS_FixedCells(p);[127X[104X
-    [4X[28X[ 1, 4, 5, 3 ][128X[104X
-    [4X[25Xgap>[125X [27X# Contents of the cells of size 1[127X[104X
-    [4X[25X>[125X [27XPS_FixedPoints(p);[127X[104X
-    [4X[28X[ 6, 3, 5, 4 ][128X[104X
-    [4X[25Xgap>[125X [27X# The contents of a cell, as a slice (a type of list)[127X[104X
-    [4X[25X>[125X [27XPS_CellSlice(p, 2)[127X[104X
-    [4X[25X>[125X [27X[ 2, 8 ][127X[104X
-  [4X[32X[104X
+  [33X[0;0YThe category of tracers.[133X
   
-  [33X[0;0YNote  that PS_CellSlice does not make a copy of the list, but gives a "view"
-  inside the partition stack. This means it is fast, but the value will become
-  invalid  if  another  split is made in the Partition Stack. Also, in general
-  the list returned by PS_CellSlice is *NOT* sorted.[133X
+  [1X7.1-6 AddEvent[101X
   
-  [33X[0;0YWe  can  revert  to  an  earlier state of the partition stack. This includes
-  states  we  may  never have explicitly created, while a cell was being split
-  into pieces.[133X
+  [33X[1;0Y[29X[2XAddEvent[102X( [3Xt[103X, [3Xo[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
-  [4X[32X  Example  [32X[104X
-    [4X[25Xgap>[125X [27XPS_RevertToCellCount(p, 3);[127X[104X
-    [4X[25Xgap>[125X [27Xp;[127X[104X
-    [4X[28X[ [ 3, 6 ], [ 2, 5, 8 ], [ 1, 4, 7 ] ][128X[104X
-    [4X[25Xgap>[125X [27XPS_RevertToCellCount(p, 2);[127X[104X
-    [4X[25Xgap>[125X [27Xp;[127X[104X
-    [4X[28X[ [ 1, 3, 4, 6, 7 ], [ 2, 5, 8 ] ][128X[104X
-    [4X[25Xgap>[125X [27XPS_CellSlice(p, 1);[127X[104X
-    [4X[28X[ 6, 3, 4, 1, 7 ][128X[104X
-  [4X[32X[104X
+  [33X[0;0YAdd  the  arbitrary  GAP  object [3Xo[103X as an event to the tracer [3Xt[103X. This returns
+  [9Xtrue[109X  if  the  event is accepted by the tracer, and [9Xfalse[109X if not. Events are
+  always accepted by recording tracers.[133X
   
+  [1X7.1-7 TraceLength[101X
   
-  [1X7.2 [33X[0;0YRefiners[133X[101X
+  [33X[1;0Y[29X[2XTraceLength[102X( [3Xt[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10YAn integer[133X
   
-  [33X[0;0YIn  partition  backtrack, the search takes a list of refiners, each of which
-  represents a group or coset, and calculates their intersection.[133X
+  [33X[0;0YGet the number of events in the tracer [3Xt[103X.[133X
   
-  [33X[0;0YLet us begin by calculating the intersection of two groups, [23XG[123X and [23XH[123X.[133X
+  [1X7.1-8 TraceEvent[101X
   
-  [4X[32X  Example  [32X[104X
-    [4X[25Xgap>[125X [27XLoadPackage("BacktrackKit", false);[127X[104X
-    [4X[25Xgap>[125X [27XG := Group((1,2,3),(4,5,6),(1,4)(2,5)(3,6));;[127X[104X
-    [4X[25Xgap>[125X [27XH := Group((1,2,3,4,5,6),(2,3)(4,5));;[127X[104X
-    [4X[25Xgap>[125X [27X# Need to make a partition stack to search over[127X[104X
-    [4X[25X>[125X [27Xps := PartitionStack(6);;[127X[104X
-    [4X[25Xgap>[125X [27X# We create a refiner for each group[127X[104X
-    [4X[25X>[125X [27X# We have to give this how many points we want the group to act on[127X[104X
-    [4X[25X>[125X [27Xrg := BTKit_Con.InGroup(G);;[127X[104X
-    [4X[25Xgap>[125X [27Xrh := BTKit_Con.InGroup(H);;[127X[104X
-    [4X[25Xgap>[125X [27X# Finally, intersect the groups[127X[104X
-    [4X[25X>[125X [27XBTKit_SimpleSearch(ps, [rg, rh]);[127X[104X
-    [4X[25Xgap>[125X [27XGroup([ (1,2,3)(4,6,5), (1,4)(2,5)(3,6) ])[127X[104X
-  [4X[32X[104X
+  [33X[1;0Y[29X[2XTraceEvent[102X( [3Xt[103X, [3Xi[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10YA GAP object[133X
   
-  [33X[0;0YThe   refiner   BTKit_Con.InGroup   represents  a  group  represented  as  a
-  Permutation  Group in GAP. There are many other ways of representing groups.
-  For example, we could calculate a set stabilizer:[133X
+  [33X[0;0YGet  the event at position [3Xi[103X in the tracer [3Xt[103X. The argument [3Xi[103X must lie in the
+  range [10X[1..TraceLength([3Xt[103X[10X)][110X.[133X
   
-  [4X[32X  Example  [32X[104X
-    [4X[25Xgap>[125X [27X# This represents the group which stabilizes the set [3,4,5,6][127X[104X
-    [4X[25X>[125X [27Xss := BTKit_Con.SetStab([3,4,5,6]);;[127X[104X
-    [4X[25Xgap>[125X [27X# We can prove this by just "searching" on this group[127X[104X
-    [4X[25X>[125X [27XBTKit_SimpleSearch(ps, [ss]);[127X[104X
-    [4X[28XGroup([ (5,6), (4,5), (3,4), (1,2) ])[128X[104X
-    [4X[25Xgap>[125X [27X# We can intersect this with G[127X[104X
-    [4X[25X>[125X [27XBTKit_SimpleSearch(ps, [rg,ss]);[127X[104X
-    [4X[28XGroup([ (4,5,6) ])[128X[104X
-    [4X[25Xgap>[125X [27X# We can also intersect G and H and the set stabilizer at the same time![127X[104X
-    [4X[25X>[125X [27Xgap> BTKit_SimpleSearch(ps, [rg,rh,ss]);[127X[104X
-    [4X[25Xgap>[125X [27XGroup(())[127X[104X
-  [4X[32X[104X
+  [1X7.1-9 GetEvents[101X
   
-  [33X[0;0YWriting   a  new  refiner  requires  some  understanding  of  the  Partition
-  Backtracking  framework  by  Jeffry  Leon.  We  will give a (very brief, and
-  incomplete!) overview here.[133X
+  [33X[1;0Y[29X[2XGetEvents[102X( [3Xt[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10YA GAP list[133X
   
-  [33X[0;0YIn  general,  a  refiner  represents  either  a group or coset. Here we will
-  consider  the  case  where  we are building a coset which represents mapping
-  some  permutation  [23XP[123X  to  another permutation [23XQ[123X under conjugation. This is a
-  group when [23XP=Q[123X.[133X
-  
-  [33X[0;0YTo begin, we will just consider the case where [23XP=Q[123X. Then, we need to provide
-  a  GAP function [23XR[123X which, given an ordered partition [10Xps[110X on [23X\{1..n\}[123X returns a
-  function  [23Xf: \{1..n\} -> O[123X (where [23XO[123X is any valid GAP object) which satisfies
-  the following conditions:[133X
-  
-  [30X    [33X[0;6YInvariance:  Given  a  permutation  [23Xg[123X  such that [23XP^g=g[123X, then [23XR(ps^g) =
-        R(ps)^g[123X. Here, we define [23Xps^g[123X as applying [23Xg[123X to each point in each cell
-        of [10Xps[110X, and we define [23X(R(ps)^g)(x) := R(ps)(x^g)[123X.[133X
-  
-  [33X[0;0Y(TO COMPLETE)[133X
+  [33X[0;0YGet a list of all events in the tracer.[133X
   

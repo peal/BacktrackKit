@@ -2,15 +2,121 @@
   [1X3 [33X[0;0YImplementation[133X[101X
   
   
-  [1X3.1 [33X[0;0YFilters[133X[101X
+  [1X3.1 [33X[0;0YState[133X[101X
   
-  [1X3.1-1 ApplyFilters[101X
+  [1X3.1-1 IsBacktrackableState[101X
+  
+  [33X[1;0Y[29X[2XIsBacktrackableState[102X( [3Xarg[103X ) [32X filter[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
+  
+  [1X3.1-2 IsBTKitState[101X
+  
+  [33X[1;0Y[29X[2XIsBTKitState[102X( [3Xarg[103X ) [32X filter[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
+  
+  [1X3.1-3 BacktrackableStateFamily[101X
+  
+  [33X[1;0Y[29X[2XBacktrackableStateFamily[102X [32X global variable[133X
+  
+  [1X3.1-4 BTKitStateType[101X
+  
+  [33X[1;0Y[29X[2XBTKitStateType[102X [32X global variable[133X
+  
+  [1X3.1-5 SaveState[101X
+  
+  [33X[1;0Y[29X[2XSaveState[102X( [3Xarg[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10YThe saved state[133X
+  
+  [33X[0;0YReturn  a  small  object which allows one to revert to this state from later
+  the search.[133X
+  
+  [1X3.1-6 RestoreState[101X
+  
+  [33X[1;0Y[29X[2XRestoreState[102X( [3Xstate[103X, [3Xsaved[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10YNothing[133X
+  
+  [33X[0;0YRevert  to  a saved state from later in the search. The first argument [3Xstate[103X
+  must  be the current state object, and the second argument [3Xsaved[103X must be one
+  of the objects produced by [2XSaveState[102X ([14X3.1-5[114X) from earlier in the search.[133X
+  
+  [1X3.1-7 ConsolidateState[101X
+  
+  [33X[1;0Y[29X[2XConsolidateState[102X( [3Xarg1[103X, [3Xarg2[103X ) [32X operation[133X
+  
+  [33X[0;0YSome implementations of [10XBacktrackableState[110X can perform simplifications. This
+  function  gives a well-defined point for such operations to be performed. It
+  can be ignored by implementations without such simplifications.[133X
+  
+  
+  [1X3.2 [33X[0;0YApplying refiners[133X[101X
+  
+  [1X3.2-1 InitialiseConstraints[101X
+  
+  [33X[1;0Y[29X[2XInitialiseConstraints[102X( [3Xstate[103X, [3Xtracer[103X, [3Xrbase[103X ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
+  
+  [33X[0;0YSet   up   the   list   of   constraints   in   [10X[3Xstate[103X[10X.conlist[110X,  using  their
+  [10Xrefine.initialise[110X  members. This should be called once at the start of RBase
+  creation,  and  once at the start of search. During search, if the branch of
+  search  becomes  inconsistent  with  the  RBase,  then this function returns
+  [9Xfalse[109X. Otherwise, this function returns [9Xtrue[109X.[133X
+  
+  [33X[0;0YThe   second   and  third  arguments  [3Xtracer[103X  and  [3Xrbase[103X  should  be  as  in
+  [2XRefineConstraints[102X ([14X3.2-2[114X).[133X
+  
+  [1X3.2-2 RefineConstraints[101X
+  
+  [33X[1;0Y[29X[2XRefineConstraints[102X( [3Xstate[103X, [3Xtracer[103X, [3Xrbase[103X ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
+  
+  [33X[0;0YRefine  the partition stack [10X[3Xstate[103X[10X.ps[110X according to the list of constraints in
+  [10X[3Xstate[103X[10X.conlist[110X,  until  it  is not possible to use them to refine the current
+  partition  stack  any  further,  or  until  the  branch  of  search  becomes
+  inconsistent with the RBase. In the former case, this function returns [9Xtrue[109X,
+  and in the latter case, this function returns [9Xfalse[109X.[133X
+  
+  [33X[0;0YDuring  RBase  creation,  the  second  argument  [3Xtracer[103X  must be a recording
+  tracer, and the third argument [3Xrbase[103X must be [9Xtrue[109X. During search, the second
+  argument  should  be  a tracer following the corresponding RBase tracer, and
+  the third argument [3Xrbase[103X should be [9Xfalse[109X.[133X
+  
+  [1X3.2-3 FinaliseRBaseForConstraints[101X
+  
+  [33X[1;0Y[29X[2XFinaliseRBaseForConstraints[102X( [3Xarg[103X ) [32X function[133X
+  
+  [33X[0;0YSet  up  a  list of constraints. This should be called once, at the start of
+  search after all constraints have been created.[133X
+  
+  [1X3.2-4 ApplyFilters[101X
   
   [33X[1;0Y[29X[2XApplyFilters[102X( [3Xps[103X, [3Xtracer[103X, [3Xfilter[103X ) [32X operation[133X
-  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X.[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   [33X[0;0YSplit the cells of the partition stack [3Xps[103X, if possible, according to a given
   [3Xfilter[103X.  If  the  filter is [9Xfail[109X, or if the split is rejected by the [3Xtracer[103X,
   then  this  function  returns  [9Xfalse[109X. Otherwise, the split is applied and is
   consistent with the [3Xtracer[103X, and this function returns [9Xtrue[109X.[133X
+  
+  
+  [1X3.3 [33X[0;0YCurrently unorganised stuff[133X[101X
+  
+  [1X3.3-1 BTKit_BuildProblem[101X
+  
+  [33X[1;0Y[29X[2XBTKit_BuildProblem[102X( [3Xarg[103X ) [32X function[133X
+  
+  [33X[0;0YTakes  a  partition  stack and a list of constraints and builds a 'Problem',
+  Which  can  then  be  solved  by passing the 'Problem' to [2XBTKit_SimpleSearch[102X
+  ([14X2.1-1[114X) or [2XBTKit_SimpleSinglePermSearch[102X ([14X2.1-2[114X).[133X
+  
+  [1X3.3-2 FirstFixedPoint[101X
+  
+  [33X[1;0Y[29X[2XFirstFixedPoint[102X( [3Xarg[103X ) [32X function[133X
+  
+  [1X3.3-3 BuildRBase[101X
+  
+  [33X[1;0Y[29X[2XBuildRBase[102X( [3Xarg[103X ) [32X function[133X
+  
+  [1X3.3-4 Backtrack[101X
+  
+  [33X[1;0Y[29X[2XBacktrack[102X( [3Xarg[103X ) [32X function[133X
   

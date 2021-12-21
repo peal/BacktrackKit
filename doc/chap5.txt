@@ -1,158 +1,67 @@
   
-  [1X5 [33X[0;0YOrdered partition stack[133X[101X
-  
-  [33X[0;0YAn  [13Xordered partition stack[113X is an ordered partition which supports splitting
-  a  cell, and then later undoing a change, reverting the partition back to an
-  earlier state.[133X
+  [1X5 [33X[0;0YRefiners[133X[101X
   
   
-  [1X5.1 [33X[0;0YAPI[133X[101X
+  [1X5.1 [33X[0;0YIntroduction to refiners[133X[101X
   
-  [1X5.1-1 PartitionStack[101X
+  [33X[0;0YIn [5XBacktrackKit[105X, a refiner is implemented as a record that must contain:[133X
   
-  [33X[1;0Y[29X[2XPartitionStack[102X(  ) [32X function[133X
-  [6XReturns:[106X  [33X[0;10Ya partition stack.[133X
+  [30X    [33X[0;6YA  member  called  [10Xname[110X,  which  is  a  string  giving the name of the
+        constraint;[133X
   
-  [33X[0;0YConstructor for partition stacks.[133X
+  [30X    [33X[0;6YA  member  called  [10Xlargest_required_point[110X,  which  is an integer which
+        gives  the  smallest  size  partition  this  refiner will work on. For
+        example, given a set we would expect this to be the largest element of
+        the set.[133X
   
-  [1X5.1-2 IsPartitionStack[101X
+  [30X    [33X[0;6YA  member  called  [10Xconstraint[110X, which is a constraint object, such that
+        the  refiner  is  refining  for  the  permutations  that  satisfy  the
+        constraint.[133X
   
-  [33X[1;0Y[29X[2XIsPartitionStack[102X( [3Xarg[103X ) [32X filter[133X
-  [6XReturns:[106X  [33X[0;10Y[10Xtrue[110X or [10Xfalse[110X[133X
+  [30X    [33X[0;6YA  member  called [10Xrefine[110X, which is a record; more information is given
+        below.[133X
   
-  [33X[0;0YCategory of partition stacks.[133X
+  [33X[0;0YA constraint may also optionally contain any of the following members:[133X
   
-  [1X5.1-3 PS_Points[101X
+  [30X    [33X[0;6YA  member called [10Xbtdata[110X. The data in this member will be automatically
+        saved and restored on backtrack.[133X
   
-  [33X[1;0Y[29X[2XPS_Points[102X( [3XPS[103X ) [32X operation[133X
-  [6XReturns:[106X  [33X[0;10Ya positive integer.[133X
   
-  [33X[0;0YReturn  the  number of points on which the partition stack [3XPS[103X was originally
-  defined.[133X
+  [1X5.2 [33X[0;0YThe record [10Xrefine[110X[101X[1X[133X[101X
   
-  [1X5.1-4 PS_ExtendedPoints[101X
+  [33X[0;0YThe [10Xrefine[110X member of a constraint is a record that contains functions which,
+  if  present,  will be called to inform the constraint of behaviour as search
+  progresses,  and  to  give  the  constraint the opportunity to influence the
+  search. The permissible functions are given described below.[133X
   
-  [33X[1;0Y[29X[2XPS_ExtendedPoints[102X( [3XPS[103X ) [32X operation[133X
-  [6XReturns:[106X  [33X[0;10Ya positive integer.[133X
+  [33X[0;0YThese  functions  will  always be passed at least two arguments: firstly the
+  constraint  itself,  and  then  the  partition stack. Details of any further
+  arguments are described with the relevant function, below.[133X
   
-  [33X[0;0YReturn  the  number  of  points on which the partition stack [3XPS[103X is currently
-  defined on (which includes extra points added during refinement)[133X
+  [30X    [33X[0;6Y[10Xinitialise[110X  [13X(required)[113X.  This is called when search begins. Note that,
+        since  the  [10Xrefine.initialise[110X  function  is  called  for  all relevant
+        constraints at the beginning of search, the partition may have already
+        been   split   by   some   earlier   constraint   by   the  time  that
+        [10Xrefine.initialise[110X is called for a later constraint.[133X
   
-  [1X5.1-5 PS_Extend[101X
+  [33X[0;0YAt most one of the following two functions will generally be implemented.[133X
   
-  [33X[1;0Y[29X[2XPS_Extend[102X( [3XPS[103X, [3XNewPoints[103X ) [32X operation[133X
-  [6XReturns:[106X  [33X[0;10Ythe label of the new cell[133X
+  [30X    [33X[0;6Y[10Xchanged[110X  -  Will  be  called after one or more splits in the partition
+        occur.[133X
   
-  [33X[0;0YAdds  [3XNewPoints[103X  to  PS,  as  a  new  cell  at  the  end. Will be removed on
-  backtracking.[133X
+  [30X    [33X[0;6Y[10Xfixed[110X  -  Will  be  called  after  one or more points in the partition
+        became fixed.[133X
   
-  [1X5.1-6 PS_Cells[101X
+  [30X    [33X[0;6Y[10XrBaseFinished[110X  -  The  rBase  has  been created (is passed the rbase).
+        Constraints  which  care about this can use this to remember the rBase
+        construction is finished.[133X
   
-  [33X[1;0Y[29X[2XPS_Cells[102X( [3XPS[103X ) [32X operation[133X
-  [6XReturns:[106X  [33X[0;10Ya positive integer.[133X
   
-  [33X[0;0YThe  number  of  cells in the current partition state of the partition stack
-  [3XPS[103X.[133X
+  [1X5.3 [33X[0;0YConstructing refiners[133X[101X
   
-  [1X5.1-7 PS_Fixed[101X
+  [1X5.3-1 DummyRefiner[101X
   
-  [33X[1;0Y[29X[2XPS_Fixed[102X( [3XPS[103X ) [32X operation[133X
-  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X.[133X
+  [33X[1;0Y[29X[2XDummyRefiner[102X( [3Xconstraint[103X ) [32X attribute[133X
   
-  [33X[0;0YReturn [9Xtrue[109X if all the cells of the current partition state of the partition
-  stack [3XPS[103X have size 1 and were in the 'original partition'.[133X
-  
-  [1X5.1-8 PS_AsPartition[101X
-  
-  [33X[1;0Y[29X[2XPS_AsPartition[102X( [3XPS[103X ) [32X operation[133X
-  [6XReturns:[106X  [33X[0;10Ya list of lists of positive integers.[133X
-  
-  [33X[0;0YReturn  the  current  partition state of the partition stack [3XPS[103X as a list of
-  sets, in the correct order.[133X
-  
-  [1X5.1-9 PS_CellLen[101X
-  
-  [33X[1;0Y[29X[2XPS_CellLen[102X( [3XPS[103X, [3Xi[103X ) [32X operation[133X
-  [6XReturns:[106X  [33X[0;10Ya positive integer.[133X
-  
-  [33X[0;0YThe size of cell [3Xi[103X in the current partition state of the partition stack [3XPS[103X.
-  This requires that [3Xi[103X is contained in [10X[1..PS_Cells([3XPS[103X[10X)][110X.[133X
-  
-  [1X5.1-10 PS_CellSlice[101X
-  
-  [33X[1;0Y[29X[2XPS_CellSlice[102X( [3XPS[103X, [3Xi[103X ) [32X operation[133X
-  [6XReturns:[106X  [33X[0;10Yan immutable list of positive integers.[133X
-  
-  [33X[0;0YReturn  an  immutable  list containing the elements of cell [3Xi[103X in the current
-  partition state of the partition stack [3XPS[103X. This requires that [3Xi[103X is contained
-  in [10X[1..PS_Cells([3XPS[103X[10X)][110X.[133X
-  
-  [1X5.1-11 PS_FixedCells[101X
-  
-  [33X[1;0Y[29X[2XPS_FixedCells[102X( [3XPS[103X ) [32X operation[133X
-  [6XReturns:[106X  [33X[0;10Ya list of 1-element lists of positive integers.[133X
-  
-  [33X[0;0YReturn  a  list of the 1-element cells of the current state of the partition
-  stack  [3XPS[103X  which  contain points from the original size of the partition, in
-  the order in which the cells came to have size 1.[133X
-  
-  [1X5.1-12 PS_FixedPoints[101X
-  
-  [33X[1;0Y[29X[2XPS_FixedPoints[102X( [3XPS[103X ) [32X operation[133X
-  [6XReturns:[106X  [33X[0;10Ya list of positive integers.[133X
-  
-  [33X[0;0YReturn a list of points in 1-element cells of the partition stack [3XPS[103X, in the
-  order  in  which  the  cells  came  to  have  size 1. In other words, return
-  [10XConcatenation(PS_FixedCells([3XPS[103X[10X))[110X.[133X
-  
-  [1X5.1-13 PS_CellOfPoint[101X
-  
-  [33X[1;0Y[29X[2XPS_CellOfPoint[102X( [3XPS[103X, [3Xi[103X ) [32X operation[133X
-  [6XReturns:[106X  [33X[0;10Ya positive integer.[133X
-  
-  [33X[0;0YReturn the index of the cell containing the value [3Xi[103X in the current partition
-  state  of  the  partition  stack  [3XPS[103X.  This  requires that [3Xi[103X is contained in
-  [10X[1..PS_ExtededPoints([3XPS[103X[10X)][110X.[133X
-  
-  [1X5.1-14 PS_RevertToCellCount[101X
-  
-  [33X[1;0Y[29X[2XPS_RevertToCellCount[102X( [3XPS[103X, [3Xi[103X ) [32X operation[133X
-  [6XReturns:[106X  [33X[0;10Ynothing.[133X
-  
-  [33X[0;0YRevert  the state of the partition stack [3XPS[103X to when there were [3Xi[103X cells. This
-  requires that [3Xi[103X is contained in [10X[1..PS_Cells([3XPS[103X[10X)][110X.[133X
-  
-  [1X5.1-15 PS_SplitCellByFunction[101X
-  
-  [33X[1;0Y[29X[2XPS_SplitCellByFunction[102X( [3XPS[103X, [3Xt[103X, [3Xi[103X, [3Xf[103X ) [32X operation[133X
-  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X.[133X
-  
-  [33X[0;0YSplit  cell  [3Xi[103X  of  the  current  partition  state of the partition stack [3XPS[103X
-  according  to the function [3Xf[103X. The values in the cell are split so that those
-  with  different  images  under  [3Xf[103X  are  put into different cells. The second
-  argument [3Xt[103X should be a tracer.[133X
-  
-  [1X5.1-16 PS_SplitCellsByFunction[101X
-  
-  [33X[1;0Y[29X[2XPS_SplitCellsByFunction[102X( [3XPS[103X, [3Xt[103X, [3Xf[103X ) [32X operation[133X
-  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X.[133X
-  
-  [33X[0;0YApply  [10XPS_SplitCellByFunction[110X to every active cell in the partition stack [3XPS[103X
-  (ignoring points added after search starts).[133X
-  
-  [1X5.1-17 PS_SplitCellByUnorderedFunction[101X
-  
-  [33X[1;0Y[29X[2XPS_SplitCellByUnorderedFunction[102X( [3XPS[103X, [3Xt[103X, [3Xi[103X, [3Xf[103X ) [32X operation[133X
-  
-  [33X[0;0YSplit  cell  [3Xi[103X  of  the  current  partition  state of the partition stack [3XPS[103X
-  according  to the function [3Xf[103X. The values in the cell are split so that those
-  with  different  images  under  [3Xf[103X  are  put into different cells. The second
-  argument [3Xt[103X should be a tracer.[133X
-  
-  [1X5.1-18 PS_SplitCellsByUnorderedFunction[101X
-  
-  [33X[1;0Y[29X[2XPS_SplitCellsByUnorderedFunction[102X( [3XPS[103X, [3Xt[103X, [3Xf[103X ) [32X operation[133X
-  
-  [33X[0;0YApply  [10XPS_SplitCellByUnorderedFunction[110X to every active cell in the partition
-  stack [3XPS[103X. The second argument [3Xt[103X should be a tracer.[133X
+  [33X[0;0YThis wraps a constraint in a refiner that doesn't do any refining.[133X
   
