@@ -342,6 +342,7 @@ Constraint.IsTrivial := ObjectifyWithAttributes(
 
 ProcessConstraints := function(args...)
     local constraints, refiners, extra, x, i, G, movedG, movedx, differ, points, sizes, all, con, bound;
+    # FIXME if `[]` or `[[]]` etc is given as an arg, then this disappears!
     args := Flat(args);
 
     constraints := [];
