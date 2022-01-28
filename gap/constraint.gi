@@ -67,9 +67,6 @@ InstallImmediateMethod(Size, "for a constraint with IsEmptyConstraint",
         TryNextMethod();
     end);
 
-InstallMethod(Object, "for a stabiliser constraint", [IsStabiliserConstraint],
-    SourceObject);
-
 InstallMethod(Check, "for an in-coset-by-gens constraint", [IsInCosetByGensConstraint],
     {con} -> {p} -> p / Representative(con) in UnderlyingGroup(con));
 InstallMethod(Check, "for a transporter constraint", [IsTransporterConstraint],

@@ -154,7 +154,6 @@ DeclareAttribute("SourceObject", IsTransporterConstraint);
 DeclareSynonymAttr("LeftObject", SourceObject);
 DeclareAttribute("ResultObject", IsTransporterConstraint);
 DeclareSynonymAttr("RightObject", ResultObject);
-DeclareOperation("Object", [IsStabiliserConstraint]);
 
 # Things set at creation for in-coset constraints
 DeclareAttribute("UnderlyingGroup", IsConstraint);
