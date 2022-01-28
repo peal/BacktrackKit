@@ -27,6 +27,11 @@ at https://github.com/peal/BacktrackKit/issues
 
 ## History
 
+0.6.2
+-----
+
+* Remove `Object` for a stabiliser constraint (as a synonym for source object).
+  This clashed with the HAP package.
 
 0.6.1
 -----
