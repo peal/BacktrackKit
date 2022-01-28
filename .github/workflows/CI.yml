@@ -21,12 +21,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: gap-actions/setup-gap-for-packages@v1
+      - uses: gap-actions/setup-gap@v2
         with:
           GAPBRANCH: ${{ matrix.gap-branch }}
           GAP_PKGS_TO_CLONE: "datastructures ChrisJefferson/QuickCheck"
           GAP_PKGS_TO_BUILD: "io profiling datastructures json digraphs orb grape"
-      - uses: gap-actions/run-test-for-packages@v1
+      - uses: gap-actions/run-pkg-tests@v2
+      - uses: gap-actions/process-coverage@v2
+      - uses: codecov/codecov-action@v2
 
   # The documentation job
   manual:
@@ -37,10 +39,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: gap-actions/setup-gap-for-packages@v1
+      - uses: gap-actions/setup-gap@v2
         with:
           GAP_PKGS_TO_BUILD: ''
-      - uses: gap-actions/compile-documentation-for-packages@v1
+      - uses: gap-actions/build-pkg-docs@v1
         with:
           use-latex: 'true'
       - name: 'Upload documentation'
