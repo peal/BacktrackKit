@@ -27,22 +27,9 @@ function(con)
 
     # TODO: Add an Info statement saying that a search is about to happen and might be slow.
 
-    # FIXME: This is very temporary!
-    # Ultimately we should adapt the main search interface to accept constraints, and just use that.
-    # For now, wrap constraint around a dummy refiner that does nothing useful.
     return BTKit_SimpleSinglePermSearch(
         PartitionStack(LargestRelevantPoint(con)),
-        [Objectify(BTKitRefinerType,
-            rec(
-                name := "Dummy refiner for constraint",
-                largest_required_point := LargestRelevantPoint(con),
-                constraint := con,
-                refine := rec(
-                    initialise := {ps, buildingRBase} -> {x} -> 0
-                )
-            )
-        )]
-    );
+        [BTKit_RefinerFromConstraint(con)]);
 end);
 
 InstallImmediateMethod(Representative, "for a group constraint",

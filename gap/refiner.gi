@@ -36,7 +36,8 @@ InstallMethod(DummyRefiner,
     )
 );
 
-BTKit_RefinerFromConstraint := function(con)
+InstallGlobalFunction(BTKit_RefinerFromConstraint,
+function(con)
     local action, source, result;
 
     if HasIsEmptyConstraint(con) and IsEmptyConstraint(con) then
@@ -92,4 +93,4 @@ BTKit_RefinerFromConstraint := function(con)
 
     # TODO: Give a severe warning!
     return DummyRefiner(con);
-end;
+end);

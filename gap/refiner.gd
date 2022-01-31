@@ -69,3 +69,5 @@ BindGlobal("BTKitRefinerType", NewType(RefinerFamily, IsBTKitRefiner));
 #! @Description
 #! This wraps a constraint in a refiner that doesn't do any refining.
 DeclareAttribute("DummyRefiner", IsConstraint);
+
+DeclareGlobalFunction("BTKit_RefinerFromConstraint");
