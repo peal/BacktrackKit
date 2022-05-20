@@ -97,8 +97,8 @@
 #! @BeginExampleSession
 #! gap> LoadPackage("BacktrackKit", false);;
 #! gap> Set(RecNames(Constraint));
-#! [ "Centralise", "Centralize", "Conjugate", "InCoset", "InGroup", 
-#!   "InLeftCoset", "InRightCoset", "IsEven", "IsOdd", "IsTrivial", 
+#! [ "Centralise", "Centralize", "Conjugate", "Everything", "InCoset", 
+#!   "InGroup", "InLeftCoset", "InRightCoset", "IsEven", "IsOdd", "IsTrivial", 
 #!   "LargestMovedPoint", "MovedPoints", "None", "Normalise", "Normalize", 
 #!   "Nothing", "Stabilise", "Stabilize", "Transport" ]
 #!  @EndExampleSession
@@ -492,3 +492,15 @@ DeclareGlobalVariable("Constraint.IsTrivial");
 #! fail
 #! @EndExampleSession
 DeclareGlobalVariable("Constraint.None");
+
+#! @Description
+#! This constraint is satisfied by all permutations.
+#!
+#! @InsertChunk nonuser
+#! @BeginExampleSession
+#! gap> Constraint.Everything;
+#! <constraint: satisfied by all permutations>
+#! gap> Representative(Constraint.Everything);
+#! ()
+#! @EndExampleSession
+DeclareGlobalVariable("Constraint.Everything");

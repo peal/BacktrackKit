@@ -50,10 +50,12 @@
 #! * `changed` - Will be called after one or more splits in the partition occur.
 #! * `fixed` - Will be called after one or more points in the partition became fixed.
 #!
-#TODO: this is unclear. Also unimplemented.
-#! * `rBaseFinished` - The rBase has been created (is passed the rbase).
+#! * `rBaseFinished` - The rBase has been created -- this is passed the partition
+#!   which was generated down the first branch of search.
 #!   Constraints which care about this can use this to remember the rBase
 #!   construction is finished.
+#! * `solutionFound` - A solution to the problem has been found. This function
+#!   is passed a permutation. This function is rarely needed.
 
 DeclareCategory("IsRefiner", IsBacktrackableState);
 BindGlobal("RefinerFamily", NewFamily("RefinerFamily", IsRefiner));

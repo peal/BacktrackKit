@@ -354,3 +354,30 @@ BTKit_Refiner.Nothing2 := {} -> Objectify(BTKitRefinerType, rec(
             fixed := ReturnFail
         )
     ));
+
+# Imposes no constraint, just prints out messages whenever functions are called
+_BTKit.ChattyRefiner := {} -> Objectify(BTKitRefinerType, rec(
+        name := "ChattyRefiner",
+        largest_required_point := 1,
+        constraint := Constraint.Everything,
+        refine := rec(
+            initialise := function(ps, buildingRBase)
+                Print("initialise:", PS_Cells(ps), "\n");
+                return {x}->1;
+            end,
+            fixed := function(ps, buildingRBase)
+                Print("fixed:", PS_Cells(ps), "\n");
+                return {x}->1;
+            end,
+            changed := function(ps, buildingRBase)
+                Print("changed:", PS_Cells(ps), "\n");
+                return {x}->1;
+            end,
+            rBaseFinished := function(getRBase)
+                Print("rBaseFinished\n");
+            end,
+            solutionFound := function(perm)
+                Print("solutionFound:", perm,"\n");
+            end
+            )
+    ));

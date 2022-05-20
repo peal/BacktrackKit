@@ -307,6 +307,16 @@ Constraint.IsEven := ObjectifyWithAttributes(
     Name, "<constraint: is even permutation>"
 );
 
+Constraint.Everything := ObjectifyWithAttributes(
+    rec(), ConstraintType,
+    ImageFunc, IdFunc,
+    Check, ReturnTrue,
+    IsGroupConstraint, true,
+    LargestRelevantPoint, 1,
+    Size, infinity,
+    Name, "<constraint: satisfied by all permutations>"
+);
+
 Constraint.IsOdd := ObjectifyWithAttributes(
     rec(Result := -1), ConstraintType,
     ImageFunc, SignPerm,

@@ -13,8 +13,8 @@ gap> START_TEST("backtrackkit04.tst");
 # doc/_Chapter_Constraints.xml:98-105
 gap> LoadPackage("BacktrackKit", false);;
 gap> Set(RecNames(Constraint));
-[ "Centralise", "Centralize", "Conjugate", "InCoset", "InGroup", 
-  "InLeftCoset", "InRightCoset", "IsEven", "IsOdd", "IsTrivial", 
+[ "Centralise", "Centralize", "Conjugate", "Everything", "InCoset", 
+  "InGroup", "InLeftCoset", "InRightCoset", "IsEven", "IsOdd", "IsTrivial", 
   "LargestMovedPoint", "MovedPoints", "None", "Normalise", "Normalize", 
   "Nothing", "Stabilise", "Stabilize", "Transport" ]
 
@@ -100,6 +100,12 @@ gap> Constraint.None;
 <empty constraint: satisfied by no permutations>
 gap> Representative(Constraint.None);
 fail
+
+# doc/_Chapter_Constraints.xml:533-538
+gap> Constraint.Everything;
+<constraint: satisfied by all permutations>
+gap> Representative(Constraint.Everything);
+()
 
 #
 gap> STOP_TEST("backtrackkit04.tst", 1);

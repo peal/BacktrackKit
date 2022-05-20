@@ -269,9 +269,15 @@ end;
 BTKit_CheckPermutation := {perm, con} -> Check(con!.constraint)(perm);
 
 BTKit_CheckSolution := function(perm, conlist)
-    local check;
+    local check, c;
     check := ForAll(conlist, {c} -> BTKit_CheckPermutation(perm, c));
-    if not check then
+    if check then
+        for c in conlist do
+            if IsBound(c!.refine.solutionFound) then
+                c!.refine.solutionFound(perm);
+            fi;
+        od;
+    else
         _BTKit.Stats.badSolutions := _BTKit.Stats.badSolutions + 1;
     fi;
     return check;
