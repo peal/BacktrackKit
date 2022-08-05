@@ -87,7 +87,8 @@ _BTKit.getOrbitalList := function(sc, maxval)
         od;
     od;
     #Print(sc, ":", maxval, ":", graphlist, "\n");
-    return List(graphlist, Digraph);
+    # Use NC because we trust our graphs, and it takes a long time for 'Digraph' to check.
+    return List(graphlist, DigraphNC);
 end;
 
 _BTKit.InNeighboursSafe := function(graph, v)
