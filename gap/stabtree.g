@@ -44,25 +44,48 @@ fi;
 
 
 _ST.fillTree := function(tree, sc, conj)
-    local orbmin, orbit, o, g, gens, newconj;
+    local orbmin, orbit, o, g, gens, newconj, depthlist, depth;
     orbmin := Minimum(List(sc.orbit, x -> x^conj));
     orbit := [orbmin];
     Assert(2, not(orbmin in tree.transversal));
     tree.transversal[orbmin] := ();
     gens := List(sc.generators, x -> x^conj);
+    depthlist := [];
+    depthlist[orbmin] := 0;
     for o in orbit do
         for g in gens do
             if not IsBound(tree.transversal[o^g]) then
-                tree.transversal[o^g] := (g^-1)*tree.transversal[o];
-                Assert(2, (o^g)^(tree.transversal[o^g]) = orbmin);
-                Assert(2, tree.orbitmin[o^g] = orbmin);
+                # Limit depth getting too deep
+                if depthlist[o] > 1 + Log2Int(Length(orbit)) then
+                    tree.transversal[o] := _ST.getBasePerm(tree, o);
+                    depthlist[o] := 0;
+                    Add(gens, tree.transversal[o]);
+                fi;
+                depthlist[o^g] := depthlist[o] + 1;
+
+                tree.transversal[o^g] := (g^-1);#(g^-1)*tree.transversal[o];
+#                Assert(2, (o^g)^(tree.transversal[o^g]) = orbmin);
+#                Assert(2, tree.orbitmin[o^g] = orbmin);
                 Add(orbit, o^g);
             fi;
         od;
     od;
     #Print(tree.base, conj, "::", sc.orbit[1]^conj, "!", ((tree.transversal[sc.orbit[1]^conj])^(conj^-1)), sc.orbit, orbit, ":", sc.orbit[1],"\n");
-    newconj := conj*tree.transversal[sc.orbit[1]^conj];
+    newconj := conj*_ST.getBasePerm(tree, sc.orbit[1]^conj);
     tree.children[orbmin] := _ST.makeSTfromSC(sc.stabilizer, tree.size/Size(orbit), newconj, Concatenation(tree.base, [orbmin]));
+end;
+
+
+_ST.getBasePerm := function(sc, point)
+    local minval, perm;
+    minval := sc.orbitmin[point];
+    perm := sc.transversal[point];
+    while point^perm <> minval do
+        perm :=  perm * sc.transversal[point^perm];
+    od;
+    # If we make a new perm, fill it in
+    sc.transversal[point] := perm;
+    return perm;
 end;
 
 _ST.makeSTfromSC := function(sc, size, conj, base)
@@ -131,7 +154,7 @@ _ST.MinImage := function(tree, points)
         if not IsBound(tree.transversal[p]) then
             _fillTreeFromPoints(tree, OnTuples(points{[i..Length(points)]}, perm));
         fi;
-        newperm := perm*tree.transversal[p];
+        newperm := perm*_ST.getBasePerm(tree, p);
         Assert(2, OnTuples(points{[1..i]},newperm) = minlist);
         tree := tree.children[baseminpnt];
         perm := newperm;
