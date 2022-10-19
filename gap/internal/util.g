@@ -79,7 +79,7 @@ _BTKit.getOrbitalList := function(sc, maxval)
                     fi;
                     for val in orb do
                         p := orbreps[val]; 
-                        graph[val] := List(iorb, x -> x^p);
+                        graph[val] := OnTuples(iorb, p);
                     od;
                     Add(graphlist, graph);
                 fi;
