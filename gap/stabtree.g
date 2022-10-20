@@ -176,12 +176,23 @@ StabTreeStabilizerOrbits := function(group, points, omega)
 end;
 
 
-StabTreeStabilizerReducedOrbitalGraphs := function(group, points, omega)
-    local ret, fixpnts, g, ondigraphs_extraverts, graphs;
+
+
+# Options: rec(skipOneLarge := false, cutoff := infinity)
+StabTreeStabilizerOrbitalGraphs := function(group, points, omega, options...)
+    local ret, fixpnts, g, ondigraphs_extraverts, graphs, retval;
     ret := StabTreeStabilizer(group, points);
+    options := _BTKit.orbitalOptions(options);
+    options.omega := omega;
     if not IsBound(ret.tree.reducedOrbitals) then
-        ret.tree.reducedOrbitals := _BTKit.getOrbitalList(ret.tree.group, Maximum(omega));
+        ret.tree.reducedOrbitals := HashMap();
     fi;
+
+    if not (options in ret.tree.reducedOrbitals) then
+        ret.tree.reducedOrbitals[options] :=  _BTKit.getOrbitalList(ret.tree.group, Maximum(omega), options);
+    fi;
+
+    retval := ret.tree.reducedOrbitals[ret];
 
     #ondigraphs_extraverts := function(g,p)
     #    if Size(DigraphVertices(g)) < LargestMovedPoint(p) then
@@ -189,7 +200,11 @@ StabTreeStabilizerReducedOrbitalGraphs := function(group, points, omega)
     #    fi;
     #    return OnDigraphs(g,p);
     #end;
-    graphs := List(ret.tree.reducedOrbitals, g -> OnDigraphs(g, ret.minperm^-1));
+    graphs := List(retval, g -> OnDigraphs(g, ret.minperm^-1));
     Assert(5, ForAll(graphs, graph -> ForAll(GeneratorsOfGroup(Stabilizer(group, points, OnTuples)), p -> OnDigraphs(graph,p) = graph)));
     return graphs;
+end;
+
+StabTreeStabilizerReducedOrbitalGraphs := function(group, points, omega)
+    return StabTreeStabilizerOrbitalGraphs(group, points, omega, rec(skipOneLarge := true));
 end;

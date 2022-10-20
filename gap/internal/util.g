@@ -18,23 +18,59 @@ _BTKit.fillRepElements := function(G, orb)
   return reps;
 end;
 
-_BTKit.getOrbitalList := function(sc, maxval)
-    local G, cutoff,
+_BTKit.options := function(default, useroptions)
+    local name, ret;
+    ret := rec();
+
+    if IsList(useroptions) then
+      if IsEmpty(useroptions) then
+        return default;
+      elif Length(useroptions) = 1 then
+        useroptions := useroptions[1];
+      else
+        ErrorNoReturn("Too many arguments for function");
+      fi;
+    fi;
+
+    if not IsRecord(useroptions) then
+      ErrorNoReturn("Options should be a record");
+    fi;
+
+    ret := ShallowCopy(default);
+
+    for name in RecNames(useroptions) do
+      if not IsBound(default.(name)) then
+        ErrorNoReturn(Concatenation("Unknown option: " , name));
+      else
+        ret.(name) := useroptions.(name);
+      fi;
+    od;
+
+    return ret;
+  end;
+
+_BTKit.orbitalOptions := function(options)
+    return _BTKit.options(rec(skipOneLarge := false, cutoff := infinity), options);
+end;
+
+_BTKit.getOrbitalList := function(sc, maxval, options...)
+    local G, 
         orb, orbitsG, iorb, graph, graphlist, val, p, i, orbsizes, orbpos, innerorblist, orbitsizes,
             biggestOrbit, skippedOneLargeOrbit, orbreps;
     
+    options := _BTKit.orbitalOptions(options);
+
     if IsGroup(sc) then
         G := sc;
     else
         G := GroupStabChain(sc);
     fi;
     
+
     # Catch stupid case early
     if Size(G) = 1 then
         return [];
     fi;
-
-    cutoff := infinity;
 
     graphlist := [];
     # Make sure orbits are sorted, so we always get the same list of graphs
@@ -62,10 +98,10 @@ _BTKit.getOrbitalList := function(sc, maxval)
         orb := orbitsG[i];
         orbreps := [];
         for iorb in innerorblist[i] do
-            if (Size(orb) * Size(iorb) = biggestOrbit and not skippedOneLargeOrbit) then
+            if (Size(orb) * Size(iorb) = biggestOrbit and options.skipOneLarge and not skippedOneLargeOrbit) then
                 skippedOneLargeOrbit := true;
             else
-                if (Size(orb) * Size(iorb) <= cutoff) and
+                if (Size(orb) * Size(iorb) <= options.cutoff) and
                 # orbit size unchanged
                 not(Size(iorb) = orbsizes[iorb[1]]) and
                 # orbit size only removed one point
