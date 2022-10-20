@@ -178,21 +178,20 @@ end;
 
 
 
-# Options: rec(skipOneLarge := false, cutoff := infinity)
-StabTreeStabilizerOrbitalGraphs := function(group, points, omega, options...)
+# Options: rec(skipOneLarge := false, cutoff := false, maxval := false)
+StabTreeStabilizerOrbitalGraphs := function(group, points, options...)
     local ret, fixpnts, g, ondigraphs_extraverts, graphs, retval;
     ret := StabTreeStabilizer(group, points);
     options := _BTKit.orbitalOptions(options);
-    options.omega := omega;
     if not IsBound(ret.tree.reducedOrbitals) then
         ret.tree.reducedOrbitals := HashMap();
     fi;
 
     if not (options in ret.tree.reducedOrbitals) then
-        ret.tree.reducedOrbitals[options] :=  _BTKit.getOrbitalList(ret.tree.group, Maximum(omega), options);
+        ret.tree.reducedOrbitals[options] :=  _BTKit.getOrbitalListWithOptions(ret.tree.group, options);
     fi;
 
-    retval := ret.tree.reducedOrbitals[ret];
+    retval := ret.tree.reducedOrbitals[options];
 
     #ondigraphs_extraverts := function(g,p)
     #    if Size(DigraphVertices(g)) < LargestMovedPoint(p) then
@@ -206,5 +205,5 @@ StabTreeStabilizerOrbitalGraphs := function(group, points, omega, options...)
 end;
 
 StabTreeStabilizerReducedOrbitalGraphs := function(group, points, omega)
-    return StabTreeStabilizerOrbitalGraphs(group, points, omega, rec(skipOneLarge := true));
+    return StabTreeStabilizerOrbitalGraphs(group, points, rec(maxval := Maximum(omega), skipOneLarge := true));
 end;

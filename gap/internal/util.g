@@ -50,22 +50,38 @@ _BTKit.options := function(default, useroptions)
   end;
 
 _BTKit.orbitalOptions := function(options)
-    return _BTKit.options(rec(skipOneLarge := false, cutoff := infinity), options);
+    return _BTKit.options(rec(skipOneLarge := false, cutoff := false, maxval := false), options);
 end;
 
-_BTKit.getOrbitalList := function(sc, maxval, options...)
-    local G, 
+_BTKit.getOrbitalList := function(sc, maxval)
+    return _BTKit.getOrbitalListWithOptions(sc, rec(maxval := maxval, skipOneLarge := true));
+end;
+
+_BTKit.getOrbitalListWithOptions := function(sc, options...)
+    local G, maxval,
         orb, orbitsG, iorb, graph, graphlist, val, p, i, orbsizes, orbpos, innerorblist, orbitsizes,
-            biggestOrbit, skippedOneLargeOrbit, orbreps;
+            biggestOrbit, skippedOneLargeOrbit, orbreps, cutoff;
     
     options := _BTKit.orbitalOptions(options);
+
+    if options.cutoff = false then
+        cutoff := infinity;
+    else
+        cutoff := options.cutoff;
+    fi;
+
 
     if IsGroup(sc) then
         G := sc;
     else
         G := GroupStabChain(sc);
     fi;
-    
+
+    if options.maxval = false then
+        maxval := LargestMovedPoint(G);
+    else
+        maxval := options.maxval;
+    fi;
 
     # Catch stupid case early
     if Size(G) = 1 then
@@ -101,7 +117,7 @@ _BTKit.getOrbitalList := function(sc, maxval, options...)
             if (Size(orb) * Size(iorb) = biggestOrbit and options.skipOneLarge and not skippedOneLargeOrbit) then
                 skippedOneLargeOrbit := true;
             else
-                if (Size(orb) * Size(iorb) <= options.cutoff) and
+                if (Size(orb) * Size(iorb) <= cutoff) and
                 # orbit size unchanged
                 not(Size(iorb) = orbsizes[iorb[1]]) and
                 # orbit size only removed one point
