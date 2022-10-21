@@ -355,6 +355,41 @@ BTKit_Refiner.Nothing2 := {} -> Objectify(BTKitRefinerType, rec(
         )
     ));
 
+BTKit_Refiner.IdentityForTesting := function(depth)
+    local r;
+    r :=  rec(
+        name := "Identity",
+        largest_required_point := 1,
+        image := {p} -> p,
+        result := {} -> (),
+        check := {p} -> p=(),
+        constraint :=  Constraint.InGroup(Group(())),
+        refine := rec(
+            rBaseFinished := function(getRBase)
+                r!.RBase := getRBase;
+            end,
+
+            initialise := function(ps, buildingRBase)
+                return {x} -> 1;
+            end,
+
+        fixed := function(ps, buildingRBase)
+            local fixedpoints, fixedrbase;
+
+            fixedpoints := PS_FixedPoints(ps);
+            if not buildingRBase then
+                fixedrbase := PS_FixedPoints(r!.RBase){[1..Length(fixedpoints)]};
+                if fixedpoints <> fixedrbase and Length(fixedpoints) >= depth then
+                    return fail;
+                fi;
+            fi;
+            return {x} -> 1;
+        end
+        )
+    );
+    return Objectify(BTKitRefinerType,r);
+end;
+
 # Imposes no constraint, just prints out messages whenever functions are called
 _BTKit.ChattyRefiner := {} -> Objectify(BTKitRefinerType, rec(
         name := "ChattyRefiner",

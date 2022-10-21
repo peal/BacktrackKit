@@ -20,6 +20,9 @@ gap> G = Intersection(AlternatingGroup(6),
 >                     Stabilizer(AlternatingGroup(6), [2,4,6], OnSets),
 >                     Stabilizer(AlternatingGroup(6), [1,2], OnTuples));
 true
+gap> G := BTKit_SimpleSearch(ps6, [BTKit_Refiner.IdentityForTesting(1)]);;
+gap> G = Group([()]);
+true
 gap> G := BTKit_SimpleSearch(ps6, [BTKit_Refiner.IsEven()]);;
 gap> G = AlternatingGroup(6);
 true
