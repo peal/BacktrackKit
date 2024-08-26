@@ -5,36 +5,41 @@
 #
 
 # A store of the BTKit refiners
-BTKit_Refiner := AtomicRecord(rec());
-# For backwards compatibility
-BTKit_Con := BTKit_Refiner;
-BTKit_Ref := BTKit_Refiner;
+if not IsBound(BTKit_Refiner) then
+    BTKit_Refiner := AtomicRecord(rec());
+fi;
 
-# Private members
-_BTKit := AtomicRecord(rec());
 
-ReadPackage( "BacktrackKit", "gap/internal/util.g");
 
-ReadPackage( "BacktrackKit", "gap/stabtree.g");
+if not IsBound(_BTKit.ReadFiles) then
+    ReadPackage( "BacktrackKit", "gap/internal/util.g");
+    ReadPackage( "BacktrackKit", "gap/stabtree.g");
+    ReadPackage( "BacktrackKit", "gap/BacktrackKit.gi");
+fi;
 
-ReadPackage( "BacktrackKit", "gap/BacktrackKit.gi");
 
-if not IsBound(_BT_SKIP_INTERFACE) then
+if not IsBound(_BT_SKIP_INTERFACE) and not IsBound(_BTKit.ReadInterface) then
+    _BTKit.ReadInterface := true;
     ReadPackage( "BacktrackKit", "gap/interface.gi");
 fi;
 
-ReadPackage( "BacktrackKit", "gap/canonical.gi");
-ReadPackage( "BacktrackKit", "gap/constraint.gi");
-ReadPackage( "BacktrackKit", "gap/partitionstack.gi");
-ReadPackage( "BacktrackKit", "gap/refiner.gi");
-ReadPackage( "BacktrackKit", "gap/tracer.gi");
+if not IsBound(_BTKit.ReadFiles) then
+    _BTKit.ReadFiles := true;
 
-ReadPackage( "BacktrackKit", "gap/refiners/simple.g");
-ReadPackage( "BacktrackKit", "gap/refiners/conjugacyexample.g");
-ReadPackage( "BacktrackKit", "gap/refiners/normaliserexample.g");
-ReadPackage( "BacktrackKit", "gap/refiners/graphs.g");
-ReadPackage( "BacktrackKit", "gap/refiners/canonicalrefiners.g");
-ReadPackage( "BacktrackKit", "gap/refiners/tree/tree.g");
+    ReadPackage( "BacktrackKit", "gap/canonical.gi");
+    ReadPackage( "BacktrackKit", "gap/constraint.gi");
+    ReadPackage( "BacktrackKit", "gap/partitionstack.gi");
+    ReadPackage( "BacktrackKit", "gap/refiner.gi");
+    ReadPackage( "BacktrackKit", "gap/tracer.gi");
 
-Perform(["BTKit_Refiner", "_BTKit", "Constraint"],
-        SetNamesForFunctionsInRecord);
+    ReadPackage( "BacktrackKit", "gap/refiners/simple.g");
+    ReadPackage( "BacktrackKit", "gap/refiners/conjugacyexample.g");
+    ReadPackage( "BacktrackKit", "gap/refiners/normaliserexample.g");
+    ReadPackage( "BacktrackKit", "gap/refiners/graphs.g");
+    ReadPackage( "BacktrackKit", "gap/refiners/canonicalrefiners.g");
+    ReadPackage( "BacktrackKit", "gap/refiners/tree/tree.g");
+
+    Perform(["BTKit_Refiner", "_BTKit", "Constraint"],
+            SetNamesForFunctionsInRecord);
+fi;
+
