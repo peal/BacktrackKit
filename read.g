@@ -18,6 +18,11 @@ ReadPackage( "BacktrackKit", "gap/internal/util.g");
 ReadPackage( "BacktrackKit", "gap/stabtree.g");
 
 ReadPackage( "BacktrackKit", "gap/BacktrackKit.gi");
+
+if not IsBound(_BT_SKIP_INTERFACE) then
+    ReadPackage( "BacktrackKit", "gap/interface.gi");
+fi;
+
 ReadPackage( "BacktrackKit", "gap/canonical.gi");
 ReadPackage( "BacktrackKit", "gap/constraint.gi");
 ReadPackage( "BacktrackKit", "gap/partitionstack.gi");

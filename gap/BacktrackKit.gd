@@ -1,21 +1,3 @@
-#
-# BacktrackKit: An extensible, easy to understand backtracking framework
-#
-
-
-#! @Chapter Executing a search
-
-
-#! @Section The main search interface
-
-#!
-DeclareGlobalFunction( "BTKit_SimpleSearch" );
-
-#!
-DeclareGlobalFunction( "BTKit_SimpleSinglePermSearch" );
-
-#!
-DeclareGlobalFunction( "BTKit_SimpleAllPermSearch" );
 
 
 #! @Section Extra information and stats
@@ -55,7 +37,7 @@ BindGlobal("BTKitStateType", NewType(BacktrackableStateFamily, IsBTKitState));
 
 #! @Description
 #! Return a small object which allows one to revert to this state from later
-#! the search. 
+#! the search.
 #!
 #! @Returns The saved state
 DeclareOperation("SaveState", [IsBacktrackableState]);
