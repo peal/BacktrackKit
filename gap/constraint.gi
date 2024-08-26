@@ -27,9 +27,9 @@ function(con)
 
     # TODO: Add an Info statement saying that a search is about to happen and might be slow.
 
-    return BTKit_SimpleSinglePermSearch(
+    return _BTKit.SimpleSinglePermSearch(
         PartitionStack(LargestRelevantPoint(con)),
-        [BTKit_RefinerFromConstraint(con)]);
+        [BTKit_RefinerFromConstraint(con)],[])[1];
 end);
 
 InstallImmediateMethod(Representative, "for a group constraint",
@@ -264,7 +264,7 @@ Constraint.Conjugate := function(G, H)
 
     con := Constraint.Transport(G, H, OnPoints);
     con!.Name := StringFormatted("<constraint: conjugate {} {} to {}>", type, G, H);
-    
+
     if IsPerm(G) and (CycleIndex(G) <> CycleIndex(H)) then
         SetIsEmptyConstraint(con, true);
     fi;
@@ -394,7 +394,7 @@ ProcessConstraints := function(args...)
         if IsGroupConstraint(con) and HasUnderlyingGroup(con) and IsNaturalAlternatingGroup(UnderlyingGroup(con)) then
             Add(constraints, Constraint.IsEven);
             constraints[i] := Constraint.MovedPoints(MovedPoints(UnderlyingGroup(con)));
-        
+
         # In coset of Sym(x) -> combination
         elif IsInCosetByGensConstraint(con) and not IsGroupConstraint(con) and IsNaturalSymmetricGroup(UnderlyingGroup(con)) then
             G := UnderlyingGroup(con);
