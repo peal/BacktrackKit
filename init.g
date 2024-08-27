@@ -9,18 +9,18 @@ if not IsBound(_BTKit) then
     _BTKit := AtomicRecord(rec());
 fi;
 
-if not IsBound(_BTKit.FilesInit) then
+if not IsBound(_BTKit.CheckInitg) then
     ReadPackage( "BacktrackKit", "gap/tracer.gd");
     ReadPackage( "BacktrackKit", "gap/partitionstack.gd");
 fi;
 
-if not IsBound(_BT_SKIP_INTERFACE) and not IsBound(_BTKit.InitInterface) then
-    _BTKit.InitInterface := true;
+if not IsBound(_BT_SKIP_INTERFACE) and not IsBound(_BTKit.CheckInitgInterface) then
+    # _BTKit.CheckInitgInterface := true; is in gap/interface.gd
     ReadPackage( "BacktrackKit", "gap/interface.gd");
 fi;
 
-if not IsBound(_BTKit.FilesInit) then
-    _BTKit.FilesInit := true;
+if not IsBound(_BTKit.CheckInitg) then
+    # _BTKit.CheckInitg := true; in gap/BacktrackKit.gd
     ReadPackage( "BacktrackKit", "gap/BacktrackKit.gd");
 
     ReadPackage( "BacktrackKit", "gap/canonical.gd");

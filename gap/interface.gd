@@ -16,3 +16,6 @@ DeclareGlobalFunction( "BTKit_SimpleSinglePermSearch" );
 
 #!
 DeclareGlobalFunction( "BTKit_SimpleAllPermSearch" );
+
+# Used in init.g
+_BTKit.CheckInitgInterface := true;

@@ -98,7 +98,7 @@ InstallGlobalFunction( CanonicalBacktrack,
 end);
 
 
-_BTKit.SimpleCanonicalSearch := 
+_BTKit.SimpleCanonicalSearch :=
     function(state, group)
         local canonical, tracer;
         canonical := rec(perms := []);
@@ -128,3 +128,6 @@ BTKit_SimpleCanonicalSearchInGroup :=
         Remove(ret.image);
         return ret;
 end;
+
+# Used in read.g
+_BTKit.CheckReadg := true;

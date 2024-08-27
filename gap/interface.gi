@@ -60,3 +60,8 @@ end);
 
 InstallGlobalFunction( BTKit_SimpleAllPermSearch,
     {ps, conlist, conf...} -> _BTKit.SimpleSearch(_BTKit.BuildProblem(ps, conlist, conf)));
+
+
+
+# Used in read.g
+_BTKit.CheckReadgInterface := true;

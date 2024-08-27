@@ -11,20 +11,20 @@ fi;
 
 
 
-if not IsBound(_BTKit.ReadFiles) then
+if not IsBound(_BTKit.CheckReadg) then
     ReadPackage( "BacktrackKit", "gap/internal/util.g");
     ReadPackage( "BacktrackKit", "gap/stabtree.g");
     ReadPackage( "BacktrackKit", "gap/BacktrackKit.gi");
 fi;
 
 
-if not IsBound(_BT_SKIP_INTERFACE) and not IsBound(_BTKit.ReadInterface) then
-    _BTKit.ReadInterface := true;
+if not IsBound(_BT_SKIP_INTERFACE) and not IsBound(_BTKit.CheckReadgInterface) then
+    # _BTKit.CheckReadgInterface := true; set in gap/interface.gi
     ReadPackage( "BacktrackKit", "gap/interface.gi");
 fi;
 
-if not IsBound(_BTKit.ReadFiles) then
-    _BTKit.ReadFiles := true;
+if not IsBound(_BTKit.CheckReadg) then
+    # _BTKit.CheckReadg := true; set in gap/canonical.gi
 
     ReadPackage( "BacktrackKit", "gap/canonical.gi");
     ReadPackage( "BacktrackKit", "gap/constraint.gi");

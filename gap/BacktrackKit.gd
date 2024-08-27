@@ -131,3 +131,5 @@ DeclareGlobalFunction( "BuildRBase" );
 #!
 DeclareGlobalFunction( "Backtrack" );
 
+# From init.g
+_BTKit.CheckInitg := true;
