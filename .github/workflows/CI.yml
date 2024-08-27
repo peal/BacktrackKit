@@ -18,7 +18,7 @@ jobs:
       matrix:
         gap-branch:
           - master
-          - stable-4.11
+          - stable-4.13
 
     steps:
       - uses: actions/checkout@v2
