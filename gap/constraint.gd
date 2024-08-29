@@ -4,7 +4,7 @@
 # Declarations for constraint objects
 #
 #! @Chapter Constraints
-
+#! @ChapterLabel Constraints
 
 ################################################################################
 ## Chunks
