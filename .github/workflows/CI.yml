@@ -39,15 +39,10 @@ jobs:
     if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: gap-actions/setup-gap@v2
         with:
           GAP_PKGS_TO_BUILD: ''
       - uses: gap-actions/build-pkg-docs@v1
         with:
           use-latex: 'true'
-      - name: 'Upload documentation'
-        uses: actions/upload-artifact@v2
-        with:
-          name: manual
-          path: ./doc/manual.pdf
