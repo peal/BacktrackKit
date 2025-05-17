@@ -27,6 +27,7 @@ _autodoc := rec(
                    "gap/partitionstack.gd",
                    "gap/tracer.gd",
                    "gap/canonical.gd",
+                   "gap/interface.gd",
                    "examples/partitionstack.autodoc",
                    "examples/refiner.autodoc",
                  ],
