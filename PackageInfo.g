@@ -9,8 +9,8 @@ SetPackageInfo( rec(
 
 PackageName := "BacktrackKit",
 Subtitle := "An extensible, easy to understand backtracking framework",
-Version := "0.6.2",
-Date := "28/01/2022", # dd/mm/yyyy format
+Version := "1.0.0",
+Date := "28/05/2025", # dd/mm/yyyy format
 License := "MPL-2.0",
 
 Persons := [

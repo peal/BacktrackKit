@@ -6,13 +6,20 @@
 This package provides a simple implementation of Leon's partition backtrack
 framework.
 
-BacktrackKit currently requires (currently) GAP version >= 4.11.0, and
+This package is intended to be a package for learning the algorithms of
+partition backtrack, and the performance is extremely poor -- orders of
+magnitude slower than the algorithms in GAP. If you want to see a modern,
+high-performance extension to partition backtrack, look at the
+[vole](https://github.com/peal/vole) package.
+
+BacktrackKit currently requires (currently) GAP version >= 4.13.0, and
 sufficiently recent versions of the following packages (see the `PackageInfo.g`
 file for specific versions):
 * datastructures
 * digraphs
 * images
 * primgrp
+* 
 Additionally, [the QuickCheck
 package](https://github.com/ChrisJefferson/QuickCheck) is required in order to
 run all of the tests.
@@ -26,6 +33,13 @@ at https://github.com/peal/BacktrackKit/issues
 
 
 ## History
+
+1.0.0
+-----
+
+* Internal changes to make this package compatible with 'vole', in particular,
+  refiners made for BacktrackKit can be used inside 'vole'.
+
 
 0.6.2
 -----
