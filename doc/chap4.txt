@@ -2,7 +2,7 @@
   [1X4 [33X[0;0YConstraints[133X[101X
   
   
-  [1X4.1 [33X[0;0YThe concept of constraints in [5XBacktrackKit[105X[101X[1X[133X[101X
+  [1X4.1 [33X[0;0YThe concept of constraints[133X[101X
   
   [33X[0;0YFundamentally,  the  partition backtrack algorithm (and its generalisations)
   performs a search for permutations that satisfy a collection of constraints.[133X
@@ -10,8 +10,8 @@
   [33X[0;0YA  [13Xconstraint[113X  is  a  [9Xtrue[109X/[9Xfalse[109X mathematical property of permutations, such
   that  if  the  set of permutations satisfying the property is nonempty, then
   that  set  must  be  a  (possibly  infinite)  permutation  group, or a coset
-  thereof.   Furthermore,  it  must  be  ‘easy’  to  test  whether  any  given
-  permutation satisfies the property.[133X
+  thereof.  For  constraints  to be useful in practice, it should be ‘easy’ to
+  test whether any given permutation satisfies the property.[133X
   
   [33X[0;0YFor example:[133X
   
@@ -43,17 +43,17 @@
   satisfaction  problems, constraint programming, and constraint solvers, with
   which backtrack search algorithms are very closely linked.[133X
   
-  [33X[0;0Y[5XBacktrackKit[105X provides a number of built-in constraints. Constraints, and the
-  functions  to  create  them, are contained in the [2XConstraint[102X ([14X4.2-1[114X) record.
-  The members of this record are documented individually in Section [14X4.3[114X.[133X
+  [33X[0;0YA  number  of  built  in  constraints, and the functions to create them, are
+  contained  in  the [2XConstraint[102X ([14X4.2-1[114X) record. The members of this record are
+  documented individually in Section [14X4.3[114X.[133X
   
-  [33X[0;0YTo  use  [5XBacktrackKit[105X,  it  is  necessary  to  (at least implicitly) specify
+  [33X[0;0YTo  perform  a  search,  it  is  necessary  to (at least implicitly) specify
   constraints that, in conjunction, define the permutation(s) that you wish to
-  find.  This  is  documented  in  Chapter [14X2[114X.  A  constraint will typically be
-  converted  into  one  or  more [13Xrefiners[113X by that the time that a search takes
-  place.  Refiners  are  introduced  in  Chapter [14X5[114X.  We  do not yet explicitly
-  document  the  conversion  of  [5XBacktrackKit[105X  constraints  into refiners; the
-  conversion may change in future versions of [5XBacktrackKit[105X.[133X
+  find.  A constraint will typically be converted into one or more [13Xrefiners[113X by
+  that  the  time  that  a  search  takes  place.  Refiners  are introduced in
+  Chapter [14X5[114X,  which  are the low-level code which implement constraints. We do
+  not  explicitly  document  the  conversion of constraints into refiners; the
+  conversion may change in the future.[133X
   
   
   [1X4.2 [33X[0;0YThe [10XConstraints[110X[101X[1X record[133X[101X
@@ -63,7 +63,7 @@
   [33X[1;0Y[29X[2XConstraint[102X [32X global variable[133X
   
   [33X[0;0Y[2XConstraint[102X  is  a  record  that  contains functions for producing all of the
-  constraints that [5XBacktrackKit[105X provides.[133X
+  constraints provided by default.[133X
   
   [33X[0;0YThe members of [2XConstraint[102X are documented individually in Section [14X4.3[114X.[133X
   
@@ -72,11 +72,27 @@
   
   [4X[32X  Example  [32X[104X
     [4X[25Xgap>[125X [27XLoadPackage("BacktrackKit", false);;[127X[104X
-    [4X[25Xgap>[125X [27XSet(RecNames(Constraint));[127X[104X
-    [4X[28X[ "Centralise", "Centralize", "Conjugate", "InCoset", "InGroup", [128X[104X
-    [4X[28X  "InLeftCoset", "InRightCoset", "IsEven", "IsOdd", "IsTrivial", [128X[104X
-    [4X[28X  "LargestMovedPoint", "MovedPoints", "None", "Normalise", "Normalize", [128X[104X
-    [4X[28X  "Nothing", "Stabilise", "Stabilize", "Transport" ][128X[104X
+    [4X[25Xgap>[125X [27Xfor c in Set(RecNames(Constraint)) do Print(c,"\n"); od;[127X[104X
+    [4X[28XCentralise[128X[104X
+    [4X[28XCentralize[128X[104X
+    [4X[28XConjugate[128X[104X
+    [4X[28XEverything[128X[104X
+    [4X[28XInCoset[128X[104X
+    [4X[28XInGroup[128X[104X
+    [4X[28XInLeftCoset[128X[104X
+    [4X[28XInRightCoset[128X[104X
+    [4X[28XIsEven[128X[104X
+    [4X[28XIsOdd[128X[104X
+    [4X[28XIsTrivial[128X[104X
+    [4X[28XLargestMovedPoint[128X[104X
+    [4X[28XMovedPoints[128X[104X
+    [4X[28XNone[128X[104X
+    [4X[28XNormalise[128X[104X
+    [4X[28XNormalize[128X[104X
+    [4X[28XNothing[128X[104X
+    [4X[28XStabilise[128X[104X
+    [4X[28XStabilize[128X[104X
+    [4X[28XTransport[128X[104X
   [4X[32X[104X
   
   
@@ -185,8 +201,8 @@
     [4X[25Xgap>[125X [27Xsetofsets1 := [[1, 3, 6], [2, 3, 6]];;[127X[104X
     [4X[25Xgap>[125X [27Xsetofsets2 := [[1, 2, 5], [1, 5, 7]];;[127X[104X
     [4X[25Xgap>[125X [27Xcon := Constraint.Transport(setofsets1, setofsets2, OnSetsSets);[127X[104X
-    [4X[28X<constraint: transporter of [ [ 1, 3, 6 ], [ 2, 3, 6 ] ] to [ [ 1, 2, 5 ], [ 1\[128X[104X
-    [4X[28X, 5, 7 ] ] under OnSetsSets>[128X[104X
+    [4X[28X<constraint: transporter of <matrix object of dimensions 2x3 over Rationals> t\[128X[104X
+    [4X[28Xo <matrix object of dimensions 2x3 over Rationals> under OnSetsSets>[128X[104X
   [4X[32X[104X
   
   [1X4.3-6 Constraint.Stabilise[101X
@@ -205,7 +221,8 @@
   
   [4X[32X  Example  [32X[104X
     [4X[25Xgap>[125X [27Xcon1 := Constraint.Stabilise(CycleDigraph(6), OnDigraphs);[127X[104X
-    [4X[28X<constraint: stabiliser of CycleDigraph(6) under OnDigraphs>[128X[104X
+    [4X[28X<constraint: stabiliser of <immutable cycle digraph with 6 vertices> under OnD\[128X[104X
+    [4X[28Xigraphs>[128X[104X
     [4X[25Xgap>[125X [27Xcon2 := Constraint.Stabilise([2,4,6], OnSets);[127X[104X
     [4X[28X<constraint: stabiliser of [ 2, 4, 6 ] under OnSets>[128X[104X
   [4X[32X[104X
@@ -357,5 +374,20 @@
     [4X[28X<empty constraint: satisfied by no permutations>[128X[104X
     [4X[25Xgap>[125X [27XRepresentative(Constraint.None);[127X[104X
     [4X[28Xfail[128X[104X
+  [4X[32X[104X
+  
+  [1X4.3-16 Constraint.Everything[101X
+  
+  [33X[1;0Y[29X[2XConstraint.Everything[102X [32X global variable[133X
+  
+  [33X[0;0YThis constraint is satisfied by all permutations.[133X
+  
+  [33X[0;0YThis constraint will typically not be required by the user.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XConstraint.Everything;[127X[104X
+    [4X[28X<constraint: satisfied by all permutations>[128X[104X
+    [4X[25Xgap>[125X [27XRepresentative(Constraint.Everything);[127X[104X
+    [4X[28X()[128X[104X
   [4X[32X[104X
   

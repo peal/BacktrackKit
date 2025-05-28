@@ -106,7 +106,7 @@
   
   [33X[0;0YTakes  a  partition  stack and a list of constraints and builds a 'Problem',
   Which  can  then  be  solved  by passing the 'Problem' to [2XBTKit_SimpleSearch[102X
-  ([14X2.1-1[114X) or [2XBTKit_SimpleSinglePermSearch[102X ([14X2.1-2[114X).[133X
+  ([14X2.2-1[114X) or [2XBTKit_SimpleSinglePermSearch[102X ([14X2.2-2[114X).[133X
   
   [1X3.3-2 FirstFixedPoint[101X
   

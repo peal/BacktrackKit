@@ -52,9 +52,13 @@
   [30X    [33X[0;6Y[10Xfixed[110X  -  Will  be  called  after  one or more points in the partition
         became fixed.[133X
   
-  [30X    [33X[0;6Y[10XrBaseFinished[110X  -  The  rBase  has  been created (is passed the rbase).
+  [30X    [33X[0;6Y[10XrBaseFinished[110X  -  The  rBase  has  been  created -- this is passed the
+        partition  which  was  generated  down  the  first  branch  of search.
         Constraints  which  care about this can use this to remember the rBase
         construction is finished.[133X
+  
+  [30X    [33X[0;6Y[10XsolutionFound[110X  -  A  solution  to  the  problem  has  been found. This
+        function is passed a permutation. This function is rarely needed.[133X
   
   
   [1X5.3 [33X[0;0YConstructing refiners[133X[101X
