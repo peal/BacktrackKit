@@ -18,10 +18,11 @@ jobs:
       matrix:
         gap-branch:
           - master
+          - stable-4.14
           - stable-4.13
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: gap-actions/setup-gap@v2
         with:
           GAPBRANCH: ${{ matrix.gap-branch }}
@@ -29,7 +30,9 @@ jobs:
           GAP_PKGS_TO_BUILD: "io profiling datastructures json digraphs orb grape"
       - uses: gap-actions/run-pkg-tests@v2
       - uses: gap-actions/process-coverage@v2
-      - uses: codecov/codecov-action@v2
+      - uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   # The documentation job
   manual:
@@ -39,7 +42,7 @@ jobs:
     if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: gap-actions/setup-gap@v2
         with:
           GAP_PKGS_TO_BUILD: ''
