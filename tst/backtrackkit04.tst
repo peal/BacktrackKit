@@ -55,11 +55,11 @@ gap> Constraint.InLeftCoset(PSL(2,5), (3,4,6));
 <constraint: in coset: Group( [ (3,6)(4,5), (1,2,5)(3,4,6) ] ) * (3,4,6)
 
 # doc/_Chapter_Constraints.xml:299-305
-gap> setofsets1 := [[1, 3, 6], [2, 3, 6]];;
-gap> setofsets2 := [[1, 2, 5], [1, 5, 7]];;
+gap> setofsets1 := [[1, 3, 6], [2, 4]];;
+gap> setofsets2 := [[1, 2, 5], [3, 7]];;
 gap> con := Constraint.Transport(setofsets1, setofsets2, OnSetsSets);
-<constraint: transporter of <matrix object of dimensions 2x3 over Rationals> t\
-o <matrix object of dimensions 2x3 over Rationals> under OnSetsSets>
+<constraint: transporter of [ [ 1, 3, 6 ], [ 2, 4 ] ] to 
+[ [ 1, 2, 5 ], [ 3, 7 ] ] under OnSetsSets>
 
 # doc/_Chapter_Constraints.xml:333-339
 gap> con1 := Constraint.Stabilise(CycleDigraph(6), OnDigraphs);

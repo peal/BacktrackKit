@@ -207,3 +207,111 @@ end;
 StabTreeStabilizerReducedOrbitalGraphs := function(group, points, omega)
     return StabTreeStabilizerOrbitalGraphs(group, points, rec(maxval := Maximum(omega), skipOneLarge := true));
 end;
+
+#############################################################################
+##
+## Regular-orbit data for `group`, cached on the root of the stabtree
+## (i.e. on `group!.stabTree` itself — independent of any stabilising
+## tuple, because the deduction in Theißen §3.7 uses the regular orbit
+## of E itself, not of any stabiliser of E).
+##
+## Returns rec(omega1, regOrbit, regOrbitSet, regOrbitBFS, treeE), or
+## `fail` if `group` has no regular orbit on the points it moves.
+##
+## The cache stores the canonical (orbit-min indexed) Schreier-tree
+## data; because L = R for the normaliser refiner, both sides pull the
+## same data from this cache without any per-side conjugation. The
+## deductions made from this data are g-covariant by virtue of the
+## symmetry of the formula (the same indices b_1..b_d are used on each
+## side; the points differ but the deduction is conjugation-symmetric
+## — see notes in normaliser.g).
+##
+## Callers must not mutate the returned record, its HashMap, or lists.
+##
+StabTreeRegularOrbitData := function(group)
+    local tree, regOrbits, regOrb, o, data;
+    tree := StabTree(group);
+    if not IsBound(tree.regOrbitData) then
+        # Regular orbits are E-orbits of size |E|.
+        regOrbits := Filtered(tree.orbits, o ->
+            Length(o) > 1 and Length(o) = Size(tree.group));
+        if IsEmpty(regOrbits) then
+            tree.regOrbitData := false;
+        else
+            # Canonical: the regular orbit with smallest minimum point.
+            regOrb := regOrbits[1];
+            for o in regOrbits do
+                if Minimum(o) < Minimum(regOrb) then
+                    regOrb := o;
+                fi;
+            od;
+            data := _BTKit.regularOrbitSchreierTreeData(tree.group, regOrb);
+            tree.regOrbitData := data;
+        fi;
+    fi;
+    if tree.regOrbitData = false then
+        return fail;
+    fi;
+    return tree.regOrbitData;
+end;
+
+
+# Block systems of Stab(group, points), returned as intra-block complete
+# digraphs on [1..maxval]. Each entry is rec(graph, key) where `key` is
+# the block-size profile (a list [block-size, num-blocks]) — used by
+# callers to group block systems into families that the normaliser can
+# permute among themselves.
+#
+# Cache layout mirrors `reducedOrbitals`: results are computed once on
+# the canonical (orbit-min) stabiliser `ret.tree.group` and stored
+# under `ret.tree.blockSystemDigraphs` keyed by the options record.
+# Each call returns a fresh list of records whose graphs are
+# OnDigraphs-conjugated by `ret.minperm^-1` to the requested
+# representation. The cache value is made immutable to prevent
+# downstream callers from polluting it.
+#
+# Options: rec(maxval := false)  (default: LargestMovedPoint(ret.tree.group))
+#
+# Covariance: this function is the block-system analogue of
+# StabTreeStabilizerOrbitalGraphs and obeys the same R(S)^g = R(S^g)
+# guarantee.
+_BTKit.blockSystemOptions := function(options)
+    return _BTKit.options(rec(maxval := false), options);
+end;
+
+StabTreeStabilizerBlockSystemGraphs := function(group, points, options...)
+    local ret, opt, orb, canonical, perm, fresh;
+    ret := StabTreeStabilizer(group, points);
+    opt := _BTKit.blockSystemOptions(options);
+    if opt.maxval = false then
+        opt.maxval := LargestMovedPoint(ret.tree.group);
+    fi;
+    if not IsBound(ret.tree.blockSystemDigraphs) then
+        ret.tree.blockSystemDigraphs := HashMap();
+    fi;
+    if not (opt in ret.tree.blockSystemDigraphs) then
+        # Compute on the canonical (orbit-min) stabiliser. Iterate over
+        # every non-trivial orbit; minimal block systems of an
+        # intransitive G are the union over each transitive constituent.
+        canonical := [];
+        for orb in ret.tree.orbits do
+            if Length(orb) > 1 then
+                Append(canonical,
+                    _BTKit.blockSystemsAsGraphs(
+                        ret.tree.group, orb, opt.maxval));
+            fi;
+        od;
+        # Immutable to prevent cache pollution if a caller mutates the
+        # records or list it receives.
+        ret.tree.blockSystemDigraphs[opt] := MakeImmutable(canonical);
+    fi;
+    canonical := ret.tree.blockSystemDigraphs[opt];
+    perm := ret.minperm ^ -1;
+    fresh := List(canonical, bs -> rec(
+        graph := OnDigraphs(bs.graph, perm),
+        key := bs.key));
+    Assert(5, ForAll(fresh, bs ->
+        ForAll(GeneratorsOfGroup(Stabilizer(group, points, OnTuples)),
+               p -> OnDigraphs(bs.graph, p) = bs.graph)));
+    return fresh;
+end;
