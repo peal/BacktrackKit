@@ -15,20 +15,20 @@ gap> LoadPackage("BacktrackKit", false);;
 gap> p := PartitionStack(8);
 [ [ 1, 2, 3, 4, 5, 6, 7, 8 ] ]
 
-# doc/_Chapter_Tutorial.xml:35-37
+# doc/_Chapter_Tutorial.xml:34-36
 gap> t := RecordingTracer();;
 
-# doc/_Chapter_Tutorial.xml:43-47
+# doc/_Chapter_Tutorial.xml:41-45
 gap> PS_SplitCellsByFunction(p, t, {x} -> x mod 3);;
 gap> p;
 [ [ 3, 6 ], [ 2, 5, 8 ], [ 1, 4, 7 ] ]
 
-# doc/_Chapter_Tutorial.xml:53-57
+# doc/_Chapter_Tutorial.xml:50-54
 gap> PS_SplitCellsByFunction(p, t, {x} -> x mod 2);;
 gap> p;
 [ [ 6 ], [ 2, 8 ], [ 4 ], [ 3 ], [ 5 ], [ 1, 7 ] ]
 
-# doc/_Chapter_Tutorial.xml:65-80
+# doc/_Chapter_Tutorial.xml:61-76
 gap> # Number of cells
 > PS_Cells(p);
 6
@@ -44,7 +44,7 @@ gap> # The contents of a cell, as a slice (a type of list)
 gap> AsList(last);
 [ 2, 8 ]
 
-# doc/_Chapter_Tutorial.xml:88-97
+# doc/_Chapter_Tutorial.xml:83-92
 gap> PS_RevertToCellCount(p, 3);
 gap> p;
 [ [ 3, 6 ], [ 2, 5, 8 ], [ 1, 4, 7 ] ]
@@ -54,7 +54,7 @@ gap> p;
 gap> AsList(PS_CellSlice(p, 1));
 [ 6, 3, 4, 1, 7 ]
 
-# doc/_Chapter_Tutorial.xml:113-126
+# doc/_Chapter_Tutorial.xml:106-119
 gap> LoadPackage("BacktrackKit", false);;
 gap> G := Group((1,2,3),(4,5,6),(1,4)(2,5)(3,6));;
 gap> H := Group((1,2,3,4,5,6),(2,3)(4,5));;
@@ -68,7 +68,7 @@ gap> # Finally, intersect the groups
 > BTKit_SimpleSearch(ps, [rg, rh]);
 Group([ (1,2,3)(4,6,5), (1,4)(2,5)(3,6) ])
 
-# doc/_Chapter_Tutorial.xml:132-144
+# doc/_Chapter_Tutorial.xml:124-136
 gap> # This represents the group which stabilizes the set [3,4,5,6]
 > ss := BTKit_Refiner.SetStab([3,4,5,6]);;
 gap> # We can prove this by just "searching" on this group
