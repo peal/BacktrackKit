@@ -10,8 +10,7 @@
 #
 gap> START_TEST("backtrackkit04.tst");
 
-# doc/_Chapter_Constraints.xml:94-117
-gap> LoadPackage("BacktrackKit", false);;
+# doc/_Chapter_Constraints.xml:94-116
 gap> for c in Set(RecNames(Constraint)) do Print(c,"\n"); od;
 Centralise
 Centralize
@@ -34,44 +33,44 @@ Stabilise
 Stabilize
 Transport
 
-# doc/_Chapter_Constraints.xml:200-205
+# doc/_Chapter_Constraints.xml:199-204
 gap> con1 := Constraint.InGroup(DihedralGroup(IsPermGroup, 8));
 <constraint: in group: Group( [ (1,2,3,4), (2,4) ] )>
 gap> con2 := Constraint.InGroup(AlternatingGroup(4));
 <constraint: in group: AlternatingGroup( [ 1 .. 4 ] )>
 
-# doc/_Chapter_Constraints.xml:221-226
+# doc/_Chapter_Constraints.xml:220-225
 gap> U := PSL(2,5) * (3,4,6);
 RightCoset(Group([ (3,5)(4,6), (1,2,5)(3,4,6) ]),(3,4,6))
 gap> Constraint.InCoset(U);
 <constraint: in coset: Group( [ (3,5)(4,6), (1,2,5)(3,4,6) ] ) * (3,4,6)
 
-# doc/_Chapter_Constraints.xml:241-244
+# doc/_Chapter_Constraints.xml:240-243
 gap> Constraint.InRightCoset(PSL(2,5), (3,4,6));
 <constraint: in coset: Group( [ (3,5)(4,6), (1,2,5)(3,4,6) ] ) * (3,4,6)
 
-# doc/_Chapter_Constraints.xml:259-262
+# doc/_Chapter_Constraints.xml:258-261
 gap> Constraint.InLeftCoset(PSL(2,5), (3,4,6));
 <constraint: in coset: Group( [ (3,6)(4,5), (1,2,5)(3,4,6) ] ) * (3,4,6)
 
-# doc/_Chapter_Constraints.xml:284-289
+# doc/_Chapter_Constraints.xml:283-288
 gap> set1 := [1, 3, 6];;
 gap> set2 := [2, 4, 5];;
 gap> con := Constraint.Transport(set1, set2, OnSets);
 <constraint: transporter of [ 1, 3, 6 ] to [ 2, 4, 5 ] under OnSets>
 
-# doc/_Chapter_Constraints.xml:312-318
+# doc/_Chapter_Constraints.xml:311-317
 gap> con1 := Constraint.Stabilise(CycleDigraph(6), OnDigraphs);
 <constraint: stabiliser of <immutable cycle digraph with 6 vertices> under OnD\
 igraphs>
 gap> con2 := Constraint.Stabilise([2,4,6], OnSets);
 <constraint: stabiliser of [ 2, 4, 6 ] under OnSets>
 
-# doc/_Chapter_Constraints.xml:334-337
+# doc/_Chapter_Constraints.xml:333-336
 gap> Constraint.Normalise(PSL(2,5));
 <constraint: normalise Group( [ (3,5)(4,6), (1,2,5)(3,4,6) ] )>
 
-# doc/_Chapter_Constraints.xml:353-360
+# doc/_Chapter_Constraints.xml:352-359
 gap> D12 := DihedralGroup(IsPermGroup, 12);;
 gap> Constraint.Centralise(D12);
 <constraint: centralise group Group( [ (1,2,3,4,5,6), (2,6)(3,5) ] )>
@@ -79,45 +78,45 @@ gap> x := (1,6)(2,5)(3,4);;
 gap> Constraint.Centralise(x);
 <constraint: centralise perm (1,6)(2,5)(3,4)>
 
-# doc/_Chapter_Constraints.xml:379-382
+# doc/_Chapter_Constraints.xml:378-381
 gap> Constraint.Conjugate((3,4)(2,5,1), (1,2,3)(4,5));
 <constraint: conjugate perm (1,2,5)(3,4) to (1,2,3)(4,5)>
 
-# doc/_Chapter_Constraints.xml:395-400
+# doc/_Chapter_Constraints.xml:394-399
 gap> con1 := Constraint.MovedPoints([1..5]);
 <constraint: moved points: [ 1 .. 5 ]>
 gap> con2 := Constraint.MovedPoints([2,6,4,5]);
 <constraint: moved points: [ 2, 6, 4, 5 ]>
 
-# doc/_Chapter_Constraints.xml:414-417
+# doc/_Chapter_Constraints.xml:413-416
 gap> con := Constraint.LargestMovedPoint(5);
 <constraint: largest moved point: 5>
 
-# doc/_Chapter_Constraints.xml:431-436
+# doc/_Chapter_Constraints.xml:430-435
 gap> Constraint.IsEven;
 <constraint: is even permutation>
 gap> Representative(Constraint.IsEven);
 ()
 
-# doc/_Chapter_Constraints.xml:450-455
+# doc/_Chapter_Constraints.xml:449-454
 gap> Constraint.IsOdd;
 <constraint: is odd permutation>
 gap> Representative(Constraint.IsOdd);
 (1,2)
 
-# doc/_Chapter_Constraints.xml:466-471
+# doc/_Chapter_Constraints.xml:465-470
 gap> Constraint.IsTrivial;
 <trivial constraint: is identity permutation>
 gap> Representative(Constraint.IsTrivial);
 ()
 
-# doc/_Chapter_Constraints.xml:482-487
+# doc/_Chapter_Constraints.xml:481-486
 gap> Constraint.None;
 <empty constraint: satisfied by no permutations>
 gap> Representative(Constraint.None);
 fail
 
-# doc/_Chapter_Constraints.xml:498-503
+# doc/_Chapter_Constraints.xml:497-502
 gap> Constraint.Everything;
 <constraint: satisfied by all permutations>
 gap> Representative(Constraint.Everything);
