@@ -121,7 +121,6 @@
 
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">LoadPackage("BacktrackKit", false);;</span>
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">for c in Set(RecNames(Constraint)) do Print(c,"\n"); od;</span>
 Centralise
 Centralize
@@ -278,17 +277,52 @@ RightCoset(Group([ (3,5)(4,6), (1,2,5)(3,4,6) ]),(3,4,6))
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Constraint.Transport</code>( <var class="Arg">object1</var>, <var class="Arg">object2</var>[, <var class="Arg">action</var>] )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: A constraint</p>
 
-<p>This constraint is satisfied by precisely those permutations that map <var class="Arg">object1</var> to <var class="Arg">object2</var> under the given group <var class="Arg">action</var>, i.e. all permutations <code class="code">g</code> such that <code class="code"><var class="Arg">action</var>(<var class="Arg">object1</var>,g)=<var class="Arg">object2</var></code>. Note that the set of such permutations may be infinite.</p>
+<p>This constraint is satisfied by precisely those permutations that map <var class="Arg">object1</var> to <var class="Arg">object2</var> under the given group <var class="Arg">action</var>, i.e. all permutations <code class="code">g</code> such that <code class="code">&lt;A&gt;action&lt;/A&gt;(&lt;A&gt;object1&lt;/A&gt;,g)=&lt;A&gt;object2&lt;/A&gt;</code>. Note that the set of such permutations may be infinite.</p>
 
 <p>The combinations of objects and actions that are supported by <code class="code">Constraint.Transport</code> are given in the table below.</p>
 
+<p>If you do not give the optional <var class="Arg">action</var> argument, then it defaults to <code class="code">OnPoints</code>. This default suits a point, a permutation, or a permutation group; for the other kinds of object below you must name the action yourself.</p>
+
+<div class="pcenter"><table class="GAPDocTable">
+<tr>
+<td class="tdleft">Object</td>
+<td class="tdleft">Action</td>
+</tr>
+<tr>
+<td class="tdleft">A point (a positive integer)</td>
+<td class="tdleft"><code class="code">OnPoints</code></td>
+</tr>
+<tr>
+<td class="tdleft">A list of points</td>
+<td class="tdleft"><code class="code">OnTuples</code></td>
+</tr>
+<tr>
+<td class="tdleft">A set of points</td>
+<td class="tdleft"><code class="code">OnSets</code></td>
+</tr>
+<tr>
+<td class="tdleft">A permutation</td>
+<td class="tdleft"><code class="code">OnPoints</code></td>
+</tr>
+<tr>
+<td class="tdleft">A permutation group</td>
+<td class="tdleft"><code class="code">OnPoints</code></td>
+</tr>
+<tr>
+<td class="tdleft">A digraph (from the <strong class="pkg">Digraphs</strong> package)</td>
+<td class="tdleft"><code class="code">OnDigraphs</code></td>
+</tr>
+</table><br />
+</div>
+
+<p>BacktrackKit solves each combination in this table with a dedicated refiner. Any other object and action still gives a correct answer, but BacktrackKit has no specialised refiner for it, and so falls back to an unrefined search that tests each candidate permutation directly. This is correct, but it can be very slow.</p>
+
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">setofsets1 := [[1, 3, 6], [2, 3, 6]];;</span>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">setofsets2 := [[1, 2, 5], [1, 5, 7]];;</span>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">con := Constraint.Transport(setofsets1, setofsets2, OnSetsSets);</span>
-&lt;constraint: transporter of &lt;matrix object of dimensions 2x3 over Rationals&gt; t\
-o &lt;matrix object of dimensions 2x3 over Rationals&gt; under OnSetsSets&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">set1 := [1, 3, 6];;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">set2 := [2, 4, 5];;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">con := Constraint.Transport(set1, set2, OnSets);</span>
+&lt;constraint: transporter of [ 1, 3, 6 ] to [ 2, 4, 5 ] under OnSets&gt;
 </pre></div>
 
 <p><a id="X7BA3B89D8206CBCE" name="X7BA3B89D8206CBCE"></a></p>
@@ -299,9 +333,45 @@ o &lt;matrix object of dimensions 2x3 over Rationals&gt; under OnSetsSets&gt;
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Constraint.Stabilize</code>( <var class="Arg">object</var>[, <var class="Arg">action</var>] )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: A constraint</p>
 
-<p>This constraint is satisfied by precisely those permutations that fix <var class="Arg">object</var> under the given group <var class="Arg">action</var>, i.e. all permutations <code class="code">g</code> such that <code class="code"><var class="Arg">action</var>(<var class="Arg">object</var>,g)=<var class="Arg">object</var></code>. Note that the set of such permutations may be infinite.</p>
+<p>This constraint is satisfied by precisely those permutations that fix <var class="Arg">object</var> under the given group <var class="Arg">action</var>, i.e. all permutations <code class="code">g</code> such that <code class="code">&lt;A&gt;action&lt;/A&gt;(&lt;A&gt;object&lt;/A&gt;,g)=&lt;A&gt;object&lt;/A&gt;</code>. Note that the set of such permutations may be infinite.</p>
 
 <p>The combinations of objects and actions that are supported by <code class="code">Constraint.Stabilise</code> are given in the table below.</p>
+
+<p>If you do not give the optional <var class="Arg">action</var> argument, then it defaults to <code class="code">OnPoints</code>. This default suits a point, a permutation, or a permutation group; for the other kinds of object below you must name the action yourself.</p>
+
+<div class="pcenter"><table class="GAPDocTable">
+<tr>
+<td class="tdleft">Object</td>
+<td class="tdleft">Action</td>
+</tr>
+<tr>
+<td class="tdleft">A point (a positive integer)</td>
+<td class="tdleft"><code class="code">OnPoints</code></td>
+</tr>
+<tr>
+<td class="tdleft">A list of points</td>
+<td class="tdleft"><code class="code">OnTuples</code></td>
+</tr>
+<tr>
+<td class="tdleft">A set of points</td>
+<td class="tdleft"><code class="code">OnSets</code></td>
+</tr>
+<tr>
+<td class="tdleft">A permutation</td>
+<td class="tdleft"><code class="code">OnPoints</code></td>
+</tr>
+<tr>
+<td class="tdleft">A permutation group</td>
+<td class="tdleft"><code class="code">OnPoints</code></td>
+</tr>
+<tr>
+<td class="tdleft">A digraph (from the <strong class="pkg">Digraphs</strong> package)</td>
+<td class="tdleft"><code class="code">OnDigraphs</code></td>
+</tr>
+</table><br />
+</div>
+
+<p>BacktrackKit solves each combination in this table with a dedicated refiner. Any other object and action still gives a correct answer, but BacktrackKit has no specialised refiner for it, and so falls back to an unrefined search that tests each candidate permutation directly. This is correct, but it can be very slow.</p>
 
 
 <div class="example"><pre>
@@ -363,7 +433,7 @@ igraphs&gt;
 
 <p>Note that the set of such permutations may be infinite.</p>
 
-<p>This constraint is equivalent to <code class="code">Constraint.Transport(<var class="Arg">x</var>,<var class="Arg">y</var>,OnPoints)</code>.</p>
+<p>This constraint is equivalent to <code class="code">Constraint.Transport(&lt;A&gt;x&lt;/A&gt;,&lt;A&gt;y&lt;/A&gt;,OnPoints)</code>.</p>
 
 
 <div class="example"><pre>
@@ -378,7 +448,7 @@ igraphs&gt;
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Constraint.MovedPoints</code>( <var class="Arg">pointlist</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: A constraint</p>
 
-<p>This constraint is a shorthand for <code class="code">Constraint.InGroup(SymmetricGroup(<var class="Arg">pointlist</var>))</code>. See <code class="func">Constraint.InGroup</code> (<a href="chap4.html#X7F4B593980803A70"><span class="RefLink">4.3-1</span></a>).</p>
+<p>This constraint is a shorthand for <code class="code">Constraint.InGroup(SymmetricGroup(&lt;A&gt;pointlist&lt;/A&gt;))</code>. See <code class="func">Constraint.InGroup</code> (<a href="chap4.html#X7F4B593980803A70"><span class="RefLink">4.3-1</span></a>).</p>
 
 
 <div class="example"><pre>
@@ -395,7 +465,7 @@ igraphs&gt;
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Constraint.LargestMovedPoint</code>( <var class="Arg">point</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: A constraint</p>
 
-<p>This constraint is a shorthand for <code class="code">Constraint.InGroup(SymmetricGroup(<var class="Arg">point</var>))</code>, where <var class="Arg">point</var> is a nonnegative integer. See <code class="func">Constraint.InGroup</code> (<a href="chap4.html#X7F4B593980803A70"><span class="RefLink">4.3-1</span></a>).</p>
+<p>This constraint is a shorthand for <code class="code">Constraint.InGroup(SymmetricGroup(&lt;A&gt;point&lt;/A&gt;))</code>, where <var class="Arg">point</var> is a nonnegative integer. See <code class="func">Constraint.InGroup</code> (<a href="chap4.html#X7F4B593980803A70"><span class="RefLink">4.3-1</span></a>).</p>
 
 
 <div class="example"><pre>
