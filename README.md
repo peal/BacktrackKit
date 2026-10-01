@@ -70,3 +70,16 @@ Add `IsEven` and `IsOdd` refiners, to more efficiently handle alternating groups
 -----
 
 * Significant change to the API -- remove the requirement to give the size of the partition to most refiners
+
+## CI and releases
+
+CI tests the development, latest, and oldest supported GAP versions on Linux,
+plus development GAP on Windows, with both normal and `OnlyNeeded` loading.
+The Docs workflow builds the manual and uploads its PDF.
+
+To release, update the version and date in `PackageInfo.g`, push to `master`,
+then run **Actions → Release** on `master` with **dry-run** selected first.
+Inspect the generated archives and manuals, then rerun without dry-run to
+publish the GitHub release and update the package website. Existing website
+customisations are preserved. Use **force** only when intentionally replacing
+an existing release or bypassing the release-date check.

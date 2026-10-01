@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Create release artifacts without publishing
+        type: boolean
+        default: false
+      force:
+        description: Allow replacing a release or using a different release date
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Release the GAP package
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: gap-actions/setup-gap@v3
+        with:
+          gap-version: devel
+      - uses: gap-actions/build-pkg@v3
+        with:
+          coverage: false
+      - uses: gap-actions/build-pkg-docs@v2
+        with:
+          use-latex: true
+      - name: Fix documentation links for distribution
+        run: bash .release
+      - uses: gap-actions/release-pkg@v1
+        with:
+          dry-run: ${{ inputs.dry-run }}
+          force: ${{ inputs.force }}
+      - uses: gap-actions/update-gh-pages@v1
+        if: ${{ !inputs.dry-run }}
+        with:
+          version: ${{ env.TAG }}
+          clean: false
