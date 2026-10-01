@@ -1,50 +1,55 @@
 name: CI
 
-# Trigger the workflow on push or pull request
 on:
   workflow_dispatch:
-  pull_request:
   push:
+    branches: [master, main]
+  pull_request:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.ref_name != github.event.repository.default_branch || github.run_number }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 jobs:
-  # The CI test job
   test:
-    name: GAP ${{ matrix.gap-branch }}
-    runs-on: ubuntu-latest
-    # Don't run this twice on PRs for branches pushed to the same repository
-    if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
+    name: GAP ${{ matrix.gap-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
       matrix:
-        gap-branch:
-          - master
-          - stable-4.16
+        os: [ubuntu]
+        gap-version: [devel, latest, minimal]
+        include:
+          - os: windows
+            gap-version: devel
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: gap-actions/setup-gap@v2
+      - uses: actions/checkout@v6
+      - uses: gap-actions/setup-cygwin@v2
+        if: ${{ runner.os == 'Windows' }}
+      - uses: gap-actions/setup-gap@v3
         with:
-          GAPBRANCH: ${{ matrix.gap-branch }}
-          GAP_PKGS_TO_CLONE: "datastructures ChrisJefferson/QuickCheck"
-          GAP_PKGS_TO_BUILD: "io profiling datastructures json digraphs orb grape"
-      - uses: gap-actions/run-pkg-tests@v2
-      - uses: gap-actions/process-coverage@v2
-      - uses: codecov/codecov-action@v5
+          gap-version: ${{ matrix.gap-version }}
+      - uses: gap-actions/install-pkg@v1
+        with:
+          packages: |
+            ChrisJefferson/QuickCheck@devel
+      - uses: gap-actions/build-pkg@v3
+        with:
+          extra-pkgs: quickcheck
+      - uses: gap-actions/run-pkg-tests@v4
+        with:
+          coverage: ${{ runner.os != 'Windows' }}
+      - uses: gap-actions/run-pkg-tests@v4
+        with:
+          mode: onlyneeded
+          coverage: false
+      - uses: gap-actions/process-coverage@v3
+        if: ${{ runner.os != 'Windows' }}
+      - uses: codecov/codecov-action@v6
+        if: ${{ runner.os != 'Windows' }}
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-
-  # The documentation job
-  manual:
-    name: Build manuals
-    runs-on: ubuntu-latest
-    # Don't run this twice on PRs for branches pushed to the same repository
-    if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: gap-actions/setup-gap@v2
-        with:
-          GAP_PKGS_TO_BUILD: ''
-      - uses: gap-actions/build-pkg-docs@v1
-        with:
-          use-latex: 'true'
+          files: gap-coverage.json
